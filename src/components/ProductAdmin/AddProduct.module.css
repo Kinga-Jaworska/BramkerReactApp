@@ -1,0 +1,71 @@
+input {
+  padding: 10px;
+  border-radius: 5px;
+}
+label{
+  padding: 5px 0px;
+}
+.addForm {
+  display: flex;
+  flex-direction: column;
+  color: aliceblue;
+}
+.btnSection {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;  
+}
+.priceSection
+{
+  margin: 5px 0px;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;  
+}
+.priceSection input{
+  width: 50%;
+  /* margin: 10px 0px ; */
+}
+.btnSection button {
+  width: 50%;
+}
+.priceSection label {
+  justify-content: space-between;
+  display: flex;
+  width: 100%;
+}
+.pricesRow
+{
+  display: inline-block;  
+  width: 50%;
+
+  /* justify-content: space-between; */
+
+}
+.priceItem label{
+  width: 100%;
+}
+
+h2{
+  text-align: center;
+}
+.addForm p{
+  animation: blink 1s 2;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: .7;
+  }
+  100% {
+    opacity: 1;
+  }  
+}
+

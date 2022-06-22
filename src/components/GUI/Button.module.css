@@ -1,0 +1,15 @@
+.button
+{
+    border-radius: 5px;
+    color: aliceblue;
+    padding: 10px;
+    cursor: pointer;
+    background-color: #4545be;
+    margin: 10px 0px;
+}
+
+.button[type="cancel"]
+{
+    background-color: aliceblue;
+    color: black;
+}

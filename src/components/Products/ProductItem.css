@@ -1,0 +1,67 @@
+.expense-item
+{
+    background-color: rgb(252, 252, 252);
+    width: 600px;
+    height: 200px;
+    border-radius: 10px;
+    border-style: ridge;
+    border-color: rgb(18, 84, 205);
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.expense-item-price
+{
+    /* background-color: rgb(252, 252, 252);
+    width: 100px;
+    height: 50px;
+    justify-items: flex-end; */
+    /* background-color: rgb(146, 172, 220); */
+    width: 100%;
+    height: fit-content;
+    display: flex;    
+    justify-content: flex-end;
+    color: white;
+    margin-top: 10px;
+    transform: skew(-10deg);
+}
+.expense-item-info
+{
+    width: 100%;
+    display: flex;    
+    justify-content: flex-end;
+    color: white;
+    margin-top: 10px;
+    transform: skew(-10deg);
+}
+.expense-item-img img
+{
+    width: 150px;
+}
+
+.expense-price
+{
+    background-color: rgb(18, 84, 205);
+    border-radius: 5px;
+    padding: 20px;
+    width: fit-content;
+    border-style: dashed;
+}
+.expense-item-name
+{
+    display: block;
+}
+.p-netto, .p-brutto
+{
+    color: black;
+}
+
+.expense-item-desc
+{
+    box-sizing: border-box;
+    padding: 5%;
+    /*display: flex;*/
+    /* justify-content: flex-end; */
+}
