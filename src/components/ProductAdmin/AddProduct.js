@@ -2,27 +2,35 @@ import { useState } from "react";
 import styles from "./AddProduct.module.css";
 import Button from "../GUI/Button";
 import Card from "../GUI/Card";
+import AutomatsInput from "../Products/AutomatsInput";
 
 const AddProduct = (props) => {
   const [inputName, setInputName] = useState("");
   const [inputNetto, setInputNetto] = useState("");
   const [inputBrutto, setInputBrutto] = useState("");
+  const [inputImg, setInputImg] = useState("");
   const [isValid, setIsValid] = useState(true);
   const [selectedCat, setSelectedCat] = useState("Automaty");
+  const [selectedSubCat, setSelectedSubCat] = useState("ZESTAW SKRZYDŁOWY");
 
-  const handleName = (event) => {
-    if (event.target.value.trim() > 0) {
+  const handleName = (e) => {
+    if (e.target.value.trim() > 0) {
       setIsValid(true);
     }
-    setInputName(event.target.value);
-  };
+    setInputName(e.target.value);
+  }
 
-  const handleNetto = (event) => {
-    if (event.target.value.trim() > 0) {
+  const handleImg  = (e) =>
+  {
+    setInputImg(e.target.value)
+  }
+
+  const handleNetto = (e) => {
+    if (e.target.value.trim() > 0) {
       setIsValid(true);
     }
-    setInputNetto(event.target.value);
-    const netto = parseFloat(event.target.value);
+    setInputNetto(e.target.value);
+    const netto = parseFloat(e.target.value);
     console.log(netto);
     const brutto = Math.round((netto * 0.23 + netto) * 10) / 10;
     console.log(brutto);
@@ -34,6 +42,16 @@ const AddProduct = (props) => {
     //Client can set Brutto in global value eg. 23%
     //not send to base
   };
+
+  const handleSelectCat = (e) =>
+  {
+    setSelectedCat(e.target.value)
+  }
+
+  const handleSubCat = (subCat) =>
+  {
+    setSelectedSubCat(subCat)
+  }
 
   const handleAddProduct = (event) => {
     event.preventDefault();
@@ -55,10 +73,6 @@ const AddProduct = (props) => {
     });
   };
 
-  const handleSelectCat = (e) => {
-    setSelectedCat(e.target.value);
-  };
-
   return (
     <Card className={styles.input}>
       <form onSubmit={handleAddProduct} className={styles.addForm}>
@@ -69,6 +83,13 @@ const AddProduct = (props) => {
           id="name"
           onChange={handleName}
           placeholder="Nazwa"
+        ></input>
+
+        <input
+          type="text"
+          id="img"
+          onChange={handleImg}
+          placeholder="Img URL"
         ></input>
 
         <div className={styles.priceSection}>
@@ -94,50 +115,22 @@ const AddProduct = (props) => {
           />
         </div>
 
-        {/* <div className={styles.pricesItems}>
-         <div className={styles.priceItem}>
-        <label htmlFor="price_netto">Cena Netto</label>
-        <label htmlFor="price_brutto">Cena Brutto </label>
-        </div>
-        <div className={styles.pricesItems}>
-          <input
-            type="number"
-            id="price_netto"
-            onChange={handleNetto}
-            min="1"
-            step="0.01"
-          />
-
-          <input
-            type="number"
-            id="price_brutto"
-            onChange={handleBrutto}
-            value={inputBrutto}
-            min="1"
-            step="0.01"
-          />
-        </div>
-        </div> */}
-
         <select value={selectedCat} onChange={handleSelectCat}>
           <option value="Automaty">Automaty</option>
           <option value="Akcesoria">Akcesoria</option>
         </select>
 
-        {selectedCat === "Automaty" && (
-          <>
-            <label htmlFor="switchers">
-              Wyłączniki krańcowe TAK/NIE
-              <input id="switchers" type="checkbox" />
-            </label>
-          </>
-        )}
+        <div className={styles.checkSection}>
+          <label htmlFor="discount">          
+            <input id="discount" type="checkbox" />
+            Podlega rabatowi
+          </label>
+          {selectedCat === 'Automaty' && <AutomatsInput selectedSubCat={selectedSubCat} onChangeSubCat={handleSubCat}/>}
+        </div>
 
         <div className={styles.btnSection}>
           <Button type="submit">Dodaj</Button>
-          <Button type="cancel" onClick={props.onOpen}>
-            Cancel
-          </Button>
+          <Button type="cancel" onClick={props.onOpen}>Cancel</Button>
         </div>
       </form>
     </Card>

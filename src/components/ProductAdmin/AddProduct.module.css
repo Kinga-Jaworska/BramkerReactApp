@@ -1,5 +1,6 @@
 input {
   padding: 10px;
+  margin: 5px 0px;
   border-radius: 5px;
 }
 label{
@@ -19,7 +20,6 @@ label{
 }
 .priceSection
 {
-  margin: 5px 0px;
   box-sizing: border-box;
   width: 100%;
   display: flex;
@@ -28,7 +28,6 @@ label{
 }
 .priceSection input{
   width: 50%;
-  /* margin: 10px 0px ; */
 }
 .btnSection button {
   width: 50%;
@@ -38,23 +37,36 @@ label{
   display: flex;
   width: 100%;
 }
-.pricesRow
+.checkSection
 {
-  display: inline-block;  
-  width: 50%;
-
-  /* justify-content: space-between; */
-
+  margin: 5px 0px;
+  box-sizing: border-box;
+  /* width: 100%; */
+  display: grid;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;  
+}
+.checkSection input
+{
+  margin-right: 10px;  
+  padding: 10px;
 }
 .priceItem label{
   width: 100%;
 }
-
 h2{
   text-align: center;
 }
 .addForm p{
   animation: blink 1s 2;
+}
+
+@media (min-width: 880px){
+  .checkSection
+  {
+    display: flex;
+  }
 }
 
 @keyframes blink {
