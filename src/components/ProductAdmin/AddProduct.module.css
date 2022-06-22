@@ -59,7 +59,7 @@ h2{
   text-align: center;
 }
 .addForm p{
-  animation: blink 1s 2;
+  animation: blink 0.8s 3;
 }
 
 @media (min-width: 880px){
@@ -70,14 +70,12 @@ h2{
 }
 
 @keyframes blink {
-  0% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: .7;
-  }
   100% {
     opacity: 1;
   }  
+  0% {
+    opacity: 0.2;
+  }
+  
 }
 

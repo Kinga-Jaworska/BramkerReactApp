@@ -52,13 +52,15 @@ const AddProduct = (props) => {
   const handleNetto = (e) => {
     if (e.target.value.trim() > 0) {
       setIsValid(true);
-    }
+    }        
+    
     setInputNetto(e.target.value);
+   
+    //aUTOMATE BRUTTO:
     const netto = parseFloat(e.target.value);
-    console.log(netto);
-    // const ex3 = parseFloat(str1).toFixed(2);
+    //console.log(netto);
     const brutto = (Math.floor((netto * 0.23 + netto) * 10) / 10).toFixed(2);
-    console.log(brutto);
+    //console.log(brutto);
     setInputBrutto(brutto.toString());
   };
 
@@ -72,17 +74,14 @@ const AddProduct = (props) => {
     setSelectedCat(cat);
 
     if (cat === "Akcesoria") setSelectedSubCat(subListAccesory[0].name);
-
-    console.log("CAT CHANGED! " + selectedSubCat);
+    else setSelectedSubCat(subListAutomats[0].name)
   };
 
   const handleSubCat = (subCat) => {
-    console.log("add: " + subCat);
     setSelectedSubCat(subCat);
   };
 
   const getCheckSwitch = (isSwitch) => {
-    console.log(isSwitch);
     setInputswitches(isSwitch);
   };
 
@@ -98,9 +97,12 @@ const AddProduct = (props) => {
       setIsValid(false);
       return;
     }
+    const netto = ((parseFloat(inputNetto)*10)/10).toFixed(2);
+    //console.log(netto)
+
     props.onAdd({
       name: inputName,
-      price_netto: inputNetto,
+      price_netto: netto.toString(),
       price_brutto: inputBrutto,
       img: inputImg,
       cat: selectedCat,
@@ -139,6 +141,7 @@ const AddProduct = (props) => {
 
         <div className={styles.priceSection}>
           <input
+            value={inputNetto}
             type="number"
             id="price_netto"
             onChange={handleNetto}

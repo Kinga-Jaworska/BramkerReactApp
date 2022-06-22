@@ -3,8 +3,6 @@ import DropDown from "../GUI/DropDown";
 const AutomatsInput = (props) => {
     
     //get from base
-
-
     const getSelection = (subCat) =>
     {  
         console.log(subCat)

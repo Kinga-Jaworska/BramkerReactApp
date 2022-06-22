@@ -14,11 +14,6 @@
 }
 .expense-item-price
 {
-    /* background-color: rgb(252, 252, 252);
-    width: 100px;
-    height: 50px;
-    justify-items: flex-end; */
-    /* background-color: rgb(146, 172, 220); */
     width: 100%;
     height: fit-content;
     display: flex;    

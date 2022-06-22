@@ -16,7 +16,6 @@ const DropDown = (props) =>
                 return <option value={element.name}>{element.name}</option>
             })}
         </select>       
-
     )
 }
 
