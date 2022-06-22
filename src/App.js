@@ -41,6 +41,10 @@ const App = () => {
   const addProduct = (product) =>
   {
     console.log(product)
+    //TODO with DATABASE:
+    //if product.cat === 'Automaty' save subCat as 'dzial' in base
+    //if product.cat === 'Akcesoria' find branch by subCat name and save there without subCat and isSwitches
+    //no brutto save
     setDevices((prevList)=>
     {
       return [product,...prevList]
@@ -51,6 +55,7 @@ const App = () => {
     <div>
         <Navbar>
           <NavLink onClick={openAddForm}>Add</NavLink>
+          <NavLink >Zmień % Brutto</NavLink>
         </Navbar>
       <main>
         <div className="admin-add-product">        

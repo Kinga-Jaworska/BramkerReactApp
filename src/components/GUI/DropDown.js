@@ -5,6 +5,7 @@ const DropDown = (props) =>
 {
     const handleSelection = (e) => {
         // setSelectedCat(e.target.value);
+        //console.log(e)
         props.sendSelection(e.target.value)
       };
 
@@ -12,7 +13,7 @@ const DropDown = (props) =>
         <select value={props.selectedValue} onChange={handleSelection}>
         {props.list.map((element)=>
             {
-                return <option value={element.id}>{element.name}</option>
+                return <option value={element.name}>{element.name}</option>
             })}
         </select>       
 
