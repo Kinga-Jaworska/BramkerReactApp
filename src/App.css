@@ -1,12 +1,35 @@
-.admin-add-product
-{
-    margin: 20px auto;
-    display: flex;
-    width: 50%;
-    justify-content: center;
+.admin-add-product {
+  /* margin: 20px auto; */
+  margin: 0px auto;
+  display: flex;
+  width: 50%;
+  justify-content: center;
 }
 
-main
-{
-    width: 100%;
+main {
+  width: 100%;
+  height: fit-content; 
+  margin: 0px; 
+  padding: 0px;
+  
+  background: linear-gradient(
+    180deg,
+    rgb(19, 13, 128) 0%,
+    rgba(69, 69, 190, 1) 43%,
+    rgba(160, 174, 235, 1) 100%
+  );
+
+
+
+  /* Center and scale the image nicely */
+  /* background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover; */
+  
+}
+footer{
+  height: 100px;
+  padding: 0px;
+  background-color: black;
+  margin: 0px;
 }
