@@ -3,38 +3,59 @@ import Button from "../GUI/Button";
 import "./ProductItem.css";
 
 function ProductItem(props) {
-  // console.log('item '+props.className)
-  // let itemClass = `${'expense-item'} ${props.className ? styles.fadeIn : ''}`
-  // console.log('item class'+itemClass)
 
-  // useEffect(()=>
-  // {
-  //   // console.log('anim ')
-  //   // setAnim(true)
+  const editHandle = (e) =>
+  {
+    // console.log(e.target.value)
+    // console.log(props.info)
+    // let fetchStr = `https://reacttest-b7b01-default-rtdb.firebaseio.com/`
 
-  //   // console.log('class '+itemClass)
+    // if(props.info === 'Automaty')
+    // {
+    //   fetchStr += `automaty/${e.target.value}.json`
+    // }
+    // else
+    // {
+    //   fetchStr += `akcesoria/${props.info}/${e.target.value}.json`      
+    // }
+   
+    // console.log(fetchStr)
 
-  //   console.log('effect ')
-  //   itemClass = `${'expense-item'} ${props.className ? styles.fadeIn : ''}`
-  //   console.log('item class'+itemClass)
-
-  // },[props.className])
-
-  // // console.log(isAnim)
+    // fetch(fetchStr,
+    // {
+    //   method: 'PATCH',
+    //   // body: JSON.stringify(product),
+    //   headers:{
+    //     'Content-Type' : 'application/json'
+    //   }
+    // });
+  }
 
   const deleteHandle = (e) =>
   {
     console.log(e.target.value)
+    console.log(props.info)
+    let fetchStr = `https://reacttest-b7b01-default-rtdb.firebaseio.com/`
 
-    // fetch(`https://reacttest-b7b01-default-rtdb.firebaseio.com/automaty/${e.target.value}.json`),
-    // {
-    //   method: 'DELETE',
-    //   body: JSON.stringify(product),
-    //   headers:{
-    //     'Content-Type' : 'application/json'
-    //   }
-    // }
+    if(props.info === 'Automaty')
+    {
+      fetchStr += `automaty/${e.target.value}.json`
+    }
+    else
+    {
+      fetchStr += `akcesoria/${props.info}/${e.target.value}.json`      
+    }
+   
+    console.log(fetchStr)
 
+    fetch(fetchStr,
+    {
+      method: 'DELETE',
+      // body: JSON.stringify(product),
+      headers:{
+        'Content-Type' : 'application/json'
+      }
+    });
   }
 
   return (
@@ -49,15 +70,13 @@ function ProductItem(props) {
 
           <div className="expense-price-block">
             <div className="expense-item-price">
-              {/* <p className="p-netto">Netto: </p> */}
               <div className="expense-price">{`Netto: ${props.price_netto} PLN`}</div>
-              {/* <p className="p-brutto">Brutto: </p> */}
               <div className="expense-price">{`Brutto: ${props.price_brutto} PLN`}</div>
             </div>
           </div>
         </div>
         <div className="expense-item-actions">
-          <Button onClick={(e) => deleteHandle(e)}>Delete</Button>
+          <Button value={props.id} key={props.id} onClick={(e) => deleteHandle(e)}>Delete</Button>
         </div>
       </div>
     </div>

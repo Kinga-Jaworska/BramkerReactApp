@@ -5,23 +5,78 @@ import Navbar from "./components/GUI/Navbar";
 import { useEffect, useState, useCallback } from "react";
 import NavLink from "./components/GUI/NavLink";
 import VerticalMenu from "./components/GUI/VerticalMenu";
-import bramker from "./assets/bramker.PNG";
+import useHttp from "./components/hooks/use-http";
 
 const App = () => {
   const [addFormVisibility, setAddFormVisibility] = useState(false);
-  const [devices, setDevices] = useState([]);
+  const [products, setProducts] = useState([]);
   const [accessory, setAccessory] = useState([]);
-  const [isAnim, setAnim] = useState(false);
-  const [error, setError] = useState(null);
-  let animation = isAnim ? "fadeIn" : "";
+  // const [isAnim, setAnim] = useState(false);
+  // const [error, setError] = useState(null);
+  //let animation = isAnim ? "fadeIn" : "";
+  const [selectedCat, setSelectedCat] = useState("Automaty");
+  const FIREBASE_URL = "https://reacttest-b7b01-default-rtdb.firebaseio.com";
+
+  const {
+    isAnim,
+    error: isError,
+    sendRequest: fetchAutomats,
+  } = useHttp();
+
+  const {
+    isAnim: isLoadingAccesory,
+    error: isErrorAccesory,
+    sendRequest: fetchAccessory,
+  } = useHttp();
+
+  useEffect(() => {
+    const transformAutomats = (automatsObj) => {
+      //console.log("automObj " + automatsObj);
+      const loadedAutomats = [];
+      for (const key in automatsObj) {
+        //console.log('key: '+key+' '+automatsObj[key])
+        loadedAutomats.push({
+          id: key,
+          cat: "automaty",
+          img: automatsObj[key].img,
+          name: automatsObj[key].nazwa,
+          price_netto: automatsObj[key].cenaNetto,
+          price_brutto: automatsObj[key].cenaBrutto,
+        });
+      }
+      setProducts(loadedAutomats);
+    };
+
+    const transformAccessory = (accessoryObj) => {
+      const loadedAccessory = [];
+      for (const key in accessoryObj) {
+        loadedAccessory.push({
+          cat: key,
+          data: accessoryObj[key],
+        });
+      }
+      setAccessory(loadedAccessory);
+    };
+    fetchAutomats({ url: `${FIREBASE_URL}/automaty.json`}, transformAutomats);
+    fetchAccessory({ url: `${FIREBASE_URL}/akcesoria.json`}, transformAccessory
+    );
+  }, [fetchAutomats, fetchAccessory]);
+
+  const automatsOpen = (e) => {
+    fetchAutomats();
+    setSelectedCat("Automaty");
+  };
+
+  const productAddHandler = (product) =>
+  {
+    setProducts((prevProduct) => prevProduct.concat(product)) /// ? it works ??
+  }
 
   const accessoryOpen = (e) => {
     const cat = e.target.textContent;
     console.log(cat);
     let loadedAccessory = [];
-    //console.log(accessory)
-
-    setAnim(true);
+    setSelectedCat(cat);
 
     const findAccessory = accessory.find((element) => element.cat === cat).data;
     for (const key in findAccessory) {
@@ -33,137 +88,54 @@ const App = () => {
         // price_brutto: findAccessory[key].cenaBrutto,
       });
     }
-    setDevices(loadedAccessory);
-    setAnim(false);
+    setProducts(loadedAccessory);
   };
-
-  const fetchAccessory = useCallback(async () => {
-    setAnim(true);
-    try {
-      const response = await fetch(
-        "https://reacttest-b7b01-default-rtdb.firebaseio.com/akcesoria.json"
-      );
-      if (!response.ok) {
-        throw new Error("Somethingwent wrong :C");
-      }
-      const data = await response.json();
-      let loadedAccessory = [];
-
-      for (const key in data) {
-        loadedAccessory.push({
-          cat: key,
-          data: data[key],
-        });
-      }
-      setAccessory(loadedAccessory);
-    } catch (error) {
-      setError(error.message);
-    }
-    setAnim(false);
-  }, []);
-
-  const fetchDevices = useCallback(async () => {
-    setAnim(true);
-    try {
-      const response = await fetch(
-        "https://reacttest-b7b01-default-rtdb.firebaseio.com/autoaty.json"
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong :C");
-      }
-      const data = await response.json();
-      const loadedDevices = [];
-
-      for (const key in data) {
-        //console.log('key: '+key+' '+data[key])
-        loadedDevices.push({
-          id: key,
-          img: data[key].img,
-          name: data[key].nazwa,
-          price_netto: data[key].cenaNetto,
-          price_brutto: data[key].cenaBrutto,
-        });
-      }
-      setDevices(loadedDevices);
-    } catch (error) {
-      setError(error.message);
-    }
-    setAnim(false);
-  }, []);
-
-  useEffect(() => {
-    fetchDevices();
-  }, [fetchDevices]);
-
-  useEffect(() => {
-    fetchAccessory();
-  }, [fetchAccessory]);
+  
+  useEffect(() =>{
+    console.log()
+  },[])
 
   const openAddForm = () => {
     setAddFormVisibility(!addFormVisibility);
   };
-  const addProduct = (product) => {
-
-    let saveProduct = {
-      cenaNetto: product.price_netto,
-      img: product.img,
-      nazwa: product.name,
-      podlegaRabatowi: product.isDiscount,
-    };
-    let fetchStr = "";
-
-    if (product.cat === "Automaty") {
-      saveProduct.dzial = product.subCat;
-      saveProduct.wylacznikiKrancowe = product.isSwitch;
-      fetchStr = product.cat.toLowerCase();
-    } else if (product.cat === "Akcesoria") {
-      fetchStr = `${product.cat.toLowerCase()}/${product.subCat}`;
-    }
-
-    fetch(
-      `https://reacttest-b7b01-default-rtdb.firebaseio.com/${fetchStr}.json`,
-      {
-        method: "POST",
-        body: JSON.stringify(saveProduct),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    // setDevices((prevList) => {
-    //   return [product, ...prevList];
-    // });
-  };
 
   let content = <p>No data</p>;
 
-  if (devices.length > 0) {
-    content = <Products products={devices} className={animation} />;
-  }
-  if (error) {
-    content = <p>{error}</p>;
-  }
-  if (isAnim) {
-    content = <p>Anim ...</p>;
+  if (products.length > 0) {
+    content = (
+      <Products
+        products={products}
+        // className={animation}
+        info={selectedCat}
+        // onFetch={fetchAutomats}
+      />
+    );
+  } else if (isError) {
+    content = <div><p className="error">{isError}</p><button onClick={fetchAutomats}>Try again</button></div>
+  } else if (isAnim) {
+    content = <p className="error">Anim ...</p>; //Spinner, progress bar
   }
 
   return (
     <>
       <Navbar>
-        
-          {/* <img height="40" src={logo} /> */}
-          <NavLink onClick={openAddForm}>Add</NavLink>
-          <NavLink>Zmień % Brutto</NavLink>
-        
+        {/* <img height="40" src={logo} /> */}
+        <NavLink onClick={openAddForm}>Add</NavLink>
+        <NavLink>Zmień % Brutto</NavLink>
       </Navbar>
       <main>
-        {error && <p>ERROR</p>}
-        <VerticalMenu accessory={accessory} accessoryOpen={accessoryOpen} />
+        {isError && <p>ERROR</p>}
+        <VerticalMenu
+          accessory={accessory}
+          accessoryOpen={accessoryOpen}
+          automatsOpen={automatsOpen}
+        />
         <div className="admin-add-product">
           {addFormVisibility && (
             <AddProduct
-              onAdd={addProduct}
+              onAdd={productAddHandler}
+              // selectedCat={selectedCat}
+              subListAccesory={accessory}
               onOpen={openAddForm}
               subListAutomats={accessory}
             />

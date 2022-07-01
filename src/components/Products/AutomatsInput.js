@@ -20,7 +20,7 @@ const AutomatsInput = (props) => {
         Wyłączniki krańcowe TAK/NIE
       </label>
 
-      <DropDown list={props.typeListAutomats} selectedValue={props.selectedSubCat} sendSelection={getSelection}/>
+      <DropDown list={props.typeListAutomats} selectedValue={props.selectedSubCat} sendSelection={getSelection} valueName='name'/>
     </>
   );
 };

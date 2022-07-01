@@ -33,3 +33,15 @@ footer{
   background-color: black;
   margin: 0px;
 }
+
+.error
+{
+  color: tomato;
+  display: flex;
+  background-color: bisque;
+  text-align: center;
+  justify-content: center;
+  z-index: 1;
+  align-items: center;
+
+}

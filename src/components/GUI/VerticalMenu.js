@@ -6,12 +6,16 @@ const VerticalMenu = (props) => {
   const accessoryOpenHandler = (e) =>
   {
     props.accessoryOpen(e)
+  }  
+  const automatsOpenHandler = (e) =>
+  {
+    props.automatsOpen(e)
   }
-  
 
   return (
     <div className={styles["vertical-menu"]}>
       <ul>
+        <li onClick={(e) => automatsOpenHandler(e)}><p>Automaty</p></li>
         <li>
           <p>Akcesoria</p>
           <ul>

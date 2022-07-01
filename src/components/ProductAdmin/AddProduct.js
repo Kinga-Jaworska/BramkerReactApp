@@ -4,15 +4,12 @@ import Button from "../GUI/Button";
 import Card from "../GUI/Card";
 import AutomatsInput from "../Products/AutomatsInput";
 import DropDown from "../GUI/DropDown";
+import useHttp from "../hooks/use-http";
 
-//get from base ?
+//get from base???
 const catList = [
   { id: "Automaty", name: "Automaty" },
   { id: "Akcesoria", name: "Akcesoria" },
-];
-const subListAccesory = [
-  { id: "Centrale", name: "Centrale" },
-  { id: "Lampy", name: "Lampy" },
 ];
 const subListAutomats = [
   { name: "ZESTAW PRZESUWNY" },
@@ -20,7 +17,7 @@ const subListAutomats = [
   { name: "ZESTAW SZLABANOWY" },
   { name: "ZESTAW GARAŻOWY" },
 ];
-
+const FIREBASE_URL = "https://reacttest-b7b01-default-rtdb.firebaseio.com";
 const AddProduct = (props) => {
   const [inputName, setInputName] = useState("");
   const [inputNetto, setInputNetto] = useState("");
@@ -31,8 +28,8 @@ const AddProduct = (props) => {
   const [isValid, setIsValid] = useState(true);
   const [selectedCat, setSelectedCat] = useState(catList[0].name);
   const [selectedSubCat, setSelectedSubCat] = useState(subListAutomats[0].name);
-  //   const [selectedSubCatAcc, setSelectedSubCatAcc] = useState(subListAccesory[0].name);
-  //   const [selectedType, setSelectedType] = useState(typeListAutomats[0].name);
+
+  const { isLoading, error, sendRequest: addProduct } = useHttp();
 
   const handleName = (e) => {
     if (e.target.value.trim() > 0) {
@@ -52,11 +49,11 @@ const AddProduct = (props) => {
   const handleNetto = (e) => {
     if (e.target.value.trim() > 0) {
       setIsValid(true);
-    }        
-    
+    }
+
     setInputNetto(e.target.value);
-   
-    //aUTOMATE BRUTTO:
+
+    //AUTOMATE BRUTTO:
     const netto = parseFloat(e.target.value);
     //console.log(netto);
     const brutto = (Math.floor((netto * 0.23 + netto) * 10) / 10).toFixed(2);
@@ -73,8 +70,10 @@ const AddProduct = (props) => {
   const handleSelectCat = (cat) => {
     setSelectedCat(cat);
 
-    if (cat === "Akcesoria") setSelectedSubCat(subListAccesory[0].name);
-    else setSelectedSubCat(subListAutomats[0].name)
+    if (cat === "Akcesoria") setSelectedSubCat(props.subListAccesory[0].name);
+    else setSelectedSubCat(subListAutomats[0].name);
+
+    console.log("selected cat: " + cat);
   };
 
   const handleSubCat = (subCat) => {
@@ -88,6 +87,8 @@ const AddProduct = (props) => {
   const handleAddProduct = (event) => {
     event.preventDefault();
 
+    console.log('ADD ')
+
     if (
       inputName.trim().length === 0 ||
       inputBrutto.trim().length === 0 ||
@@ -97,19 +98,34 @@ const AddProduct = (props) => {
       setIsValid(false);
       return;
     }
-    const netto = ((parseFloat(inputNetto)*10)/10).toFixed(2);
-    //console.log(netto)
 
-    props.onAdd({
-      name: inputName,
-      price_netto: netto.toString(),
-      price_brutto: inputBrutto,
-      img: inputImg,
-      cat: selectedCat,
-      subCat: selectedSubCat,
-      isSwitch: inputSwitches ? "TAK" : "NIE",
-      isDiscount: inputDiscount ? "TAK" : "NIE",
-    });
+    // let fetchSTR = "";
+
+    // const netto = ((parseFloat(inputNetto) * 10) / 10).toFixed(2);
+
+    // let saveProduct = {
+    //   cenaNetto: netto.toString(),
+    //   img: inputImg,
+    //   nazwa: inputName,
+    //   podlegaRabatowi: inputDiscount ? "TAK" : "NIE",
+    // };
+
+    // if (selectedCat === "Akcesoria") {
+    //   fetchSTR = `${selectedCat.toLowerCase()}/${selectedSubCat}`;
+    // } else if (selectedCat === "Automaty") {
+    //   saveProduct.dzial = selectedSubCat;
+    //   saveProduct.wylacznikiKrancowe = inputSwitches ? "TAK" : "NIE";
+    //   fetchSTR = `${selectedCat.toLowerCase()}`;
+    // }
+
+    // addProduct({
+    //   url: `FIREBASE_URL/${fetchSTR}`,
+    //   method: " POST",
+    //   body: JSON.stringify(saveProduct),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // });
   };
 
   return (
@@ -163,6 +179,7 @@ const AddProduct = (props) => {
           selectedValue={selectedCat}
           list={catList}
           sendSelection={handleSelectCat}
+          valueName="name"
         />
 
         <div className={styles.checkSection}>
@@ -186,7 +203,8 @@ const AddProduct = (props) => {
           ) : (
             <DropDown
               selectedValue={selectedSubCat}
-              list={subListAccesory}
+              list={props.subListAccesory}
+              valueName="cat"
               sendSelection={handleSubCat}
             />
           )}
