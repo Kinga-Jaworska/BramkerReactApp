@@ -6,10 +6,12 @@ import { useEffect, useState, useCallback } from "react";
 import NavLink from "./components/GUI/NavLink";
 import VerticalMenu from "./components/GUI/VerticalMenu";
 import useHttp from "./components/hooks/use-http";
+import ProductForm from "./components/ProductAdmin/ProductForm";
 
 const App = () => {
   const [addFormVisibility, setAddFormVisibility] = useState(false);
-  const [products, setProducts] = useState([]);
+  const [products, setDisplayProducts] = useState([]);
+  const [automats, setAutomats] = useState([]);
   const [accessory, setAccessory] = useState([]);
   // const [isAnim, setAnim] = useState(false);
   // const [error, setError] = useState(null);
@@ -38,13 +40,17 @@ const App = () => {
         loadedAutomats.push({
           id: key,
           cat: "automaty",
+          isSwitch: automatsObj[key].wylacznikiMechaniczne === 'TAK' ? true : false,
+          isDiscount: automatsObj[key].podlegaRabatowi === 'TAK' ? true : false,                
           img: automatsObj[key].img,
-          name: automatsObj[key].nazwa,
+          name_product: automatsObj[key].nazwa,
           price_netto: automatsObj[key].cenaNetto,
-          price_brutto: automatsObj[key].cenaBrutto,
+          subCat: automatsObj[key].dzial
+          // price_brutto: automatsObj[key].cenaBrutto,
         });
       }
-      setProducts(loadedAutomats);
+      setAutomats(loadedAutomats)
+      setDisplayProducts(loadedAutomats);
     };
 
     const transformAccessory = (accessoryObj) => {
@@ -63,18 +69,15 @@ const App = () => {
   }, [fetchAutomats, fetchAccessory]);
 
   const automatsOpen = (e) => {
-    fetchAutomats();
-    setSelectedCat("Automaty");
+    //fetchAutomats();
+    //setProducts
+    setSelectedCat("automaty");
+    setDisplayProducts(automats)
   };
-
-  const productAddHandler = (product) =>
-  {
-    setProducts((prevProduct) => prevProduct.concat(product)) /// ? it works ??
-  }
 
   const accessoryOpen = (e) => {
     const cat = e.target.textContent;
-    console.log(cat);
+    // console.log(cat);
     let loadedAccessory = [];
     setSelectedCat(cat);
 
@@ -82,32 +85,38 @@ const App = () => {
     for (const key in findAccessory) {
       loadedAccessory.push({
         id: key,
-        name: findAccessory[key].nazwa,
+        name_product: findAccessory[key].nazwa,
         price_netto: findAccessory[key].cenaNetto,
         img: findAccessory[key].img,
+        isDiscount: findAccessory[key].podlegaRabatowi,
+        subCat: cat
         // price_brutto: findAccessory[key].cenaBrutto,
       });
     }
-    setProducts(loadedAccessory);
+    setDisplayProducts(loadedAccessory);
   };
   
-  useEffect(() =>{
-    console.log()
-  },[])
+  const handleAddProduct = (addedProduct) =>
+  {
+    //console.log(addedProduct)
+    //console.log(addedProduct.name_product)
+    setDisplayProducts((prevProduct) => prevProduct.concat(addedProduct));
+  }
 
-  const openAddForm = () => {
+  const displayAddForm = () => {
     setAddFormVisibility(!addFormVisibility);
   };
 
   let content = <p>No data</p>;
 
   if (products.length > 0) {
+    
+  console.log('len: '+products.length)
+
     content = (
       <Products
         products={products}
-        // className={animation}
         info={selectedCat}
-        // onFetch={fetchAutomats}
       />
     );
   } else if (isError) {
@@ -120,7 +129,7 @@ const App = () => {
     <>
       <Navbar>
         {/* <img height="40" src={logo} /> */}
-        <NavLink onClick={openAddForm}>Add</NavLink>
+        <NavLink onClick={displayAddForm}>Add</NavLink>
         <NavLink>Zmień % Brutto</NavLink>
       </Navbar>
       <main>
@@ -132,13 +141,7 @@ const App = () => {
         />
         <div className="admin-add-product">
           {addFormVisibility && (
-            <AddProduct
-              onAdd={productAddHandler}
-              // selectedCat={selectedCat}
-              subListAccesory={accessory}
-              onOpen={openAddForm}
-              subListAutomats={accessory}
-            />
+          <AddProduct accessory={accessory} onAddProduct={handleAddProduct} onDisplay={displayAddForm}/>
           )}
         </div>
         {content}

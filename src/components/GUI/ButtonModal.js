@@ -1,11 +1,14 @@
 import styles from "./Button.module.css";
 
-const Button = (props) => {
+const ButtonModal = (props) => {
+
+    //console.log('button '+props.id)
+    
   return (
     <button type={props.type || "button"} 
-    key={props.key}
+    id={props.id}
+    key={props.id}
     value={props.value}
-    // onClick={(key) => props.onClick(key)}
     onClick={props.onClick}
     className={styles.button}>
     {props.children}
@@ -13,4 +16,4 @@ const Button = (props) => {
   );
 };
 
-export default Button;
+export default ButtonModal;

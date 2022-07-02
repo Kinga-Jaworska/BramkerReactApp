@@ -8,7 +8,7 @@ const useHttp = (applyData) => {
     setAnim(true);
     setError(null);
 
-    console.log("call " + requestConfig);
+    //console.log("call " + requestConfig);
 
     try {
       const response = await fetch(requestConfig.url, {

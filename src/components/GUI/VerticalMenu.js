@@ -21,7 +21,7 @@ const VerticalMenu = (props) => {
           <ul>
             {accessory.length > 0 &&
               accessory.map((element) => {
-                return <li onClick={(e) => accessoryOpenHandler(e)}>{element.cat}</li>;
+                return <li key={element.cat} onClick={(e) => accessoryOpenHandler(e)}>{element.cat}</li>;
               })}
           </ul>
         </li>
