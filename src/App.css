@@ -34,3 +34,26 @@ footer{
   align-items: center;
 
 }
+.spinner
+{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  /* align-content: center; */
+  /* background-color: beige; */
+  align-items: center;
+}
+.loading-spinner img{
+  animation: loading 4s infinite;
+}
+
+@keyframes loading {
+  0%{
+    transform: rotate(0deg);
+  }
+  100%
+  {
+    transform: rotate(360deg);
+  }
+  
+}

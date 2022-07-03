@@ -6,11 +6,12 @@ const Modal = (props) => {
   return (
     <>
       {ReactDOM.createPortal(
-        <Backdrop onConfirm={props.onHide} />,
+        <Backdrop onHide={props.onHide} />,
         document.getElementById("backdrop-root")
       )}
       {ReactDOM.createPortal(
         <ModalOverlay
+          isError={props.isError}
           onHide={props.onHide}
           title={props.title}
           message={props.message}
@@ -24,7 +25,7 @@ const Modal = (props) => {
 };
 
 const Backdrop = (props) => {
-  return <div className={styles.backdrop} onClick={props.onConfirm} />;
+  return <div className={styles.backdrop} onClick={props.onHide} />;
 };
 
 const ModalOverlay = (props) => {
@@ -35,6 +36,7 @@ const ModalOverlay = (props) => {
         <h2>{props.title}</h2>
       </header>
       <div className={styles.content}>
+        {props.isError && <div className="error">{props.isError}</div>}
         <p>{props.message}</p>
       </div>
       <footer className={styles.actions}>

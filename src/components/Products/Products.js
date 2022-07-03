@@ -10,8 +10,10 @@ const Products = (props) => {
     return (
       <ProductItem
         product={product}
+        onDelete={props.onDelete}
         accessoryCat={props.accessoryCat}
-        info={props.info}
+        mainCat={props.mainCat}
+        selectedAccesory={props.selectedAccesory}
         price_brutto={toBrutto(product.price_netto)}
         automatsCat={props.automatsCat}      
         onEditProduct={props.onEditProduct}  

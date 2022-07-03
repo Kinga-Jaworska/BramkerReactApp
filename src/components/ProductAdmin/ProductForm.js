@@ -41,7 +41,7 @@ const ProductForm = (props) => {
     prepsubCatList.push({ name: el.cat });
   });
 
-  console.log('cat '+props.cat)
+  //console.log('cat '+props.cat)
 
   if (props.cat === "akcesoria") {
     subCatList = prepsubCatList;
@@ -64,20 +64,6 @@ const ProductForm = (props) => {
     if (props.isDiscount) discountRef.current.checked = true;
   }, []);
 
-
-  console.log(selectedCat)
-
-  // useEffect(() => {
-  //   if (selectedCat === "akcesoria") {
-  //     subCatList = prepsubCatList;
-  //   } else {
-  //     subCatList = props.subListAutomats;
-  //     //console.log(subCatList.length);
-  //   }
-    
-  //   setSelectedSubCat(subCatList[0].name);
-  // }, [selectedCat]);
-
   const handleImg = (e) => {
     setInputImg(e.target.value);
   };
@@ -91,16 +77,12 @@ const ProductForm = (props) => {
 
     //AUTOMATE BRUTTO:
     const netto = parseFloat(e.target.value);
-    //console.log(netto);
     const brutto = (Math.floor((netto * 0.23 + netto) * 10) / 10).toFixed(2);
-    //console.log(brutto);
     setInputBrutto(brutto.toString());
   };
 
   const handleBrutto = (event) => {
     setInputBrutto(event.target.value);
-    //Client can set Brutto in global value eg. 23%
-    //not send to base
   };
 
   const handleSelectCat = (cat) => {
@@ -130,12 +112,8 @@ const ProductForm = (props) => {
       return;
     }
 
-    //prep object
     let fetchSTR = "";
-
     const netto = ((parseFloat(inputNetto) * 10) / 10).toFixed(2);
-
-    // const inputDiscount = discountRef.current.checked;
 
     let newProduct = {
       cenaNetto: netto.toString(),
@@ -164,7 +142,9 @@ const ProductForm = (props) => {
   return (
     <Card className={styles.input}>
       <form onSubmit={validateProduct} className={styles.productForm}>
-        <h2>{`${props.title}`}<p className={styles.editName}>{`${inputName}`}</p></h2>
+        <h2>{`${props.title}`}
+            {props.type==='edit' &&   <p className={styles.editName}>{`${props.name_product}`}</p>}        
+        </h2>
 
         {!isValid && <p>Invalid input :C</p>}
 
@@ -221,7 +201,7 @@ const ProductForm = (props) => {
             <input id="discount" type="checkbox" ref={discountRef} />
             Podlega rabatowi
           </label>
-          {selectedCat === "automaty" ? (
+          {selectedCat === "automaty" && 
             <AutomatsInput
               typeListAutomats={subCatList}
               selectedSubCat={selectedSubCat}
@@ -231,7 +211,9 @@ const ProductForm = (props) => {
               isSwitch={props.isSwitch}
               type={props.type}
             />
-          ) : ( 
+            }
+             {(selectedCat === "akcesoria" && props.type === 'add') &&
+            ( 
             <DropDown
               selectedValue={selectedSubCat}
               list={props.subListAccesory}

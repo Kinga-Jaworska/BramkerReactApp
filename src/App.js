@@ -6,7 +6,6 @@ import { useEffect, useState, useCallback } from "react";
 import NavLink from "./components/GUI/NavLink";
 import VerticalMenu from "./components/GUI/VerticalMenu";
 import useHttp from "./components/hooks/use-http";
-import ProductForm from "./components/ProductAdmin/ProductForm";
 
 const App = () => {
   const [addFormVisibility, setAddFormVisibility] = useState(false);
@@ -14,16 +13,12 @@ const App = () => {
   const [automats, setAutomats] = useState([]);
   const [accessory, setAccessory] = useState([]);
   const [automatsCat, setAutomatsCat] = useState([]);
-  const [selectedCat, setSelectedCat] = useState("Automaty");
-  const [loadedAccess, setLoadedAccess] = useState()
+  const [selectedCat, setSelectedCat] = useState("automaty");
+  const [selectedMainCat, setSelectedMainCat] = useState("");
+  const [loadedAccess, setLoadedAccess] = useState();
   const FIREBASE_URL = "https://reacttest-b7b01-default-rtdb.firebaseio.com";
-  //const [accessorySelected, setAccessorySelected] = useState()
 
-  const {
-    isAnim,
-    error: isError,
-    sendRequest: fetchAutomats,
-  } = useHttp();
+  const { isAnim, error: isError, sendRequest: fetchAutomats } = useHttp();
 
   const {
     isAnim: isLoadingAccesory,
@@ -33,30 +28,27 @@ const App = () => {
 
   useEffect(() => {
     const transformAutomats = (automatsObj) => {
-      //console.log("automObj " + automatsObj);
       const loadedAutomats = [];
       for (const key in automatsObj) {
-        //console.log('key: '+key+' '+automatsObj[key])
         loadedAutomats.push({
           id: key,
           cat: "automaty",
-          isSwitch: automatsObj[key].wylacznikiMechaniczne === 'TAK' ? true : false,
-          isDiscount: automatsObj[key].podlegaRabatowi === 'TAK' ? true : false,                
+          isSwitch:
+            automatsObj[key].wylacznikiMechaniczne === "TAK" ? true : false,
+          isDiscount: automatsObj[key].podlegaRabatowi === "TAK" ? true : false,
           img: automatsObj[key].img,
           name_product: automatsObj[key].nazwa,
           price_netto: automatsObj[key].cenaNetto,
-          subCat: automatsObj[key].dzial
-          // price_brutto: automatsObj[key].cenaBrutto,
+          subCat: automatsObj[key].dzial,
         });
       }
-      setAutomats(loadedAutomats)
+      setAutomats(loadedAutomats);
       setDisplayProducts(loadedAutomats);
     };
 
     const transformAccessory = (accessoryObj) => {
       const loadedAccessory = [];
       for (const key in accessoryObj) {
-        
         loadedAccessory.push({
           cat: key,
           data: accessoryObj[key],
@@ -65,36 +57,39 @@ const App = () => {
       setAccessory(loadedAccessory);
     };
 
-    const transformSubList = (subItemObj) =>
-    {
+    const transformSubList = (subItemObj) => {
       const loadedSubCat = [];
       for (const key in subItemObj) {
-        //console.log('catAutomats: '+subItemObj[key])
         loadedSubCat.push({
           name: subItemObj[key],
         });
       }
-      setAutomatsCat(loadedSubCat);     
-    }
+      setAutomatsCat(loadedSubCat);
+    };
 
-    fetchAutomats({ url: `${FIREBASE_URL}/automaty.json`}, transformAutomats);
-    fetchAccessory({ url: `${FIREBASE_URL}/akcesoria.json`}, transformAccessory);
-    fetchAccessory({ url: `${FIREBASE_URL}/subList.json`}, transformSubList);
+    fetchAutomats({ url: `${FIREBASE_URL}/automaty.json` }, transformAutomats);
+    fetchAccessory(
+      { url: `${FIREBASE_URL}/akcesoria.json` },
+      transformAccessory
+    );
+    fetchAccessory(
+      { url: `${FIREBASE_URL}/automatsCat.json` },
+      transformSubList
+    );
   }, [fetchAutomats, fetchAccessory, setAutomatsCat]);
 
   const automatsOpen = (e) => {
     //fetchAutomats();
     //setProducts
     setSelectedCat("automaty");
-    setDisplayProducts(automats)
+    setSelectedMainCat("automaty");
+    setDisplayProducts(automats);
   };
 
   const accessoryOpen = (cat) => {
-    //const cat = e.target.textContent;
-    // console.log(cat);
     let loadedAccessory = [];
     setSelectedCat(cat);
-
+    setSelectedMainCat("akcesoria");
     const findAccessory = accessory.find((element) => element.cat === cat).data;
     for (const key in findAccessory) {
       loadedAccessory.push({
@@ -102,76 +97,92 @@ const App = () => {
         name_product: findAccessory[key].nazwa,
         price_netto: findAccessory[key].cenaNetto,
         img: findAccessory[key].img,
-        isDiscount: findAccessory[key].podlegaRabatowi === 'TAK' ? true : false,
+        isDiscount: findAccessory[key].podlegaRabatowi === "TAK" ? true : false,
         subCat: cat,
-        cat: 'akcesoria'
+        cat: "akcesoria",
       });
     }
     setDisplayProducts(loadedAccessory);
-    setLoadedAccess(loadedAccessory)
+    setLoadedAccess(loadedAccessory);
   };
-  
-  const handleAddProduct = (addedProduct) =>
-  {
+
+  const handleAddProduct = (addedProduct) => {
     setDisplayProducts((prevProduct) => prevProduct.concat(addedProduct));
-  }
+  };
 
   const displayAddForm = () => {
     setAddFormVisibility(!addFormVisibility);
   };
 
-  const handleEditProduct = (editedProduct, selectedType) =>
-  {
-    console.log(editedProduct)   
-
-    if(selectedType==='automaty')
-    {
-      const editedAutomats = automats.map(automat => {
-        // if this task has the same ID as the edited task
-          if (editedProduct.id === automat.id) {
-        
-            automat = editedProduct
-            //return {...automat, editedProduct}            
-          }
-          return automat;          
-        });
-        // console.log('edited: ' +editedAutomats[editedAutomats.indexOf(editedAutomats.find(el => el.id === editedProduct.id))].name_product)
-        setDisplayProducts(editedAutomats)
-    }  
-    else
-    {
-      const editedAccesory = loadedAccess.map(access => {
-          if (editedProduct.id === access.id) {        
-            access = editedProduct       
-          }
-          return access;          
-        });
-        setDisplayProducts(editedAccesory)
+  const onDeleteHandle = (id, mainCat, subCat) => {
+    if (mainCat === "automaty") {
+      const newArray = automats.filter(function (el) {
+        return el.id != id;
+      });
+      setDisplayProducts(newArray);
+    } else if (mainCat === "akcesoria") {
+      const newArray = loadedAccess.filter(function (el) {
+        return el.id != id;
+      });
+      setDisplayProducts(newArray);
     }
+  };
 
-  }
+  const handleEditProduct = (editedProduct, selectedType) => {
+    //console.log(editedProduct);
+
+    if (selectedType === "automaty") {
+      const editedAutomats = automats.map((automat) => {
+        if (editedProduct.id === automat.id) {
+          automat = editedProduct;
+        }
+        return automat;
+      });
+      setDisplayProducts(editedAutomats);
+    } else {
+      const editedAccesory = loadedAccess.map((access) => {
+        if (editedProduct.id === access.id) {
+          access = editedProduct;
+        }
+        return access;
+      });
+      setDisplayProducts(editedAccesory);
+    }
+  };
 
   let content = <p>No data</p>;
 
   if (products.length > 0) {
-    
-  //console.log('len: '+products.length)
-
-  console.log('Product render..')
-
     content = (
       <Products
+        onDelete={onDeleteHandle}
         products={products}
-        info={selectedCat}
+        mainCat={selectedMainCat}
+        selectedAccesory={selectedCat}
         accessoryCat={accessory}
         automatsCat={automatsCat}
         onEditProduct={handleEditProduct}
       />
     );
-  } else if (isError) {
-    content = <div><p className="error">{isError}</p><button onClick={fetchAutomats}>Try again</button></div>
-  } else if (isAnim) {
-    content = <p className="error">Anim ...</p>; //Spinner, progress bar
+  } else if (isError || isErrorAccesory) {
+    content = (
+      <div>
+        <p className="error">{isError}</p>
+        <button onClick={fetchAutomats}>Try again</button>
+      </div>
+    );
+  } else if (isAnim || isLoadingAccesory) {
+    content = (
+      <div className="spinner">
+        <div className="loading-spinner">
+          <img
+            width="100px"
+            src="https://icons.iconarchive.com/icons/elegantthemes/beautiful-flat-one-color/128/loading-icon.png"
+          />
+        </div>
+      </div>
+    );
+    //content = <div className="spinner">Anim ...<img  width="100px" src="https://icons.iconarchive.com/icons/elegantthemes/beautiful-flat-one-color/128/loading-icon.png"/></div>; //Spinner, progress bar
   }
 
   return (
@@ -190,13 +201,16 @@ const App = () => {
         />
         <div className="admin-add-product">
           {addFormVisibility && (
-          <AddProduct accessory={accessory} onAddProduct={handleAddProduct} onDisplay={displayAddForm} automatsCat={automatsCat}/>
+            <AddProduct
+              accessory={accessory}
+              onAddProduct={handleAddProduct}
+              onDisplay={displayAddForm}
+              automatsCat={automatsCat}
+            />
           )}
         </div>
+
         {content}
-        {/* {devices.length > 0 && (
-          <Products products={devices} className={animation} />
-        )*/}
       </main>
       <footer></footer>
     </>

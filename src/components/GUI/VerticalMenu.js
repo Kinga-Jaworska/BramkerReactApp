@@ -5,7 +5,7 @@ const VerticalMenu = (props) => {
 
   const accessoryOpenHandler = (e) =>
   {
-    console.log(e.target.textContent)
+    //console.log(e.target.textContent)
     props.accessoryOpen(e.target.textContent)
   }  
   const automatsOpenHandler = (e) =>
@@ -16,9 +16,9 @@ const VerticalMenu = (props) => {
   return (
     <div className={styles["vertical-menu"]}>
       <ul>
-        <li onClick={(e) => automatsOpenHandler(e)}><p>Automaty</p></li>
+        <li onClick={(e) => automatsOpenHandler(e)}><p>automaty</p></li>
         <li>
-          <p>Akcesoria</p>
+          <p>akcesoria</p>
           <ul>
             {accessory.length > 0 &&
               accessory.map((element) => {
