@@ -4,20 +4,16 @@ import Button from "../GUI/Button";
 import Card from "../GUI/Card";
 import AutomatsInput from "./AutomatsInput";
 import DropDown from "../GUI/DropDown";
-import useHttp from "../hooks/use-http";
 
-//get from base???
 const catList = [{ name: "automaty" }, { name: "akcesoria" }];
-const subListAutomats = [
-  { name: "ZESTAW PRZESUWNY" },
-  { name: "ZESTAW SKRZYDŁOWY" },
-  { name: "ZESTAW SZLABANOWY" },
-  { name: "ZESTAW GARAŻOWY" },
-];
 const FIREBASE_URL = "https://reacttest-b7b01-default-rtdb.firebaseio.com";
 
+let subCatList = [];
+
 const ProductForm = (props) => {
-  const [inputName, setInputName] = useState(props.name_product ? props.name_product : "");
+  const [inputName, setInputName] = useState(
+    props.name_product ? props.name_product : ""
+  );
   const [inputNetto, setInputNetto] = useState(
     props.price_netto ? props.price_netto : ""
   );
@@ -29,22 +25,32 @@ const ProductForm = (props) => {
   const [inputSwitches, setInputswitches] = useState(
     props.isSwitch ? props.isSwitch : false
   );
-  const [inputDiscount, setInputDiscount] = useState(
-    props.isDiscount ? props.isDiscount : false
-  );
+  // const [inputDiscount, setInputDiscount] = useState(
+  //   props.isDiscount ? props.isDiscount : false
+  // );
   const [isValid, setIsValid] = useState(true);
-  const discountRef = useRef(props.isDiscount ? props.isDiscount : false);
+  const discountRef = useRef();
   const [selectedCat, setSelectedCat] = useState(
     props.cat
       ? catList[catList.map((el) => el.name).indexOf(props.cat)].name
       : catList[0].name
   );
+
+  const prepsubCatList = [];
+  props.subListAccesory.forEach((el) => {
+    prepsubCatList.push({ name: el.cat });
+  });
+
+  console.log('cat '+props.cat)
+
+  if (props.cat === "akcesoria") {
+    subCatList = prepsubCatList;
+  } else subCatList = props.subListAutomats;
+
   const [selectedSubCat, setSelectedSubCat] = useState(
     props.subCat
-      ? subListAutomats[
-          subListAutomats.map((el) => el.name).indexOf(props.subCat)
-        ].name
-      : subListAutomats[0].name
+      ? subCatList[subCatList.map((el) => el.name).indexOf(props.subCat)].name
+      : subCatList[0].name
   );
 
   const handleName = (e) => {
@@ -54,13 +60,23 @@ const ProductForm = (props) => {
     setInputName(e.target.value);
   };
 
-  const handleDiscount = (e) => {
-    //console.log('check: '+e.target.value)
+  useEffect(() => {
+    if (props.isDiscount) discountRef.current.checked = true;
+  }, []);
 
-    //setInputDiscount(e.target.value);
-    console.log(discountRef.current);
-    console.log(discountRef.current.checked);
-  };
+
+  console.log(selectedCat)
+
+  // useEffect(() => {
+  //   if (selectedCat === "akcesoria") {
+  //     subCatList = prepsubCatList;
+  //   } else {
+  //     subCatList = props.subListAutomats;
+  //     //console.log(subCatList.length);
+  //   }
+    
+  //   setSelectedSubCat(subCatList[0].name);
+  // }, [selectedCat]);
 
   const handleImg = (e) => {
     setInputImg(e.target.value);
@@ -89,11 +105,7 @@ const ProductForm = (props) => {
 
   const handleSelectCat = (cat) => {
     setSelectedCat(cat);
-
-    if (cat === "akcesoria") setSelectedSubCat(props.subListAccesory[0].name);
-    else setSelectedSubCat(subListAutomats[0].name);
-
-    console.log("selected cat: " + cat);
+    console.log("cat " + cat);
   };
 
   const handleSubCat = (subCat) => {
@@ -101,13 +113,12 @@ const ProductForm = (props) => {
   };
 
   const getCheckSwitch = (isSwitch) => {
-    setInputswitches(isSwitch);
+    console.log(isSwitch.current.checked);
+    setInputswitches(isSwitch.current.checked);
   };
 
   const validateProduct = (event) => {
     event.preventDefault();
-
-    console.log("ADD ");
 
     if (
       inputName.trim().length === 0 ||
@@ -124,19 +135,19 @@ const ProductForm = (props) => {
 
     const netto = ((parseFloat(inputNetto) * 10) / 10).toFixed(2);
 
-    const inputDiscount = discountRef.current.checked;
+    // const inputDiscount = discountRef.current.checked;
 
     let newProduct = {
       cenaNetto: netto.toString(),
       img: inputImg,
       nazwa: inputName,
-      podlegaRabatowi: inputDiscount ? "TAK" : "NIE",
+      podlegaRabatowi: discountRef.current.checked ? "TAK" : "NIE",
     };
 
     if (selectedCat === "akcesoria")
       fetchSTR = `${selectedCat.toLowerCase()}/${selectedSubCat}`;
-    else if (selectedCat === "automaty") 
-    {
+
+    else if (selectedCat === "automaty") {
       newProduct.dzial = selectedSubCat;
 
       if (selectedSubCat === "ZESTAW PRZESUWNY")
@@ -147,13 +158,13 @@ const ProductForm = (props) => {
       fetchSTR = `${selectedCat.toLowerCase()}`;
     }
 
-    props.onHandleForm(newProduct, fetchSTR); //edit or add
+    props.onHandleForm(newProduct, fetchSTR, selectedCat); //edit or add
   };
 
   return (
     <Card className={styles.input}>
       <form onSubmit={validateProduct} className={styles.productForm}>
-        <h2>Dodaj Produkt</h2>
+        <h2>{`${props.title}`}<p className={styles.editName}>{`${inputName}`}</p></h2>
 
         {!isValid && <p>Invalid input :C</p>}
 
@@ -197,34 +208,30 @@ const ProductForm = (props) => {
           />
         </div>
 
+        {props.type === 'add' &&
         <DropDown
           selectedValue={selectedCat}
           list={catList}
           sendSelection={handleSelectCat}
           valueName="name"
-        />
+        />}
 
         <div className={styles.checkSection}>
           <label htmlFor="discount">
-            <input
-              id="discount"
-              type="checkbox"
-              //   value={inputDiscount}
-              defaultChecked={inputDiscount}
-              ref={discountRef}
-              onChange={handleDiscount}
-            />
+            <input id="discount" type="checkbox" ref={discountRef} />
             Podlega rabatowi
           </label>
           {selectedCat === "automaty" ? (
             <AutomatsInput
-              typeListAutomats={subListAutomats}
+              typeListAutomats={subCatList}
               selectedSubCat={selectedSubCat}
               swichesSelection={inputSwitches}
               onCheckSwitch={getCheckSwitch}
               onChangeSubCat={handleSubCat}
+              isSwitch={props.isSwitch}
+              type={props.type}
             />
-          ) : (
+          ) : ( 
             <DropDown
               selectedValue={selectedSubCat}
               list={props.subListAccesory}
@@ -235,10 +242,8 @@ const ProductForm = (props) => {
         </div>
 
         <div className={styles.btnSection}>
-          {/* <ButtonModal onClick={(e) => props.onConfirm(e.target.value)} id={props.id} value={props.id}>{props.button_title}</ButtonModal>
-        <ButtonModal onClick={props.onHide}>Cancel</ButtonModal> */}
-          <Button  type="submit">{props.button_title}</Button>
-          <Button  type="cancel" onClick={props.onHide}>
+          <Button type="submit">{props.button_title}</Button>
+          <Button type="cancel" onClick={props.onHide}>
             Cancel
           </Button>
         </div>

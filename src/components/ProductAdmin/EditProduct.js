@@ -8,34 +8,31 @@ const FIREBASE_URL = "https://reacttest-b7b01-default-rtdb.firebaseio.com";
 const EditProduct = (props) => {
   const { isLoading, error, sendRequest: sendEditRequest } = useHttp();
 
-  const editProductHandle = (editProduct) =>
+  const editProductHandle = (editProduct, selectedCat) =>
   {
-    console.log(editProduct)
-    // const generatedId = productData.name;
-    // const createdProduct = { id: }
-    //props.onAddProduct(addedProduct);
+    console.log(editProduct, selectedCat)
+    const brutto = (Math.floor((+editProduct.cenaNetto * 0.23 + +editProduct.cenaNetto) * 10) / 10).toFixed(2);
+    const editedDisplayProduct = {id: props.editProduct["id"], name_product: editProduct.nazwa, img: editProduct.img, price_netto: editProduct.cenaNetto, price_brutto: brutto}
+    props.onEditProduct(editedDisplayProduct, selectedCat);
+    props.onHide()
   }
 
-  const handleEditForm = async (editProduct, fetchSTR) => {
+  const handleEditForm = async (editProduct, fetchSTR, selectedCat) => {
     console.log(editProduct); //get new product from ProductForm
+    console.log(fetchSTR)
 
-    // sendEditRequest(
-    //   {
-    //     url: `${FIREBASE_URL}/${fetchSTR}.json`,
-    //     method: "PATCH",
-    //     body: editProduct,
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   },
-    //   editProductHandle.bind(editProduct)
-    // );
+    sendEditRequest(
+      {
+        url: `${FIREBASE_URL}/${fetchSTR}/${props.editProduct["id"]}.json`,
+        method: "PATCH",
+        body: editProduct,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+      editProductHandle.bind(null,editProduct, selectedCat)
+    );
   };
-
-  // const handleEditForm = (newProduct) =>
-  // {
-  //   console.log(newProduct)
-  // }
 
   return (
     <>
@@ -47,10 +44,10 @@ const EditProduct = (props) => {
         <ModalOverlay
           onHandleForm={handleEditForm} //props.onConfirm
           onHide={props.onHide}
-          title={props.title}
+          accessoryCat={props.accessoryCat}
+          automatsCat={props.automatsCat}
           editProduct={props.editProduct}
           price_brutto={props.price_brutto}
-          id={props.editProduct["id"]}
         />,
         document.getElementById("overlay-root")
       )}
@@ -64,15 +61,16 @@ const Backdrop = (props) => {
 
 const ModalOverlay = (props) => {
   return (
-    <div className={styles.modal}>
-      <header className={styles.header}>
-        <h2>{props.title}</h2>
-      </header>
-      <div className={styles.content}>
+    <div className={`${styles.modal}`}>
+      <div className={`${styles.content}`} >
         <ProductForm
           onHandleForm={props.onHandleForm}
+          type='edit'
+          title='Edytuj'
           onHide={props.onHide}
           button_title="Edytuj"
+          subListAutomats={props.automatsCat}
+          subListAccesory={props.accessoryCat}
           name_product={props.editProduct["name_product"]}
           cat={props.editProduct["cat"]}
           subCat={props.editProduct["subCat"]}

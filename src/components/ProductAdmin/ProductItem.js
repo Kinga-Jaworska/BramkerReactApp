@@ -100,7 +100,7 @@ function ProductItem(props) {
           title="Usuwanie"
         />
       )}
-      {editModal && <EditProduct title="Edit" info={props.info} onHide={hideEditModal} onConfirm={handleEdit} subListCategory={props.subListCategory}
+      {editModal && <EditProduct info={props.info} onHide={hideEditModal} onEditProduct={props.onEditProduct} onConfirm={handleEdit} accessoryCat={props.accessoryCat} automatsCat={props.automatsCat}
       editProduct={props.product} price_brutto={props.price_brutto} />}
     </div>
   );

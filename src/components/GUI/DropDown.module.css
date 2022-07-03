@@ -1,0 +1,11 @@
+.select
+{
+    text-align: center;
+    font-size: large;
+}
+
+.select:hover
+{
+    background-color: rgba(52, 52, 196, 0.303);
+    color: white;
+}

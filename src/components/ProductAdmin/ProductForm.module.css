@@ -55,8 +55,16 @@ label {
 h2 {
   text-align: center;
 }
-.productForm p {
+.productForm > p {
   animation: blink 0.8s 3;
+}
+
+.editName
+{
+  background-color: aliceblue;
+  border-radius: 4px;
+  font-size: large;
+  color: rgb(62, 29, 152);
 }
 
 @media (min-width: 880px) {
@@ -64,6 +72,12 @@ h2 {
     display: flex;
   }
 }
+
+.fadeIn
+{
+  animation: blink 3s;
+}
+
 
 @keyframes blink {
   100% {

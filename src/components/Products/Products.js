@@ -10,9 +10,11 @@ const Products = (props) => {
     return (
       <ProductItem
         product={product}
+        accessoryCat={props.accessoryCat}
         info={props.info}
         price_brutto={toBrutto(product.price_netto)}
-        subListCategory={props.subListCategory}
+        automatsCat={props.automatsCat}      
+        onEditProduct={props.onEditProduct}  
       ></ProductItem>
     );
   });

@@ -34,19 +34,14 @@ const AddProduct = (props) => {
   return (
     <>
       <ProductForm
-        //Function - add
-        // onAdd={productAddHandler}
         loadingInfo={isLoading}
         button_title="Dodaj"
         onHandleForm={handleAddForm}
         onHide={props.onDisplay}
         subListAccesory={props.accessory}
-        /*onCancelClick = {openAddForm}*/
-
-        // // selectedCat={selectedCat}
-        // subListAccesory={accessory}
-        // onOpen={openAddForm}
-        // subListAutomats={accessory}
+        subListAutomats={props.automatsCat}
+        type='add'
+        title='Dodaj produkt'
       >
         <div className="error"> {error && <p>{error}</p>}</div>
       </ProductForm>

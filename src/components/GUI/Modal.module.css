@@ -6,6 +6,7 @@
   height: 100vh;
   z-index: 10;
   background: rgba(0, 0, 0, 0.75);
+  animation: fadeIn 2s;  
 }
 
 .modal {
@@ -48,4 +49,17 @@
     left: calc(50% - 20rem);
     width: 40rem;
   }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 1;
+  }  
+}
+
+.fadeIn
+{
+  animation: fadeIn 3s ease-in;
 }

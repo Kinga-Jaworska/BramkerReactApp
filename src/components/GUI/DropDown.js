@@ -1,3 +1,4 @@
+import styles from './DropDown.module.css'
 const DropDown = (props) => {
   const handleSelection = (e) => {
     props.sendSelection(e.target.value);
@@ -5,11 +6,10 @@ const DropDown = (props) => {
 
   let valueName = props.valueName;
 
-  //console.log("VAL name " + props.valueName);
   return (
-    <select value={props.selectedValue} onChange={handleSelection}>
+    <select value={props.selectedValue} onChange={handleSelection} className={styles.select}>
       {props.list.map((element) => {
-        return <option value={element[valueName]}>{element[valueName]}</option>;
+        return <option key={`${element[valueName]}_${Math.random()}`} value={element[valueName]}>{element[valueName]}</option>;
       })}
     </select>
   );
