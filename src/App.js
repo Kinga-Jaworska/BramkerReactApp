@@ -194,12 +194,18 @@ const App = () => {
       </Navbar>
       <main>
         {isError && <p>ERROR</p>}
-        <VerticalMenu
-          accessory={accessory}
-          accessoryOpen={accessoryOpen}
-          automatsOpen={automatsOpen}
-        />
-        <div className="admin-add-product">
+        <div className="container">
+          <div className="col-left">
+          <VerticalMenu
+              accessory={accessory}
+              accessoryOpen={accessoryOpen}
+              automatsOpen={automatsOpen}
+            />
+          </div>
+          </div>
+          <div className="container-2">
+          <div className="container-row">
+          <div className="col-up">
           {addFormVisibility && (
             <AddProduct
               accessory={accessory}
@@ -208,9 +214,43 @@ const App = () => {
               automatsCat={automatsCat}
             />
           )}
+          </div>
+          <div className="col-main-1">         
+            {content}             
+          </div>
         </div>
+        </div>
+      
 
-        {content}
+        {/* <div className="row-container">
+          <div className="col-container">
+            <VerticalMenu
+              accessory={accessory}
+              accessoryOpen={accessoryOpen}
+              automatsOpen={automatsOpen}
+            />
+          </div>
+          </div> */}
+          {/* <div className="row-full-container">
+        <div className="admin-add-product">  
+        <div className="col-container">
+          {addFormVisibility && (
+            <AddProduct
+              accessory={accessory}
+              onAddProduct={handleAddProduct}
+              onDisplay={displayAddForm}
+              automatsCat={automatsCat}
+            />
+          )}
+          </div>
+</div>
+        </div>
+        
+          <div className="col-container">
+          {content}
+          </div>
+         */}
+        
       </main>
       <footer></footer>
     </>
