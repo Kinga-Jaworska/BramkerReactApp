@@ -68,12 +68,15 @@ footer{
 
 .error
 {
-  color: tomato;
+  color: rgb(237, 61, 30);
   display: flex;  
-  background-color: bisque;
+  background-color: rgb(228, 217, 204);
   text-align: center;
   justify-content: center;
   z-index: 1;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 5px 0;
   align-items: center;
 
 }

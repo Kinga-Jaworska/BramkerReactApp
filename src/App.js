@@ -1,11 +1,13 @@
 import Products from "./components/Products/Products";
-import AddProduct from "./components/ProductAdmin/AddProduct";
 import "./App.css";
-import Navbar from "./components/GUI/Navbar";
-import { useEffect, useState, useCallback } from "react";
-import NavLink from "./components/GUI/NavLink";
-import VerticalMenu from "./components/GUI/VerticalMenu";
+import { useEffect, useState, useCallback, useContext } from "react";
 import useHttp from "./components/hooks/use-http";
+import Layout from "./components/Layout/Layout";
+import { Redirect, Route, Switch } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import AuthPage from "./pages/AuthPage";
+import UserProfile from "./components/Profile/UserProfile";
+import AuthContext from "./context/auth-context";
 
 const App = () => {
   const [addFormVisibility, setAddFormVisibility] = useState(false);
@@ -19,6 +21,7 @@ const App = () => {
   const FIREBASE_URL = "https://reacttest-b7b01-default-rtdb.firebaseio.com";
 
   const { isAnim, error: isError, sendRequest: fetchAutomats } = useHttp();
+  const authCtx = useContext(AuthContext);
 
   const {
     isAnim: isLoadingAccesory,
@@ -186,74 +189,27 @@ const App = () => {
   }
 
   return (
-    <>
-      <Navbar>
-        {/* <img height="40" src={logo} /> */}
-        <NavLink onClick={displayAddForm}>Add</NavLink>
-        <NavLink>Zmień % Brutto</NavLink>
-      </Navbar>
-      <main>
-        {isError && <p>ERROR</p>}
-        <div className="container">
-          <div className="col-left">
-          <VerticalMenu
-              accessory={accessory}
-              accessoryOpen={accessoryOpen}
-              automatsOpen={automatsOpen}
-            />
-          </div>
-          </div>
-          <div className="container-2">
-          <div className="container-row">
-          <div className="col-up">
-          {addFormVisibility && (
-            <AddProduct
-              accessory={accessory}
-              onAddProduct={handleAddProduct}
-              onDisplay={displayAddForm}
-              automatsCat={automatsCat}
-            />
-          )}
-          </div>
-          <div className="col-main-1">         
-            {content}             
-          </div>
-        </div>
-        </div>
-      
+    <Layout>
+      <Switch>
+        <Route path="/" exact>
+          <HomePage />
+        </Route>
+        {!authCtx.isLoggedIn && (
+          <Route path="/auth">
+            <AuthPage />
+          </Route>
+        )}
 
-        {/* <div className="row-container">
-          <div className="col-container">
-            <VerticalMenu
-              accessory={accessory}
-              accessoryOpen={accessoryOpen}
-              automatsOpen={automatsOpen}
-            />
-          </div>
-          </div> */}
-          {/* <div className="row-full-container">
-        <div className="admin-add-product">  
-        <div className="col-container">
-          {addFormVisibility && (
-            <AddProduct
-              accessory={accessory}
-              onAddProduct={handleAddProduct}
-              onDisplay={displayAddForm}
-              automatsCat={automatsCat}
-            />
-          )}
-          </div>
-</div>
-        </div>
-        
-          <div className="col-container">
-          {content}
-          </div>
-         */}
-        
-      </main>
-      <footer></footer>
-    </>
+        <Route path="/profile">
+          {authCtx.isLoggedIn && <UserProfile />}
+          {!authCtx.isLoggedIn && <Redirect to="/auth" />}
+        </Route>
+
+        <Route path="*">
+          <Redirect to="/" />
+        </Route>
+      </Switch>
+    </Layout>
   );
 };
 
