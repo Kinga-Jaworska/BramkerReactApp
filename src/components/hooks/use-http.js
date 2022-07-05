@@ -22,9 +22,11 @@ const useHttp = (applyData) => {
       }
 
       const data = await response.json();
+
+      //return data;
       //console.log("data: " + data);
       applyData(data);
-      console.log(data.length)
+      //console.log(data.length)
 
     } catch (err) {
       console.log(err);

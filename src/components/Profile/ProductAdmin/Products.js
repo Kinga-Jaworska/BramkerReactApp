@@ -1,4 +1,4 @@
-import ProductItem from "../ProductAdmin/ProductItem";
+import ProductItem from "./ProductItem";
 
 const Products = (props) => {
   function toBrutto(netto) {

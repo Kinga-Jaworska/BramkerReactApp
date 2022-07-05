@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./ProductForm.module.css";
-import Button from "../GUI/Button";
-import Card from "../GUI/Card";
+import Button from "../../GUI/Button";
+import Card from "../../GUI/Card";
 import AutomatsInput from "./AutomatsInput";
-import DropDown from "../GUI/DropDown";
+import DropDown from "../../GUI/DropDown";
 
 const catList = [{ name: "automaty" }, { name: "akcesoria" }];
 const FIREBASE_URL = "https://reacttest-b7b01-default-rtdb.firebaseio.com";

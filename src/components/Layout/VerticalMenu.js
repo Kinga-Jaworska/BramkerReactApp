@@ -5,7 +5,6 @@ const VerticalMenu = (props) => {
 
   const accessoryOpenHandler = (e) =>
   {
-    //console.log(e.target.textContent)
     props.accessoryOpen(e.target.textContent)
   }  
   const automatsOpenHandler = (e) =>

@@ -1,4 +1,6 @@
-import useHttp from "../hooks/use-http";
+import { useContext } from "react";
+import DataContext from "../../../context/data-context";
+import useHttp from "../../hooks/use-http";
 import ProductForm from "./ProductForm";
 
 const FIREBASE_URL = "https://reacttest-b7b01-default-rtdb.firebaseio.com";
@@ -6,13 +8,17 @@ const FIREBASE_URL = "https://reacttest-b7b01-default-rtdb.firebaseio.com";
 const AddProduct = (props) => {
   const { isLoading, error, sendRequest: sendProductRequest } = useHttp();
 
+  const dataCtx = useContext(DataContext)
+
   const createProduct = (addedProduct, mainCat) => {
     //ONLY to display
-    const brutto = (
-      Math.floor(
-        (+addedProduct.cenaNetto * 0.23 + +addedProduct.cenaNetto) * 10
-      ) / 10
-    ).toFixed(2);
+    // const brutto = (
+    //   Math.floor(
+    //     (+addedProduct.cenaNetto * 0.23 + +addedProduct.cenaNetto) * 10
+    //   ) / 10
+    // ).toFixed(2);
+
+    const brutto = dataCtx.convertToBurtto(addedProduct.cenaNetto)
     const addedDisplayProduct = {
       id: addedProduct.name,
       name_product: addedProduct.nazwa,

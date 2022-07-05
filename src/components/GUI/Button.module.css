@@ -1,15 +1,43 @@
-.button
-{
-    border-radius: 5px;
-    color: aliceblue;
-    padding: 10px;
-    cursor: pointer;
-    background-color: #4545be;
-    margin: 10px 0px;
+.button {
+  border-radius: 5px;
+  color: aliceblue;
+  padding: 10px;
+  cursor: pointer;
+  background-color: #4545be;
+  margin: 10px 0px;
 }
 
-.button[type="cancel"]
-{
-    background-color: aliceblue;
-    color: black;
+.button[type="cancel"] {
+  background-color: aliceblue;
+  color: black;
+}
+
+.block-btn {
+  display: block;
+  width: 100%;
+  background-color: #4545be;
+  font-size: large;
+}
+.block-btn:hover {
+  background-color: #6060bbcb;
+  border-style: dashed;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+.edit-btn {
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+}
+.delete-btn {
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+}
+
+.edit-btn:hover {
+    background-color: #3c3cc475;
+
+}
+.delete-btn:hover{
+    background-color: rgba(240, 158, 36, 0.582);
 }

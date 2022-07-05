@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import Button from "../GUI/Button";
-import Modal from "../GUI/Modal";
-import useHttp from "../hooks/use-http";
+import Button from "../../GUI/Button";
+import Modal from "../../GUI/Modal";
+import useHttp from "../../hooks/use-http";
 import EditProduct from "./EditProduct";
 import "./ProductItem.css";
 
@@ -29,10 +29,10 @@ function ProductItem(props) {
     //console.log(editProduct); //get new product from ProductForm
     const id = props.product["id"];
     console.log("id " + id);
-    console.log('accessory cat:'+props.selectedAccesory);
-    console.log('mainCat '+props.mainCat)
-    const subCat = props.selectedAccesory
-    const mainCat = props.mainCat
+    console.log("accessory cat:" + props.selectedAccesory);
+    console.log("mainCat " + props.mainCat);
+    const subCat = props.selectedAccesory;
+    const mainCat = props.mainCat;
     let fetchSTR = "";
     // const id = props.product['id'];
     //console.log("to delete " + id);
@@ -45,18 +45,15 @@ function ProductItem(props) {
 
     console.log(`${FIREBASE_URL}/${fetchSTR}.json`);
 
-    fetch(`${FIREBASE_URL}/${fetchSTR}.json`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    // fetch(`${FIREBASE_URL}/${fetchSTR}.json`, {
+    //   method: "DELETE",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // });
 
-    hideModal()
-    props.onDelete(id,mainCat,subCat)
-
-
-
+    hideModal();
+    props.onDelete(id, mainCat, subCat);
 
     //props.onDelete(id, props.mainCat, props.selectedAccesory);
     // console.log('info '+props.info)
@@ -130,7 +127,7 @@ function ProductItem(props) {
     setDeleteModal(false);
   };
 
-  const hideEditModal = () => {    
+  const hideEditModal = () => {
     setEditModal(false);
   };
 
@@ -153,18 +150,26 @@ function ProductItem(props) {
         </div>
         <div className="expense-item-actions">
           <Button
+            className="delete-btn"
             value={props.product["id"]}
             key={`add_${props.product["id"]}`}
-            onClick={displayModal}
-          >
-            Delete
+            onClick={displayModal}>
+            <img
+              alt="edit product"
+              width="30"
+              src="https://img.icons8.com/avantgarde/344/experimental-delete-avantgarde.png"
+            />
           </Button>
           <Button
+            className="edit-btn"
             value={props.product["id"]}
             key={`edit_${props.product["id"]}`}
-            onClick={displayEditForm}
-          >
-            Edit
+            onClick={displayEditForm}>
+            <img
+              alt="edit product"
+              width="30"
+              src="https://img.icons8.com/avantgarde/344/experimental-edit-avantgarde.png"
+            />
           </Button>
         </div>
       </div>

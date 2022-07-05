@@ -1,4 +1,4 @@
-import styles from './StartingPageContent.module.css';
+import styles from "./StartingPageContent.module.css";
 
 const StartingPageContent = () => {
   return (

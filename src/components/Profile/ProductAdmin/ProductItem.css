@@ -6,15 +6,13 @@
   box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em,
     rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em,
     rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
-  /* border-style: ridge; */
-  /* border-color: rgb(18, 84, 205); */
-  /* box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; */
   margin-top: 20px;
   display: block;
   margin-left: auto;
   margin-right: auto;
   animation: fadeIn 2s ease-out;
   box-sizing: border-box;
+  margin-bottom: 10px;
 }
 .expense-price-block {
   display: flex;
@@ -77,8 +75,7 @@
   display: flex;
   align-items: center;
 } */
-.expense-item-actions
-{
+.expense-item-actions {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -89,9 +86,8 @@
   /*display: flex;*/
   /* justify-content: flex-end; */
 }
-.fadeIn
-{
-    animation: fadeIn 0.8s ease-out;
+.fadeIn {
+  animation: fadeIn 0.8s ease-out;
 }
 @keyframes fadeIn {
   0% {
@@ -101,3 +97,41 @@
     opacity: 1;
   }
 }
+@media (max-width: 768px) {
+  .expense-item {
+    display: grid;
+    height: fit-content;
+    width: auto;
+    margin-right: 10px;
+  }
+  .expense-price-block {
+    display: flex;
+    justify-content: left;
+    align-items: left;
+    width: 100%;
+  }
+  .expense-item-price {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    justify-content: flex-end;
+    justify-items: center;
+    color: white;
+    margin-top: 10px;
+    transform: skew(-10deg);
+  }
+}
+/* @media (min-width: 968px) {
+  .expense-item
+  {
+    flex-direction: row;
+    display: flex;
+    height: fit-content;
+    width: auto;
+  }
+  .expense-item-img {
+    display: block;
+    width: 60%;  
+  }  
+
+} */

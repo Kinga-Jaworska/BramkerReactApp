@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import DropDown from "../GUI/DropDown";
+import DropDown from "../../GUI/DropDown";
 
 const AutomatsInput = (props) => {
   //console.log('is Switch '+props.isSwitch)

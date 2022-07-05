@@ -1,3 +1,4 @@
+import MainPageList from '../StartingPage/MainPageList';
 import ProfileForm from './ProfileForm';
 import styles from './UserProfile.module.css';
 

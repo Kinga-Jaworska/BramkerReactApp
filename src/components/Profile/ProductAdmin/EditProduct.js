@@ -1,7 +1,7 @@
 import ProductForm from "./ProductForm";
 import styles from "./EditProduct.module.css";
 import ReactDOM from "react-dom";
-import useHttp from "../hooks/use-http";
+import useHttp from "../../hooks/use-http";
 import { useState } from "react";
 
 const FIREBASE_URL = "https://reacttest-b7b01-default-rtdb.firebaseio.com";
