@@ -1,42 +1,68 @@
 .header {
-  /* margin-bottom: 10px;
-  padding: 10px 16px;
-  background-color: rgb(240, 240, 243);
-  position: sticky;
-  top: 0;
-  bottom: 0;
-  width: 100vw;
-  display: flex;
-  height: 70px;
-  z-index: 1;
-  justify-content: space-between;
-  overflow: visible; */
-
   width: 100%;
   position: fixed;
-  padding: 10px 16px;
-  background-color: rgb(240, 240, 243);
+  padding: 0px 16px;
+  background-color: rgb(220, 225, 234);
   justify-content: space-between;
   display: flex;
   top: 0;
   z-index: 10;
-  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  box-shadow: rgba(38, 52, 93, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
-
-.logo {
-  font-family: "Lato", sans-serif;
-  font-size: 2rem;
-  color: rgb(17, 38, 175);
-  margin: 0;
+/* .header-img {
+  display: flex;
+} */
+.header img {  
+  height: 100px;
+  padding: 10px;
 }
-
+.header nav{
+  display: flex;
+  align-items: center;
+}
 .header ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
-  align-items: baseline;
+  margin: 10px;
 }
+.header li {
+  display: flex;
+  justify-content: center;
+}
+.header a {
+  text-decoration: none;
+  color: rgba(1, 30, 120, 1);
+  font-weight: bold;
+  display: flex;
+  margin-right: 10px;
+  align-items: center;
+}
+.header button {
+  font: inherit;
+  background-color: transparent;
+  border: 1px solid rgb(121, 96, 96);
+  color: #011e78;
+  font-weight: bold;
+  padding: 0.5rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.header a {
+  text-decoration: none;
+  color: rgba(1, 30, 120, 1);
+  font-weight: bold;
+}
+.header button:hover {
+  background-color: #011e78;
+  color: #e8e7ed;
+}
+.header a:hover {
+  color: #457fb3;
+}
+/* 
 
 .header li {
   margin: 0 1rem;
@@ -66,4 +92,4 @@
 .header button:hover {
   background-color: #253575;
   color: #a7aec9;
-}
+} */

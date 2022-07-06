@@ -8,6 +8,8 @@ const DataContext = React.createContext({
   isAnim: true,
   isError: false,
   isErrorAccesory: false,
+  bruttoVal: 23,
+  setBruttoVal: () =>{},
   convertToBurtto: () => {},
   getAutomats: () => {},
   getAccessory: () => {},
@@ -24,6 +26,7 @@ export const DataContextProvider = (props) => {
   const [automats, setAutomats] = useState([]);
   const [accessory, setAccessory] = useState([]);
   const [automatsCat, setAutomatsCat] = useState([]);
+  const [bruttoVal, setBruttoVal] = useState(localStorage.getItem('bruttoVal') ? localStorage.getItem('bruttoVal') : 23)
 
 
   useEffect(() => {
@@ -69,8 +72,6 @@ export const DataContextProvider = (props) => {
       { url: `${FIREBASE_URL}/akcesoria.json` },
       transformAccessory
     );
-
-    //console.log('context: '+automats)
   }, [fetchAccessory]);
 
 
@@ -102,11 +103,16 @@ export const DataContextProvider = (props) => {
   {
     const brutto = (
       Math.floor(
-        (+cenaNetto * 0.23 + +cenaNetto) * 10
+        (+cenaNetto * (bruttoVal/100) + +cenaNetto) * 10
       ) / 10
     ).toFixed(2);
 
     return brutto;
+  }
+  const setBruttoValHandle = (settedVal) =>
+  {
+    setBruttoVal(settedVal)
+    localStorage.setItem('bruttoVal',settedVal)    
   }
 
   const contextValue = {
@@ -116,6 +122,8 @@ export const DataContextProvider = (props) => {
     isAnim: isAnim,
     isError: isError,
     isErrorAccesory: isErrorAccesory,
+    bruttoVal: bruttoVal,
+    setBruttoVal: setBruttoValHandle,
     convertToBurtto: convertBruttoHandle,
     getAutomats: automatsHandler,
     getAccessory: accessoryHandler,

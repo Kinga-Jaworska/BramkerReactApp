@@ -1,0 +1,40 @@
+.user-list-item
+{
+    min-width: 200px;
+    width: 70%;
+    margin: 10px;
+    height: fit-content;
+    color: aliceblue;   
+}
+.user-list-item:hover{
+    scale: 1.1;
+    cursor: pointer;
+}
+h3,p{
+    padding: 0px;
+    margin: 0px;
+}
+p{
+    margin-top: 5px;
+}
+.wraper
+{
+    display: flex;
+    flex-direction: row;
+}
+.info-section
+{    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.img-section
+{
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    align-items: center;
+}
+.img-section img{
+    height: 70px;
+}

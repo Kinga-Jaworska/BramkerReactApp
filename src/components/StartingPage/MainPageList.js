@@ -1,14 +1,15 @@
-import { useCallback, useContext, useEffect, useState } from "react";
-import useHttp from "../hooks/use-http";
+import { useContext, useEffect, useState } from "react";
 import Products from "../Profile/ProductAdmin/Products";
 import AddProduct from "../Profile/ProductAdmin/AddProduct";
 import VerticalMenu from "../Layout/VerticalMenu";
 import styles from "./MainPageList.module.css";
 import Button from "../GUI/Button";
 import DataContext, { DataContextProvider } from "../../context/data-context";
+import AuthContext from "../../context/auth-context";
 
 const MainPageList = (props) => {
   const dataCtx = useContext(DataContext);
+  const authCtx = useContext(AuthContext)
 
   const automats = dataCtx.automats;
   const accessory = dataCtx.accessory;
@@ -24,6 +25,8 @@ const MainPageList = (props) => {
   const [selectedAccesory, setSelectedCat] = useState("");
   const [selectedMainCat, setSelectedMainCat] = useState("automaty");
   const [loadedAccess, setLoadedAccess] = useState();
+
+  //console.log('ROLE '+authCtx.role)
 
   const automatsOpen = (e) => {
     setSelectedCat("automaty");
@@ -149,8 +152,14 @@ const MainPageList = (props) => {
 
       <div className={styles["container-2"]}>
         <div className={styles["container-row"]}>
-        {!isAnim && <div><Button className="block-btn" onClick={displayAddForm}>Add</Button></div>}
-          <div className={styles["col-up"]}>          
+          {!isAnim && (
+            <div>
+              <Button className="block-btn" onClick={displayAddForm}>
+                Add
+              </Button>
+            </div>
+          )}
+          <div className={styles["col-up"]}>
             {automatsCat && addFormVisibility && (
               <AddProduct
                 accessory={accessory}

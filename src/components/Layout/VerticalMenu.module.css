@@ -9,12 +9,7 @@
   position: relative;
   margin-top: 10px;
   background: rgb(232, 231, 237);
-  background: linear-gradient(
-    342deg,
-    rgba(232, 231, 237, 0.432) 16%,
-    rgba(69, 127, 179, 1) 48%,
-    rgba(1, 30, 120, 1) 82%
-  );
+  background: linear-gradient(342deg, rgba(232, 231, 237, 0.004) 5%, rgba(232,231,237,0.562062324929972) 24%, rgba(69,127,179,1) 47%, rgba(1,30,120,1) 82%);
 }
 .vertical-menu p {
   padding: 0px;
@@ -84,12 +79,14 @@
   background-color: rgba(27, 106, 175, 0.377);
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   transform: skew(-10deg);
+  scale: 1.1;
 }
 .vertical-main-btn:hover
 {
     background-color: rgba(114, 161, 203, 0.529);
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     transform: skew(0deg);
+    scale: 1.1;
 }
 .vertical-main-btn:hover p
 {

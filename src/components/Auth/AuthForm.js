@@ -1,9 +1,10 @@
 import { useRef, useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import AuthContext from '../../context/auth-context';
-import styles from './AuthForm.module.css';
-
-const API_KEY='AIzaSyBqTyIEX7dxcB2oTSjoq4qwJIbbFmYieEs'
+import styles from './AuthForm.module.css'
+import {signInWithEmailAndPassword} from 'firebase/auth'
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { baseURL, auth } from '../../firebase.config';
 
 const AuthForm = () => {
   const authCtx = useContext(AuthContext)
@@ -13,69 +14,45 @@ const AuthForm = () => {
   const [isLoginAction, setIsLoginAction] = useState(true);
   const [isError, setIsError] = useState('')
 
+
   const switchAuthModeHandler = () => {
     setIsLoginAction((prevState) => !prevState);
     setIsError('')
   };
-
   const submitHandler = (e) =>
   {
     e.preventDefault()
-
     const enteredEmail = emailInput.current.value
     const enteredPass = passwordInput.current.value    
-    let url = ''
 
     if(isLoginAction)
     {
-      //Log IN
-      url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`   
+      //LOG IN:
+      signInWithEmailAndPassword(auth, enteredEmail, enteredPass)
+      .then(() => {
+        const userID = auth.currentUser.uid
+        console.log(auth.currentUser.providerId)
+        console.log(baseURL)
+        auth.currentUser.getIdTokenResult().then((data)=>
+        {  
+          const expirationTime = new Date(data.expirationTime)
+          authCtx.login(auth.currentUser.accessToken, expirationTime,userID)
+          history.replace('/')
+        }).catch((err)=>alert(err.message))        
+      }).catch(err => alert(err.message))
     }
     else
-    {
-      //Sign UP
-      url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`      
-    }
-
-    fetch(url,
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          email: enteredEmail,
-          password: enteredPass,
-          returnSecureToken: true
-        }),
-        headers:{
-          'Content-Type': 'application/json'
-        }
-      }).then((res)=>
-      {
-        if(res.ok)
-        {
-          return res.json()
-        }
-        else
-        {
-          return res.json().then(data =>
-            {              
-              let errorMessage = 'Coś jest nie tak :C '
-              if(data && data.error && data.error.message)
-              {
-                errorMessage += data.error.message
-              }                  
-              throw new Error(errorMessage)
-            })
-        }
-      }).then((data) => {
-        //console.log(data.idToken) //token, email etc.
-        const expirationTime =  new Date(new Date().getTime() + (+data.expiresIn * 1000))
-        authCtx.login(data.idToken, expirationTime)
-        history.replace('/')
-      }).catch(err=>{
-        alert(err)
-        //setIsError(err)   //failed log in or sign up
+    {   
+      createUserWithEmailAndPassword(auth, enteredEmail, enteredPass)
+      .then((res) => {
+        alert('Witamy na pokładzie. Wystarczy, że się zalogujesz')
+        switchAuthModeHandler()
       })
+      .catch((error) => {
+        setIsError(alert(error.message))
+      });      
     }    
+  }  
 
   return (
     <section className={styles.auth}>

@@ -1,0 +1,11 @@
+thead
+{
+    color: blue;
+}
+.settings-container
+{
+    display: flex;
+    width: 70%;
+    height: fit-content;
+    justify-content: center;
+}

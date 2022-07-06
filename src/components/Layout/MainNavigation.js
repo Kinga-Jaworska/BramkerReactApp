@@ -1,31 +1,47 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../../context/auth-context";
-import classes from "./MainNavigation.module.css";
+import styles from "./MainNavigation.module.css";
+import bramkerLogo from "../../assets/logobramker.png";
 
 const MainNavigation = () => {
   const authCtx = useContext(AuthContext);
   const isLoggedIn = authCtx.isLoggedIn;
+  const role = authCtx.role;
 
   const logoutHandler = () => {
     authCtx.logOut();
   };
 
   return (
-    <header className={classes.header}>
+    <header className={styles.header}>
       <Link to="/">
-        <div className={classes.logo}>Bramker</div>
+        <section className={styles["header-img"]}>
+          <img src={bramkerLogo} alt="Bramker logo" />
+        </section>
       </Link>
       <nav>
         <ul>
           {!isLoggedIn && (
             <li>
-              <Link to="/auth">Login</Link>
+              <Link to="/auth">
+                <button>Login</button>
+              </Link>
             </li>
           )}
           {isLoggedIn && (
             <li>
               <Link to="/profile">Profile</Link>
+            </li>
+          )}
+          {role === "a" && (
+            <li>
+              <Link to="/users">Users</Link>
+            </li>
+          )}
+          {role === "a" && (
+            <li>
+              <Link to="/settings">Settings</Link>
             </li>
           )}
           {isLoggedIn && (
