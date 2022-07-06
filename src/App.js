@@ -1,9 +1,7 @@
 import "./App.css";
 import { useEffect, useState, useContext } from "react";
-import useHttp from "./components/hooks/use-http";
 import Layout from "./components/Layout/Layout";
 import { Redirect, Route, Switch } from "react-router-dom";
-import HomePage from "./pages/HomePage";
 import AuthPage from "./pages/AuthPage";
 import UserProfile from "./components/Profile/UserProfile";
 import AuthContext from "./context/auth-context";
@@ -13,29 +11,29 @@ const App = () => {
   const authCtx = useContext(AuthContext);
 
   return (
-    <Layout>
-      <Switch>
-        <Route path="/" exact>
-        {authCtx.isLoggedIn && <MainPage />}
-          {!authCtx.isLoggedIn && <Redirect to="/auth" />}
-        </Route>
-
-        {!authCtx.isLoggedIn && (
-          <Route path="/auth">
-            <AuthPage />
+      <Layout>
+        <Switch>
+          <Route path="/" exact>
+            {authCtx.isLoggedIn && <MainPage />}
+            {!authCtx.isLoggedIn && <Redirect to="/auth" />}
           </Route>
-        )}
 
-        <Route path="/profile">
-          {authCtx.isLoggedIn && <UserProfile />}
-          {!authCtx.isLoggedIn && <Redirect to="/auth" />}
-        </Route>
-        
-        <Route path="*">
-          <Redirect to="/" />
-        </Route>
-      </Switch>
-    </Layout>
+          {!authCtx.isLoggedIn && (
+            <Route path="/auth">
+              <AuthPage />
+            </Route>
+          )}
+
+          <Route path="/profile">
+            {authCtx.isLoggedIn && <UserProfile />}
+            {!authCtx.isLoggedIn && <Redirect to="/auth" />}
+          </Route>
+
+          <Route path="*">
+            <Redirect to="/" />
+          </Route>
+        </Switch>
+      </Layout>
   );
 };
 

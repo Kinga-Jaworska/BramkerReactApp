@@ -20,24 +20,57 @@
 }
 .block-btn:hover {
   background-color: #6060bbcb;
-  border-style: dashed;
+  border-style: groove;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 .edit-btn {
   background-color: transparent;
   display: flex;
   justify-content: center;
+  border-radius: 5px;
+  border-style: none;
 }
 .delete-btn {
   background-color: transparent;
   display: flex;
   justify-content: center;
+  border-radius: 5px;
+  border-style: none;
 }
 
-.edit-btn:hover {
-    background-color: #3c3cc475;
+.delete-btn img:hover{
 
+  /*background-color: rgba(240, 158, 36, 0.582);*/
+  scale: 1.5;
+  animation: transDel 2s;
 }
-.delete-btn:hover{
-    background-color: rgba(240, 158, 36, 0.582);
+
+.edit-btn img:hover{
+
+  /*background-color: rgba(240, 158, 36, 0.582);*/
+  scale: 1.5;
+  animation: rotEdit 1s;
+}
+
+@keyframes rotEdit {
+  0%{
+    rotate: 20deg;
+  }
+  50%
+  {
+    rotate: -20deg;
+  }
+  80%
+  {
+    rotate: 10deg;
+  }  
+}
+@keyframes transDel {
+  0%{
+    transform: translateY(-15%);
+  }
+  50%{
+    transform: translateY(-5%);
+  }
+
 }

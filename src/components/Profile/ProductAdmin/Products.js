@@ -1,12 +1,13 @@
+import { useContext } from "react";
+import DataContext from "../../../context/data-context";
 import ProductItem from "./ProductItem";
 
 const Products = (props) => {
-  function toBrutto(netto) {
-    const brutto = (Math.floor((+netto * 0.23 + +netto) * 10) / 10).toFixed(2);
-    return brutto;
-  }
+
+  const dataCtx = useContext(DataContext)
 
   return props.products.map((product) => {
+    
     return (
       <ProductItem
         product={product}
@@ -14,7 +15,7 @@ const Products = (props) => {
         accessoryCat={props.accessoryCat}
         mainCat={props.mainCat}
         selectedAccesory={props.selectedAccesory}
-        price_brutto={toBrutto(product.price_netto)}
+        price_brutto={dataCtx.convertToBurtto(product.price_netto)}
         automatsCat={props.automatsCat}      
         onEditProduct={props.onEditProduct}  
       ></ProductItem>

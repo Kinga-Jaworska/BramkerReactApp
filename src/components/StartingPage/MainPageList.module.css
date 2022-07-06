@@ -4,7 +4,6 @@
   flex-direction: row;
   width: fit-content;
   flex-grow: 2;
-
 }
 .container {
   display: flex;
@@ -12,8 +11,13 @@
   flex-direction: column;
   height: 100vh;
   width: fit-content;
-  /* min-width: fit-content; */
-  
+  /* min-width: fit-content; */  
+}
+.col-left {
+  display: grid;
+  /* flex: 0 0 100%; */
+  width: fit-content;
+  height: 100vh;  
 }
 .container-2 {
   display: grid;
@@ -24,14 +28,6 @@
   margin-left: 30px;  
   justify-content: center;
   align-items: center;
-
-}
-.col-left {
-  display: grid;
-  /* flex: 0 0 100%; */
-  width: fit-content;
-  height: 100vh;
-  
 }
 .col-main-1 {
   width: 100%;
@@ -48,7 +44,6 @@
   display: flex;
   justify-content: center;
 }
-
 .spinner {
   height: 100vh;
   display: flex;

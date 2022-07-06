@@ -1,16 +1,17 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import styles from "./ProductForm.module.css";
 import Button from "../../GUI/Button";
 import Card from "../../GUI/Card";
 import AutomatsInput from "./AutomatsInput";
 import DropDown from "../../GUI/DropDown";
+import DataContext from "../../../context/data-context";
 
 const catList = [{ name: "automaty" }, { name: "akcesoria" }];
-const FIREBASE_URL = "https://reacttest-b7b01-default-rtdb.firebaseio.com";
-
 let subCatList = [];
 
 const ProductForm = (props) => {
+  const dataCtx = useContext(DataContext)
+
   const [inputName, setInputName] = useState(
     props.name_product ? props.name_product : ""
   );
@@ -25,9 +26,6 @@ const ProductForm = (props) => {
   const [inputSwitches, setInputswitches] = useState(
     props.isSwitch ? props.isSwitch : false
   );
-  // const [inputDiscount, setInputDiscount] = useState(
-  //   props.isDiscount ? props.isDiscount : false
-  // );
   const [isValid, setIsValid] = useState(true);
   const discountRef = useRef();
   const [selectedCat, setSelectedCat] = useState(
@@ -40,8 +38,6 @@ const ProductForm = (props) => {
   props.subListAccesory.forEach((el) => {
     prepsubCatList.push({ name: el.cat });
   });
-
-  //console.log('cat '+props.cat)
 
   if (props.cat === "akcesoria") {
     subCatList = prepsubCatList;
@@ -77,7 +73,7 @@ const ProductForm = (props) => {
 
     //AUTOMATE BRUTTO:
     const netto = parseFloat(e.target.value);
-    const brutto = (Math.floor((netto * 0.23 + netto) * 10) / 10).toFixed(2);
+    const brutto = dataCtx.convertToBurtto(netto)
     setInputBrutto(brutto.toString());
   };
 
@@ -87,7 +83,6 @@ const ProductForm = (props) => {
 
   const handleSelectCat = (cat) => {
     setSelectedCat(cat);
-    console.log("cat " + cat);
   };
 
   const handleSubCat = (subCat) => {
@@ -95,7 +90,6 @@ const ProductForm = (props) => {
   };
 
   const getCheckSwitch = (isSwitch) => {
-    console.log(isSwitch.current.checked);
     setInputswitches(isSwitch.current.checked);
   };
 
@@ -107,7 +101,6 @@ const ProductForm = (props) => {
       inputBrutto.trim().length === 0 ||
       inputName.trim().length === 0
     ) {
-      console.log("invalid");
       setIsValid(false);
       return;
     }
@@ -222,7 +215,6 @@ const ProductForm = (props) => {
             />
           )}
         </div>
-
         <div className={styles.btnSection}>
           <Button type="submit">{props.button_title}</Button>
           <Button type="cancel" onClick={props.onHide}>

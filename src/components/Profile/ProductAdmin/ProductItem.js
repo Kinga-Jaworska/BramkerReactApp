@@ -35,8 +35,8 @@ function ProductItem(props) {
     const mainCat = props.mainCat;
     let fetchSTR = "";
     // const id = props.product['id'];
-    //console.log("to delete " + id);
-    //console.log("to delete " + subCat);
+    // console.log("to delete " + id);
+    // console.log("to delete " + subCat);
     if (mainCat === "automaty") {
       fetchSTR = `${mainCat}/${id}`;
     } else if (mainCat === "akcesoria") {
@@ -44,6 +44,13 @@ function ProductItem(props) {
     }
 
     console.log(`${FIREBASE_URL}/${fetchSTR}.json`);
+
+    if(fetchSTR === '')
+    {
+      //console.log('fetch STR '+fetchSTR)
+    }
+
+
 
     // fetch(`${FIREBASE_URL}/${fetchSTR}.json`, {
     //   method: "DELETE",
@@ -156,7 +163,7 @@ function ProductItem(props) {
             onClick={displayModal}>
             <img
               alt="edit product"
-              width="30"
+              width="50"
               src="https://img.icons8.com/avantgarde/344/experimental-delete-avantgarde.png"
             />
           </Button>
@@ -167,7 +174,7 @@ function ProductItem(props) {
             onClick={displayEditForm}>
             <img
               alt="edit product"
-              width="30"
+              width="50"
               src="https://img.icons8.com/avantgarde/344/experimental-edit-avantgarde.png"
             />
           </Button>

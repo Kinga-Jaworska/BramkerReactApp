@@ -31,9 +31,6 @@ const ProfileForm = () => {
     })
   }
 
-
-
-
   return (
     <form className={styles.form} onSubmit={submitHandler}>
       <div className={styles.control}>

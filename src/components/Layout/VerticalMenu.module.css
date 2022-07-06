@@ -1,23 +1,102 @@
-.vertical-menu
-{
-    display: flex;
-    background-color: rgb(82, 82, 210);
-    height: 100%;
-    padding: 10px; 
-    border-bottom-right-radius: 5px;   
-    border-top-right-radius: 5px;   
-    color: white;
-    position: relative;
-    margin-top: 10px;
+.vertical-menu {
+  display: flex;
+  background-color: rgb(82, 82, 210);
+  height: 100%;
+  padding: 40px;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  color: white;
+  position: relative;
+  margin-top: 10px;
+  background: rgb(232, 231, 237);
+  background: linear-gradient(
+    342deg,
+    rgba(232, 231, 237, 0.432) 16%,
+    rgba(69, 127, 179, 1) 48%,
+    rgba(1, 30, 120, 1) 82%
+  );
 }
-.vertical-menu ul{
-    list-style: none;
+.vertical-menu p {
+  padding: 0px;
+  margin: 0px;
 }
 
-.vertical-menu li
-{
-    cursor: pointer;
+.vertical-menu ul {
+  list-style: none;
+  margin-right: 5px;
+  padding: 0px;
+}
 
+.vertical-menu li {
+  cursor: pointer;
+}
+
+.vertical-main-btn {
+  width: 100%;
+  justify-content: center;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  padding: 10px;
+  background-color: rgba(186, 194, 201, 0.397);
+  border-style: none;
+  display: flex;
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  color: aliceblue;
+  transform: skew(-10deg);
+}
+.vertical-main-btn p,.vertical-dis-btn p {
+  transform: skew(+10deg);
+}
+.vertical-dis-btn {
+  width: 100%;
+  justify-content: center;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  padding: 10px;
+  background-color: rgba(186, 194, 201, 0.295);
+  border-style: none;
+  display: flex;
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  color: aliceblue;
+  transform: skew(-10deg);
+  cursor: auto;
+}
+.vertical-sub-btn {
+  width: 100%;
+  justify-content: center;
+  margin-left: 20px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+  padding: 10px;
+  background-color: rgba(54, 93, 122, 0.507);
+  border-style: none;
+  display: flex;
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  color: aliceblue;
+  transform: skew(0deg);
+}
+
+/* .vertical-main-btn:hover, */
+.vertical-sub-btn:hover {
+  background-color: rgba(27, 106, 175, 0.377);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  transform: skew(-10deg);
+}
+.vertical-main-btn:hover
+{
+    background-color: rgba(114, 161, 203, 0.529);
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    transform: skew(0deg);
+}
+.vertical-main-btn:hover p
+{
+    transform: skew(0deg);
+}
+.vertical-sub-btn:hover p {
+  transform: skew(+10deg);
 }
 
 /* ul:hover

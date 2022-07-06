@@ -11,13 +11,6 @@ const AddProduct = (props) => {
   const dataCtx = useContext(DataContext)
 
   const createProduct = (addedProduct, mainCat) => {
-    //ONLY to display
-    // const brutto = (
-    //   Math.floor(
-    //     (+addedProduct.cenaNetto * 0.23 + +addedProduct.cenaNetto) * 10
-    //   ) / 10
-    // ).toFixed(2);
-
     const brutto = dataCtx.convertToBurtto(addedProduct.cenaNetto)
     const addedDisplayProduct = {
       id: addedProduct.name,
@@ -27,7 +20,6 @@ const AddProduct = (props) => {
       price_brutto: brutto,
       cat: mainCat,
     };
-    console.log("added product: " + addedDisplayProduct.cat);
     props.onAddProduct(addedDisplayProduct);
   };
 
@@ -57,8 +49,7 @@ const AddProduct = (props) => {
         subListAccesory={props.accessory}
         subListAutomats={props.automatsCat}
         type="add"
-        title="Dodaj produkt"
-      >
+        title="Dodaj produkt">
         <div className="error"> {error && <p>{error}</p>}</div>
       </ProductForm>
     </>

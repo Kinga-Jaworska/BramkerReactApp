@@ -1,6 +1,7 @@
 import styles from "./Modal.module.css";
 import ReactDOM from "react-dom";
-import ButtonModal from "./ButtonModal";
+// import ButtonModal from "./ButtonModal";
+import Button from "./Button";
 
 const Modal = (props) => {
   return (
@@ -40,8 +41,8 @@ const ModalOverlay = (props) => {
         <p>{props.message}</p>
       </div>
       <footer className={styles.actions}>
-        <ButtonModal onClick={(e) => props.onConfirm(e.target.value)} id={props.id} value={props.id}>Okay</ButtonModal>
-        <ButtonModal onClick={props.onHide}>Cancel</ButtonModal>
+        <Button onClick={(e) => props.onConfirm(e.target.value)} id={props.id} value={props.id}>Okay</Button>
+        <Button onClick={props.onHide}>Cancel</Button>
       </footer>
     </div>
   );

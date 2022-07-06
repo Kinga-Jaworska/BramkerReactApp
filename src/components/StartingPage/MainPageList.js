@@ -21,8 +21,8 @@ const MainPageList = (props) => {
 
   const [addFormVisibility, setAddFormVisibility] = useState(false);
   const [products, setDisplayProducts] = useState([]);
-  const [selectedCat, setSelectedCat] = useState("automaty");
-  const [selectedMainCat, setSelectedMainCat] = useState("");
+  const [selectedAccesory, setSelectedCat] = useState("");
+  const [selectedMainCat, setSelectedMainCat] = useState("automaty");
   const [loadedAccess, setLoadedAccess] = useState();
 
   const automatsOpen = (e) => {
@@ -108,7 +108,7 @@ const MainPageList = (props) => {
         onDelete={onDeleteHandle}
         products={products}
         mainCat={selectedMainCat}
-        selectedAccesory={selectedCat}
+        selectedAccesory={selectedAccesory}
         accessoryCat={accessory}
         automatsCat={automatsCat}
         onEditProduct={handleEditProduct}
@@ -149,7 +149,7 @@ const MainPageList = (props) => {
 
       <div className={styles["container-2"]}>
         <div className={styles["container-row"]}>
-        <div><Button className="block-btn" onClick={displayAddForm}>Add</Button></div>
+        {!isAnim && <div><Button className="block-btn" onClick={displayAddForm}>Add</Button></div>}
           <div className={styles["col-up"]}>          
             {automatsCat && addFormVisibility && (
               <AddProduct
