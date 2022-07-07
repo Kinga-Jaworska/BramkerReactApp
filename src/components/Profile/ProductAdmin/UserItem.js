@@ -1,17 +1,40 @@
-import { getAuth } from "firebase/auth";
-import { auth } from "../../../firebase.config";
+import { useRef, useState } from "react";
 import Card from "../../GUI/Card";
+import Modal from "../../GUI/Modal";
 import styles from "./UserItem.module.css";
+
 
 const UserItem = (props) => {
   const user = props.user;
+  const [isModal, setIsModal] = useState(false)
+  const [discount, setDiscount] = useState(+user.discount_user)
+
+  //console.log(props.discount_user)
 
   const handleEditUser = () =>
   {
     console.log('editing user...')
+    setIsModal(true)
+  }
+  const hideModal = () =>
+  {
+    setIsModal(false)
+  }
+
+  const handleDiscount = (e) =>
+  {
+    setDiscount(e.target.value)
+  }
+
+  const submitDiscount = () =>
+  {
+    console.log('submitted '+discount)
+    setIsModal(false)
+    //change in base - PATCH
   }
 
   return (
+    <>
     <div className={styles["user-list-item"]} onClick={handleEditUser}>
       <Card>
         <div className={styles['wraper']}>
@@ -26,7 +49,11 @@ const UserItem = (props) => {
           </div>
         </div>
       </Card>
-    </div>
+    </div>      
+    {isModal && <Modal id={user.key} title="Edytuj rabat usera" onConfirm={submitDiscount} onHide={hideModal} message={`Rabat usera ${user.email}`}>
+      <section className={styles['modal-input']}><input type="number" min="0" max="99" value={discount} onChange={handleDiscount}/></section>
+     </Modal>}
+    </>
   );
 };
 

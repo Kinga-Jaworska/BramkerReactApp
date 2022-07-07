@@ -45,15 +45,10 @@ export const DataContextProvider = (props) => {
           subCat: automatsObj[key].dzial,
         });
       }
-      //console.log(loadedAutomats)
       setAutomats(loadedAutomats);
-      // setDisplayProducts(loadedAutomats);
     };
-    //automatsHandler()
-
     fetchAutomats({ url: `${FIREBASE_URL}/automaty.json` }, transformAutomats);
 
-    //console.log('context: '+automats)
   }, [fetchAutomats]);
 
   useEffect(() => {

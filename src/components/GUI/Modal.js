@@ -12,6 +12,7 @@ const Modal = (props) => {
       )}
       {ReactDOM.createPortal(
         <ModalOverlay
+          children={props.children}
           isError={props.isError}
           onHide={props.onHide}
           title={props.title}
@@ -30,7 +31,6 @@ const Backdrop = (props) => {
 };
 
 const ModalOverlay = (props) => {
-
   return (
     <div className={styles.modal}>
       <header className={styles.header}>
@@ -39,9 +39,16 @@ const ModalOverlay = (props) => {
       <div className={styles.content}>
         {props.isError && <div className="error">{props.isError}</div>}
         <p>{props.message}</p>
+        {props.children}
       </div>
       <footer className={styles.actions}>
-        <Button onClick={(e) => props.onConfirm(e.target.value)} id={props.id} value={props.id}>Okay</Button>
+        <Button
+          onClick={(e) => props.onConfirm(e.target.value)}
+          id={props.id}
+          value={props.id}
+        >
+          Okay
+        </Button>
         <Button onClick={props.onHide}>Cancel</Button>
       </footer>
     </div>

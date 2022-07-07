@@ -54,7 +54,7 @@ export const AuthContextProvider = (props) => {
   const loginHandler = (token, expirationTime, userID) => {
     //Autorization - get user role
     const url = `${baseURL}/users/${userID}.json`;
-    console.log(url);
+    //console.log(url);
     fetch(url, {
       method: "GET",
     }).then((res) => {
@@ -62,7 +62,7 @@ export const AuthContextProvider = (props) => {
         throw new Error("Request failed!");
       }
       res.json().then((data) => {
-        console.log(data);
+        //console.log(data);
         if (data!=null && data.role != null)
           setRole(data.role);
 

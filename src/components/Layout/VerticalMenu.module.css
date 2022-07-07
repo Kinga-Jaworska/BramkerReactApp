@@ -9,7 +9,13 @@
   position: relative;
   margin-top: 10px;
   background: rgb(232, 231, 237);
-  background: linear-gradient(342deg, rgba(232, 231, 237, 0.004) 5%, rgba(232,231,237,0.562062324929972) 24%, rgba(69,127,179,1) 47%, rgba(1,30,120,1) 82%);
+  background: linear-gradient(
+    342deg,
+    rgba(232, 231, 237, 0.004) 5%,
+    rgba(232, 231, 237, 0.562062324929972) 24%,
+    rgba(69, 127, 179, 1) 47%,
+    rgba(1, 30, 120, 1) 82%
+  );
 }
 .vertical-menu p {
   padding: 0px;
@@ -40,7 +46,8 @@
   color: aliceblue;
   transform: skew(-10deg);
 }
-.vertical-main-btn p,.vertical-dis-btn p {
+.vertical-main-btn p,
+.vertical-dis-btn p {
   transform: skew(+10deg);
 }
 .vertical-dis-btn {
@@ -81,22 +88,40 @@
   transform: skew(-10deg);
   scale: 1.1;
 }
-.vertical-main-btn:hover
-{
-    background-color: rgba(114, 161, 203, 0.529);
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-    transform: skew(0deg);
-    scale: 1.1;
+.vertical-main-btn:hover {
+  background-color: rgba(114, 161, 203, 0.529);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  transform: skew(0deg);
+  scale: 1.1;
 }
-.vertical-main-btn:hover p
+.selected {
+  transform: skew(-10deg);
+  background-color: rgba(32, 46, 71, 0.619);
+  animation: flash 2s;
+}
+.selected_main
 {
-    transform: skew(0deg);
+  /* transform: skew(0deg); */
+  /*background-color: rgba(225, 169, 39, 0.427);*/
+  animation: flash 1s;
+}
+.vertical-main-btn:hover p {
+  transform: skew(0deg);
 }
 .vertical-sub-btn:hover p {
   transform: skew(+10deg);
 }
-
-/* ul:hover
-{
-    color: rgb(210, 210, 241);
-} */
+@keyframes flash {
+  0% {
+    opacity: 1;
+    scale: 1.1;
+  }
+  50% {
+    opacity: 0.6;
+    scale: 0.9;
+  }
+  100% {
+    opacity: 1;
+    scale: 1;
+  }
+}

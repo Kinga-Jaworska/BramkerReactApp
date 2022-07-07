@@ -38,3 +38,9 @@ p{
 .img-section img{
     height: 70px;
 }
+
+.modal-input
+{
+    display: flex;
+    justify-content: center;
+}
