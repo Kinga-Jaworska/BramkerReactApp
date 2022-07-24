@@ -1,140 +1,157 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Products from "../Profile/ProductAdmin/Products";
-import AddProduct from "../Profile/ProductAdmin/AddProduct";
 import VerticalMenu from "../Layout/VerticalMenu";
 import styles from "./MainPageList.module.css";
-import Button from "../GUI/Button";
-import DataContext, { DataContextProvider } from "../../context/data-context";
-import AuthContext from "../../context/auth-context";
+import DataContext from "../../context/data-context";
+import { useHistory, useParams } from "react-router-dom";
+import { baseURL } from "../../firebase.config";
+import useHttp from "../hooks/use-http";
 
 const MainPageList = (props) => {
+  const {
+    isAnim: isLoadingAccesory,
+    error: isErrorAccesory,
+    sendRequest: fetchAccessory,
+  } = useHttp();
+  const {
+    isAnim: isLoading,
+    error: isError,
+    sendRequest: fetchAutomats,
+  } = useHttp();
   const dataCtx = useContext(DataContext);
-  const authCtx = useContext(AuthContext)
+  const history = useHistory();
+  const params = useParams();
+  const [mainCat, setMainCat] = useState("");
+  const [isAnim, setIsAnim] = useState(false);
+  const [displayProducts, setDisplayProducts] = useState([]);
 
-  const automats = dataCtx.automats;
-  const accessory = dataCtx.accessory;
-  const automatsCat = dataCtx.automatsCat;
+  const getSelectedAccessory = async (selectedSubCat) => {
+    const url = `${baseURL}/akcesoria/${selectedSubCat}.json`;
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
 
-  const isAnim = dataCtx.isAnim;
-  const isError = dataCtx.isError;
-  const isLoadingAccesory = dataCtx.isAnim;
-  const isErrorAccesory = dataCtx.isErrorAccesory;
+    const response = await fetch(url, requestOptions);
+    if (!response.ok) {
+      console.log(response.statusText);
+    } else {
+      const data = await response.json();
+      const loadedAccessory = [];
 
-  const [addFormVisibility, setAddFormVisibility] = useState(false);
-  const [products, setDisplayProducts] = useState([]);
-  const [selectedAccesory, setSelectedCat] = useState("");
-  const [selectedMainCat, setSelectedMainCat] = useState("automaty");
-  const [loadedAccess, setLoadedAccess] = useState();
-
-  //console.log('ROLE '+authCtx.role)
-
-  const automatsOpen = (e) => {
-    setSelectedCat("automaty");
-    setSelectedMainCat("automaty");
-    setDisplayProducts(automats);
+      for (const key in data) {
+        loadedAccessory.push({
+          id: key,
+          cat: "akcesoria",
+          isSwitch: data[key].wylacznikiMechaniczne === "TAK" ? true : false,
+          isDiscount: data[key].podlegaRabatowi === "TAK" ? true : false,
+          img: data[key].img,
+          name_product: data[key].nazwa,
+          price_netto: data[key].cenaNetto,
+          subCat: selectedSubCat,
+        });
+      }
+      setDisplayProducts(loadedAccessory);
+    }
   };
 
-  const accessoryOpen = (cat) => {
-    let loadedAccessory = [];
-    setSelectedCat(cat);
-    setSelectedMainCat("akcesoria");
-    const findAccessory = accessory.find((element) => element.cat === cat).data;
-    for (const key in findAccessory) {
-      loadedAccessory.push({
-        id: key,
-        name_product: findAccessory[key].nazwa,
-        price_netto: findAccessory[key].cenaNetto,
-        img: findAccessory[key].img,
-        isDiscount: findAccessory[key].podlegaRabatowi === "TAK" ? true : false,
-        subCat: cat,
-        cat: "akcesoria",
-      });
-    }
-    setDisplayProducts(loadedAccessory);
-    setLoadedAccess(loadedAccessory);
+  const getAutomats = () => {
+    const transformAutomats = (automatsObj) => {
+      const loadedAutomats = [];
+      for (const key in automatsObj) {
+        loadedAutomats.push({
+          id: key,
+          cat: "automaty",
+          isSwitch:
+            automatsObj[key].wylacznikiMechaniczne === "TAK" ? true : false,
+          isDiscount: automatsObj[key].podlegaRabatowi === "TAK" ? true : false,
+          img: automatsObj[key].img,
+          name_product: automatsObj[key].nazwa,
+          price_netto: automatsObj[key].cenaNetto,
+          subCat: automatsObj[key].dzial,
+        });
+      }
+      //console.log(loadedAutomats)
+      setDisplayProducts(loadedAutomats);
+    };
+    fetchAutomats({ url: `${baseURL}/automaty.json` }, transformAutomats);
   };
 
   useEffect(() => {
-    setDisplayProducts(dataCtx.automats);
-  }, [dataCtx.automats]);
+    openProductsList(params.cat);
+  }, [params.cat]);
 
-  const handleAddProduct = (addedProduct) => {
-    setDisplayProducts((prevProduct) => prevProduct.concat(addedProduct));
-  };
-
-  const displayAddForm = () => {
-    setAddFormVisibility(!addFormVisibility);
-  };
-
-  const onDeleteHandle = (id, mainCat, subCat) => {
-    if (mainCat === "automaty") {
-      const newArray = automats.filter(function (el) {
-        return el.id != id;
-      });
-      setDisplayProducts(newArray);
-    } else if (mainCat === "akcesoria") {
-      const newArray = loadedAccess.filter(function (el) {
-        return el.id != id;
-      });
-      setDisplayProducts(newArray);
-    }
-  };
-
-  const handleEditProduct = (editedProduct, selectedType) => {
-    //console.log(editedProduct);
-
-    if (selectedType === "automaty") {
-      const editedAutomats = automats.map((automat) => {
-        if (editedProduct.id === automat.id) {
-          automat = editedProduct;
-        }
-        return automat;
-      });
-      setDisplayProducts(editedAutomats);
+  const openProductsList = (selectedCat) => {
+    setIsAnim(true);
+    if (selectedCat) {
+      getSelectedAccessory(selectedCat);
     } else {
-      const editedAccesory = loadedAccess.map((access) => {
-        if (editedProduct.id === access.id) {
-          access = editedProduct;
-        }
-        return access;
-      });
-      setDisplayProducts(editedAccesory);
+      getAutomats();
     }
+    setIsAnim(false);
+  };
+
+  const automatsOpen = (e) => {
+    setMainCat("automaty");
+    history.push(`/`);
+  };
+
+  const accessoryOpen = useCallback((cat) => {
+    setMainCat("akcesoria");
+    history.push(`/accessory/${cat}`);
+  }, []);
+
+  const onDeleteHandle = (id, mainCat) => {
+    const newProducts = displayProducts.filter((product) => {
+      return product.id !== id;
+    });
+    // console.log(newProducts.length);
+    // console.log(displayProducts.length);
+    setDisplayProducts(newProducts);
+  };
+  const onEditHandle = (editedProduct) => {
+    console.log("Main");
+    console.log(editedProduct);
+
+    const editedArray = displayProducts.map((product) => {
+      if (product.id === editedProduct["id"]) return editedProduct;
+      else return product;
+    });
+    // console.log(newProducts.length);
+    // console.log(displayProducts.length);
+    setDisplayProducts(editedArray);
   };
 
   //PREPARE CONTENT:
   let content = <p>No data</p>;
-
-  if (dataCtx.automats.length > 0) {
-    content = (
-      <Products
-        onDelete={onDeleteHandle}
-        products={products}
-        mainCat={selectedMainCat}
-        selectedAccesory={selectedAccesory}
-        accessoryCat={accessory}
-        automatsCat={automatsCat}
-        onEditProduct={handleEditProduct}
-      />
-    );
-  } else if (isError || isErrorAccesory) {
-    content = (
-      <div>
-        <p className={styles["error"]}>{isError}</p>
-        {/* <button onClick={fetchAutomats}>Try again</button> */}
-      </div>
-    );
-  } else if (isAnim || isLoadingAccesory) {
+  if (isAnim) {
     content = (
       <div className={styles["spinner"]}>
         <div className={styles["loading-spinner"]}>
           <img
             width="100px"
+            alt="Spinner loading"
             src="https://icons.iconarchive.com/icons/elegantthemes/beautiful-flat-one-color/128/loading-icon.png"
           />
         </div>
       </div>
     );
+  } else if (displayProducts.length > 0) {
+    if (!props.isUser) {
+      content = (
+        <Products
+          onDelete={onDeleteHandle}
+          onEditProduct={onEditHandle}
+          products={displayProducts}
+          mainCat={mainCat}
+          isUser={false}
+        />
+      );
+    } else {
+      content = (
+        <Products products={displayProducts} mainCat={mainCat} isUser={true} />
+      );
+    }
   }
 
   //VIEW:
@@ -143,7 +160,8 @@ const MainPageList = (props) => {
       <div className={styles["container"]}>
         <div className={styles["col-left"]}>
           <VerticalMenu
-            accessory={accessory}
+            // selectedCat={}
+            accessory={dataCtx.menuAccessory} // dataCtx
             accessoryOpen={accessoryOpen}
             automatsOpen={automatsOpen}
           />
@@ -153,22 +171,18 @@ const MainPageList = (props) => {
       <div className={styles["container-2"]}>
         <div className={styles["container-row"]}>
           {!isAnim && (
-            <div>
-              <Button className="block-btn" onClick={displayAddForm}>
-                Add
-              </Button>
+            <div className={styles["top-container"]}>
+              <div className={styles["searcher"]}>
+                <img src="https://img.icons8.com/color/344/search--v1.png" />
+                {/* <input
+                  type="text"
+                  onChange={searcherHandle}
+                  value={searchKey}
+                  ref={searchKeyRef}
+                /> */}
+              </div>
             </div>
           )}
-          <div className={styles["col-up"]}>
-            {automatsCat && addFormVisibility && (
-              <AddProduct
-                accessory={accessory}
-                onAddProduct={handleAddProduct}
-                onDisplay={displayAddForm}
-                automatsCat={automatsCat}
-              />
-            )}
-          </div>
           <div className={styles["col-main-1"]}>{content}</div>
         </div>
       </div>

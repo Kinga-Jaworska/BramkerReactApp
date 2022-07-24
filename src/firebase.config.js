@@ -18,4 +18,5 @@ const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
 const baseURL=firebaseConfig.databaseURL
 
+
 export {baseURL, auth}

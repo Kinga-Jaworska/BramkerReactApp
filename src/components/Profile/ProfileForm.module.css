@@ -1,12 +1,12 @@
 .form {
-  width: 95%;
+  width: auto;
   max-width: 25rem;
   margin: 2rem auto;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   padding: 20px;
 }
 
-h1{
+h1 {
   padding: 0px;
 }
 

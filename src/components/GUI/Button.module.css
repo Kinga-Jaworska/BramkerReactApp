@@ -37,6 +37,40 @@
   border-radius: 5px;
   border-style: none;
 }
+.modal-btn-cancel
+{
+  display: flex;
+  border-radius: 5px;
+  border-color: #9393c5cc;
+  background-color: #9393c5cc;
+  color: black;
+  width: 90%;
+  justify-content: center;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+.modal-btn-cancel:hover
+{
+  opacity: 0.8;
+  color: black;
+  box-shadow: rgba(0, 0, 0, 0.36) 0px 3px 6px, rgba(0, 0, 0, 0.43) 0px 3px 6px;
+}
+.modal-btn
+{
+  display: flex;
+  border-radius: 5px;
+  border-color: #2020cbc6;
+  background-color: #2020cbc6;
+  color: aliceblue;
+  width: 100%;
+  justify-content: center;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+.modal-btn:hover
+{
+  opacity: 0.8;
+  color: black;
+  box-shadow: rgba(0, 0, 0, 0.36) 0px 3px 6px, rgba(0, 0, 0, 0.43) 0px 3px 6px;
+}
 
 .delete-btn img:hover{
 

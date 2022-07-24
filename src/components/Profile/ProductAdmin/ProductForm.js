@@ -10,7 +10,7 @@ const catList = [{ name: "automaty" }, { name: "akcesoria" }];
 let subCatList = [];
 
 const ProductForm = (props) => {
-  const dataCtx = useContext(DataContext)
+  const dataCtx = useContext(DataContext);
 
   const [inputName, setInputName] = useState(
     props.name_product ? props.name_product : ""
@@ -73,7 +73,7 @@ const ProductForm = (props) => {
 
     //AUTOMATE BRUTTO:
     const netto = parseFloat(e.target.value);
-    const brutto = dataCtx.convertToBurtto(netto)
+    const brutto = dataCtx.convertToBurtto(netto);
     setInputBrutto(brutto.toString());
   };
 
@@ -117,7 +117,6 @@ const ProductForm = (props) => {
 
     if (selectedCat === "akcesoria")
       fetchSTR = `${selectedCat.toLowerCase()}/${selectedSubCat}`;
-
     else if (selectedCat === "automaty") {
       newProduct.dzial = selectedSubCat;
 
@@ -129,14 +128,17 @@ const ProductForm = (props) => {
       fetchSTR = `${selectedCat.toLowerCase()}`;
     }
 
-    props.onHandleForm(newProduct, fetchSTR, selectedCat); //edit or add
+    props.onHandleForm(newProduct, fetchSTR, selectedCat, selectedSubCat); //edit or add
   };
 
   return (
     <Card className={styles.input}>
       <form onSubmit={validateProduct} className={styles.productForm}>
-        <h2>{`${props.title}`}
-            {props.type==='edit' &&   <p className={styles.editName}>{`${props.name_product}`}</p>}        
+        <h2>
+          {`${props.title}`}
+          {props.type === "edit" && (
+            <p className={styles.editName}>{`${props.name_product}`}</p>
+          )}
         </h2>
 
         {!isValid && <p>Invalid input :C</p>}
@@ -181,20 +183,21 @@ const ProductForm = (props) => {
           />
         </div>
 
-        {props.type === 'add' &&
-        <DropDown
-          selectedValue={selectedCat}
-          list={catList}
-          sendSelection={handleSelectCat}
-          valueName="name"
-        />}
+        {props.type === "add" && (
+          <DropDown
+            selectedValue={selectedCat}
+            list={catList}
+            sendSelection={handleSelectCat}
+            valueName="name"
+          />
+        )}
 
         <div className={styles.checkSection}>
           <label htmlFor="discount">
             <input id="discount" type="checkbox" ref={discountRef} />
             Podlega rabatowi
           </label>
-          {selectedCat === "automaty" && 
+          {selectedCat === "automaty" && (
             <AutomatsInput
               typeListAutomats={subCatList}
               selectedSubCat={selectedSubCat}
@@ -204,9 +207,8 @@ const ProductForm = (props) => {
               isSwitch={props.isSwitch}
               type={props.type}
             />
-            }
-             {(selectedCat === "akcesoria" && props.type === 'add') &&
-            ( 
+          )}
+          {selectedCat === "akcesoria" && props.type === "add" && (
             <DropDown
               selectedValue={selectedSubCat}
               list={props.subListAccesory}
@@ -222,7 +224,6 @@ const ProductForm = (props) => {
           </Button>
         </div>
       </form>
-      {props.loadingInfo}
       {props.children}
     </Card>
   );

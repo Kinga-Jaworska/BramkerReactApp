@@ -8,6 +8,9 @@ import AuthContext from "./context/auth-context";
 import MainPage from "./pages/MainPage";
 import UserList from "./components/Profile/ProductAdmin/UserList";
 import Settings from "./components/Profile/ProductAdmin/Settings";
+import AddProduct from "./components/Profile/ProductAdmin/AddProduct";
+import MainPageList from "./components/StartingPage/MainPageList";
+import { ProductList } from "./components/Profile/ProductUser/ProductList";
 
 const App = () => {
   const authCtx = useContext(AuthContext);
@@ -26,14 +29,29 @@ const App = () => {
           </Route>
         )}
 
-        {authCtx.role && authCtx.isLoggedIn && (
+        <Route path="/client">
+          {authCtx.isLoggedIn && <MainPageList isUser={true} />}
+          {!authCtx.isLoggedIn && <Redirect to="/auth" />}
+        </Route>
+
+        {authCtx.role === "a" && authCtx.isLoggedIn && (
           <Route path="/users">
             <UserList />
           </Route>
         )}
-        {authCtx.role && authCtx.isLoggedIn && (
+        {authCtx.role === "a" && authCtx.isLoggedIn && (
           <Route path="/settings">
             <Settings />
+          </Route>
+        )}
+        {authCtx.role === "a" && authCtx.isLoggedIn && (
+          <Route path="/accessory/:cat">
+            <MainPageList />
+          </Route>
+        )}
+        {authCtx.role === "a" && authCtx.isLoggedIn && (
+          <Route path="/add">
+            <AddProduct />
           </Route>
         )}
 

@@ -3,12 +3,11 @@ import styles from "./EditProduct.module.css";
 import ReactDOM from "react-dom";
 import useHttp from "../../hooks/use-http";
 import { useState } from "react";
-
-const FIREBASE_URL = "https://reacttest-b7b01-default-rtdb.firebaseio.com";
+import { baseURL } from "../../../firebase.config";
 
 const EditProduct = (props) => {
   const { isLoading, error, sendRequest: sendEditRequest } = useHttp();
-  const [isClosing, setIsClosing] = useState(false)
+  const [isClosing, setIsClosing] = useState(false);
 
   const editProductHandle = (editProduct, selectedCat) => {
     //console.log(editProduct, selectedCat)
@@ -25,27 +24,76 @@ const EditProduct = (props) => {
       price_brutto: brutto,
     };
     props.onEditProduct(editedDisplayProduct, selectedCat);
-    setIsClosing(true)
-    setTimeout(()=>
-    {
+    setIsClosing(true);
+
+    setTimeout(() => {
       props.onHide();
-    },
-    [1900])
-    
+    }, [1900]);
   };
 
-  const handleEditForm = async (editProduct, fetchSTR, selectedCat) => {
-    sendEditRequest(
-      {
-        url: `${FIREBASE_URL}/${fetchSTR}/${props.editProduct["id"]}.json`,
-        method: "PATCH",
-        body: editProduct,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-      editProductHandle.bind(null, editProduct, selectedCat)
-    );
+  // const handleEditForm = async (editProduct, fetchSTR, selectedCat) => {
+  //   sendEditRequest(
+  //     {
+  //       url: `${FIREBASE_URL}/${fetchSTR}/${props.editProduct["id"]}.json`,
+  //       method: "PATCH",
+  //       body: editProduct,
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     },
+  //     editProductHandle.bind(null, editProduct, selectedCat)
+  //   );
+  //   // newProduct, fetchSTR, selectedCat, selectedSubCat
+  // };
+  const handleEditForm = async (
+    newProduct,
+    fetchSTR,
+    selectedCat,
+    selectedSubCat
+  ) => {
+    const editID = props.editProduct["id"];
+    const url = `${baseURL}/${fetchSTR}/${editID}.json`;
+
+    console.log(url);
+    console.log(newProduct);
+    console.log(selectedCat);
+    const requestOptions = {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newProduct),
+    };
+
+    const response = await fetch(url, requestOptions);
+    if (!response.ok) {
+      // setError(response.statusText);
+      console.log(response.statusText);
+      // setMessage(response.statusText);
+    } else {
+      // const data = await response.json();
+      // setMessage("Edytowano rekord");
+      const brutto = (
+        Math.floor(
+          (+newProduct.cenaNetto * 0.23 + +newProduct.cenaNetto) * 10
+        ) / 10
+      ).toFixed(2);
+
+      let editedDisplayProduct = {
+        id: editID,
+        isDiscount: newProduct.podlegaRabatowi,
+        name_product: newProduct.nazwa,
+        img: newProduct.img,
+        price_netto: newProduct.cenaNetto,
+        price_brutto: brutto,
+      };
+
+      if (selectedCat === "automaty") {
+        editedDisplayProduct.subCat = newProduct.dzial;
+        editedDisplayProduct.isSwitch = newProduct.wylacznikiMechaniczne;
+      }
+
+      console.log(editedDisplayProduct);
+      props.onConfirm(editedDisplayProduct);
+    }
   };
 
   return (
@@ -57,7 +105,7 @@ const EditProduct = (props) => {
       {ReactDOM.createPortal(
         <ModalOverlay
           isClosing={isClosing}
-          onHandleForm={handleEditForm} //props.onConfirm
+          onHandleForm={handleEditForm}
           onHide={props.onHide}
           accessoryCat={props.accessoryCat}
           automatsCat={props.automatsCat}
@@ -76,7 +124,7 @@ const Backdrop = (props) => {
 
   if (props.isClosing) {
     overlayClasses += ` ${styles.fadeOut}`;
-  }  
+  }
   return <div className={styles.backdrop} onClick={props.onCancelClick} />;
 };
 
@@ -85,7 +133,7 @@ const ModalOverlay = (props) => {
 
   if (props.isClosing) {
     overlayClasses += ` ${styles.fadeOut}`;
-  }  
+  }
 
   return (
     <div className={overlayClasses}>

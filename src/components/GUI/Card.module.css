@@ -17,10 +17,9 @@
   }
   100% {
     opacity: 1;
-  }  
+  }
 }
 
-.fadeIn
-{
+.fadeIn {
   animation: fadeIn 3s ease-in;
 }

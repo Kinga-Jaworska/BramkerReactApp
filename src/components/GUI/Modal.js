@@ -46,10 +46,11 @@ const ModalOverlay = (props) => {
           onClick={(e) => props.onConfirm(e.target.value)}
           id={props.id}
           value={props.id}
+          className='modal-btn'
         >
           Okay
         </Button>
-        <Button onClick={props.onHide}>Cancel</Button>
+        <Button onClick={props.onHide} className='modal-btn-cancel'>Cancel</Button>
       </footer>
     </div>
   );

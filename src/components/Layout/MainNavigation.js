@@ -41,7 +41,17 @@ const MainNavigation = () => {
           )}
           {role === "a" && (
             <li>
+              <Link to="/client">Strefa klienta</Link>
+            </li>
+          )}
+          {role === "a" && (
+            <li>
               <Link to="/settings">Settings</Link>
+            </li>
+          )}
+          {role === "a" && (
+            <li>
+              <Link to="/add">Add</Link>
             </li>
           )}
           {isLoggedIn && (

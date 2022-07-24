@@ -1,56 +1,55 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
 import DataContext from "../../../context/data-context";
+import { baseURL } from "../../../firebase.config";
 import useHttp from "../../hooks/use-http";
 import ProductForm from "./ProductForm";
 
 const FIREBASE_URL = "https://reacttest-b7b01-default-rtdb.firebaseio.com";
 
 const AddProduct = (props) => {
-  const { isLoading, error, sendRequest: sendProductRequest } = useHttp();
+  // const { isLoading, message, sendRequest: sendProductRequest } = useHttp();
+  const history = useHistory();
+  const dataCtx = useContext(DataContext);
+  const [message, setMessage] = useState("");
 
-  const dataCtx = useContext(DataContext)
+  const handleAddForm = async (
+    newProduct,
+    fetchSTR,
+    selectedCat,
+    selectedSubCat
+  ) => {
+    const url = `${baseURL}/${fetchSTR}.json`;
+    // console.log(url);
 
-  const createProduct = (addedProduct, mainCat) => {
-    const brutto = dataCtx.convertToBurtto(addedProduct.cenaNetto)
-    const addedDisplayProduct = {
-      id: addedProduct.name,
-      name_product: addedProduct.nazwa,
-      img: addedProduct.img,
-      price_netto: addedProduct.cenaNetto,
-      price_brutto: brutto,
-      cat: mainCat,
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newProduct),
     };
-    props.onAddProduct(addedDisplayProduct);
-  };
 
-  const handleAddForm = async (newProduct, fetchSTR, selectedCat) => {
-    //console.log(newProduct); //get new product from ProductForm
-
-    sendProductRequest(
-      {
-        url: `${FIREBASE_URL}/${fetchSTR}.json`,
-        method: "POST",
-        body: newProduct,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-      createProduct.bind(null, newProduct, selectedCat)
-    );
+    const response = await fetch(url, requestOptions);
+    if (!response.ok) {
+      // setError(response.statusText);
+      console.log(response.statusText);
+      setMessage(response.statusText);
+    } else {
+      setMessage("Dodano nowy rekord");
+    }
   };
 
   return (
     <>
       <ProductForm
-        loadingInfo={isLoading}
         button_title="Dodaj"
         onHandleForm={handleAddForm}
-        onHide={props.onDisplay}
-        subListAccesory={props.accessory}
-        subListAutomats={props.automatsCat}
+        subListAccesory={dataCtx.menuAccessory}
+        subListAutomats={dataCtx.menuAutomats}
         type="add"
-        title="Dodaj produkt">
-        <div className="error"> {error && <p>{error}</p>}</div>
+        title="Dodaj produkt"
+      >
+        <div className="error"> {message && <p>{message}</p>}</div>
+        <Link to="/">Back</Link>
       </ProductForm>
     </>
   );

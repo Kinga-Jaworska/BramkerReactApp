@@ -51,7 +51,7 @@ const UserItem = (props) => {
       </Card>
     </div>      
     {isModal && <Modal id={user.key} title="Edytuj rabat usera" onConfirm={submitDiscount} onHide={hideModal} message={`Rabat usera ${user.email}`}>
-      <section className={styles['modal-input']}><input type="number" min="0" max="99" value={discount} onChange={handleDiscount}/></section>
+      <section className={styles['modal-input']}><input type="range" min="0" max="99" value={discount} onChange={handleDiscount}/>{discount}%</section>
      </Modal>}
     </>
   );

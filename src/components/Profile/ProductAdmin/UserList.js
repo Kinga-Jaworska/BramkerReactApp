@@ -6,7 +6,6 @@ import styles from "./UserList.module.css";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
-
   const { isAnim, error: isError, sendRequest: fetchUsers } = useHttp();
 
   useEffect(() => {
@@ -27,8 +26,8 @@ const UserList = () => {
 
   return (
     <div className={styles["user-list"]}>
-      {users.map((user) => {
-        return <UserItem user={user} />;
+      {users.map((user, index) => {
+        return <UserItem user={user} key={index} />;
       })}
     </div>
   );

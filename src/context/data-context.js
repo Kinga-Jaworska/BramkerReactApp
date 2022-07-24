@@ -1,17 +1,15 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useHttp from "../components/hooks/use-http";
 
 const DataContext = React.createContext({
-  automats: [],
-  accessory: [],
-  automatsCat: [],
+  menuAutomats: [],
+  menuAccessory: [],
   isAnim: true,
   isError: false,
   isErrorAccesory: false,
   bruttoVal: 23,
-  setBruttoVal: () =>{},
+  setBruttoVal: () => {},
   convertToBurtto: () => {},
-  getAutomats: () => {},
   getAccessory: () => {},
 });
 
@@ -23,105 +21,73 @@ export const DataContextProvider = (props) => {
     sendRequest: fetchAccessory,
   } = useHttp();
   const { isAnim, error: isError, sendRequest: fetchAutomats } = useHttp();
-  const [automats, setAutomats] = useState([]);
-  const [accessory, setAccessory] = useState([]);
-  const [automatsCat, setAutomatsCat] = useState([]);
-  const [bruttoVal, setBruttoVal] = useState(localStorage.getItem('bruttoVal') ? localStorage.getItem('bruttoVal') : 23)
-
-
-  useEffect(() => {
-    const transformAutomats = (automatsObj) => {
-      const loadedAutomats = [];
-      for (const key in automatsObj) {
-        loadedAutomats.push({
-          id: key,
-          cat: "automaty",
-          isSwitch:
-            automatsObj[key].wylacznikiMechaniczne === "TAK" ? true : false,
-          isDiscount: automatsObj[key].podlegaRabatowi === "TAK" ? true : false,
-          img: automatsObj[key].img,
-          name_product: automatsObj[key].nazwa,
-          price_netto: automatsObj[key].cenaNetto,
-          subCat: automatsObj[key].dzial,
-        });
-      }
-      setAutomats(loadedAutomats);
-    };
-    fetchAutomats({ url: `${FIREBASE_URL}/automaty.json` }, transformAutomats);
-
-  }, [fetchAutomats]);
+  const [menuAccessory, setAccessoryMenu] = useState([]);
+  const [menuAutomats, setAutomatsMenu] = useState([]);
+  const [bruttoVal, setBruttoVal] = useState(
+    localStorage.getItem("bruttoVal") ? localStorage.getItem("bruttoVal") : 23
+    // add btn -> set brutto to global or up prices instead brutto
+  );
 
   useEffect(() => {
-    const transformAccessory = (accessoryObj) => {
-      const loadedAccessory = [];
-      for (const key in accessoryObj) {
-        loadedAccessory.push({
-          cat: key,
-          data: accessoryObj[key],
-        });
-      }
-      setAccessory(loadedAccessory);
-    };
+    accessoryCatHandler();
+  }, []);
 
-    fetchAccessory(
-      { url: `${FIREBASE_URL}/akcesoria.json` },
-      transformAccessory
-    );
-  }, [fetchAccessory]);
-
-
-  useEffect(()=>
-  {
-      const transformSubList = (subItemObj) => {
+  useEffect(() => {
+    const transformSubList = (subItemObj) => {
       const loadedSubCat = [];
       for (const key in subItemObj) {
         loadedSubCat.push({
           name: subItemObj[key],
         });
       }
-      setAutomatsCat(loadedSubCat);
+      setAutomatsMenu(loadedSubCat);
     };
 
     fetchAccessory(
       { url: `${FIREBASE_URL}/automatsCat.json` },
       transformSubList
-    ); 
-  },[fetchAccessory])
+    );
+  }, [fetchAccessory]);
 
-  const automatsHandler = () => {
-    //fetchAutomats({ url: `${FIREBASE_URL}/automaty.json` }, transformAutomats);
+  const accessoryCatHandler = () => {
+    const transformAccessory = (accessoryObj) => {
+      const loadedAccessory = [];
+
+      for (const key in accessoryObj) {
+        loadedAccessory.push({
+          cat: key,
+        });
+      }
+      setAccessoryMenu(loadedAccessory);
+    };
+
+    fetchAccessory(
+      { url: `${FIREBASE_URL}/akcesoria.json` },
+      transformAccessory
+    );
   };
 
-  const accessoryHandler = () => {};
-
-  const convertBruttoHandle = (cenaNetto) =>
-  {
+  const convertBruttoHandle = (cenaNetto) => {
     const brutto = (
-      Math.floor(
-        (+cenaNetto * (bruttoVal/100) + +cenaNetto) * 10
-      ) / 10
+      Math.floor((+cenaNetto * (bruttoVal / 100) + +cenaNetto) * 10) / 10
     ).toFixed(2);
 
     return brutto;
-  }
-  const setBruttoValHandle = (settedVal) =>
-  {
-    setBruttoVal(settedVal)
-    localStorage.setItem('bruttoVal',settedVal)    
-  }
+  };
+  const setBruttoValHandle = (settedVal) => {
+    setBruttoVal(settedVal);
+    localStorage.setItem("bruttoVal", settedVal);
+  };
 
   const contextValue = {
-    automats: automats,
-    accessory: accessory,
-    automatsCat: automatsCat,
+    menuAccessory: menuAccessory,
+    menuAutomats: menuAutomats,
     isAnim: isAnim,
     isError: isError,
     isErrorAccesory: isErrorAccesory,
     bruttoVal: bruttoVal,
     setBruttoVal: setBruttoValHandle,
     convertToBurtto: convertBruttoHandle,
-    getAutomats: automatsHandler,
-    getAccessory: accessoryHandler,
   };
 
   return (

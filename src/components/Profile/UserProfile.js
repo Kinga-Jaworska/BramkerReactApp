@@ -10,17 +10,15 @@ import Card from "../GUI/Card";
 const UserProfile = () => {
   const auth = getAuth();
   const user = auth.currentUser;
-  const [currentUser, setCurrentUser] = useState({})
+  const [currentUser, setCurrentUser] = useState({});
 
-  useEffect(()=>
-  {
+  useEffect(() => {
     // fetch(`${baseURL}/users/${user.uid}.json`,{
     //   method: "GET"
     // }).then((res)=>
     // {
     //   if(!res.ok)
     //     throw new Error('Something goes wrong')
-  
     //   res.json().then((data)=>
     //   {
     //     //for(const key in data)
@@ -32,27 +30,24 @@ const UserProfile = () => {
     //         email: user.auth.currentUser,
     //         discount_user: 45,
     //       }
-    //       setCurrentUser(current_user)     
+    //       setCurrentUser(current_user)
     //   }).catch((err)=>
     //   console.log(err))
     // }).catch(err=>
     //   console.log(err)
     // )
-  
     // console.log('Current: '+currentUser.key)
-  },[])
-  
-  //TODO: display rabat of current user 
+  }, []);
 
+  //TODO: display rabat of current user
 
   return (
     <section className={styles.profile}>
       {/* <UserItem user={user}/> */}
-      <Card>
+
       <h1>Profil </h1>
       {/* <h2>{user.email}</h2> */}
-      <ProfileForm />  
-      </Card>
+      <ProfileForm />
     </section>
   );
 };
