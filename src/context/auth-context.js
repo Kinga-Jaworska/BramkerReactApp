@@ -7,7 +7,7 @@ let logOutTimer;
 const AuthContext = React.createContext({
   token: "",
   isLoggedIn: false,
-  role: "u",
+  role: () => "u",
   userID: "",
   login: (token) => {},
   logOut: () => {},
@@ -50,7 +50,7 @@ export const AuthContextProvider = (props) => {
   const [token, setToken] = useState(initialToken);
   const [userID, setUserID] = useState("");
   const userIsLoggedIn = !!token; // !! - convert true or false to: Logical true or false
-  const [role, setRole] = useState();
+  const [role, setRole] = useState("u");
 
   const loginHandler = (token, expirationTime, userID) => {
     //Autorization - get user role
@@ -103,7 +103,7 @@ export const AuthContextProvider = (props) => {
     }
   }, [tokenData, logOutHandler]);
 
-  useEffect(() => {
+  const handleRole = () => {
     if (userID) {
       const url = `${baseURL}/users/${userID}.json`;
       fetch(url, {
@@ -118,14 +118,21 @@ export const AuthContextProvider = (props) => {
             if (data != null && data.role != null) {
               if (data.role === "a" || data.role === "u") {
                 setRole(data.role);
-              } else setRole("u");
+              }
+              //
+              else setRole("u");
             }
           })
           .catch((err) => {
             console.log(err);
           });
       });
+
+      return role;
     }
+  };
+  useEffect(() => {
+    handleRole();
   }, [userID]);
 
   const setUserIDHandler = (id) => {
@@ -135,7 +142,7 @@ export const AuthContextProvider = (props) => {
   const contextValue = {
     token: token,
     isLoggedIn: userIsLoggedIn,
-    role: role,
+    role: handleRole,
     userID: userID,
     login: loginHandler,
     logOut: logOutHandler,

@@ -10,14 +10,24 @@
   box-shadow: rgba(38, 52, 93, 0.05) 0px 6px 24px 0px,
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
+/* .cart-number {
+  display: flex;
+  width: 100%;
+} */
+.cart-btn {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+}
 /* .header-img {
   display: flex;
 } */
-.header img {  
+.header img {
   height: 100px;
   padding: 10px;
 }
-.header nav{
+.header nav {
   display: flex;
   align-items: center;
 }

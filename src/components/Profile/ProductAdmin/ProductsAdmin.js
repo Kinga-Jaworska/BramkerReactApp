@@ -3,15 +3,12 @@ import DataContext from "../../../context/data-context";
 import { ProductClientItem } from "../ProductUser/ProductClientItem";
 import ProductItem from "./ProductItem";
 
-const Products = (props) => {
+const ProductsAdmin = (props) => {
   const dataCtx = useContext(DataContext);
 
-  console.log(props.isUser);
-
   return props.products.map((product, index) => {
-    return !props.isUser ? (
+    return (
       <ProductItem
-        key={index}
         product={product}
         onDelete={props.onDelete}
         accessoryCat={props.accessoryCat}
@@ -21,16 +18,8 @@ const Products = (props) => {
         automatsCat={props.automatsCat}
         onEditProduct={props.onEditProduct}
       ></ProductItem>
-    ) : (
-      <ProductClientItem
-        product={product}
-        accessoryCat={props.accessoryCat}
-        mainCat={props.mainCat}
-        price_brutto={dataCtx.convertToBurtto(product.price_netto)}
-        automatsCat={props.automatsCat}
-      ></ProductClientItem>
     );
   });
 };
 
-export default Products;
+export default ProductsAdmin;

@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 import AuthContext from "../../context/auth-context";
 import styles from "./MainNavigation.module.css";
 import bramkerLogo from "../../assets/logobramker.png";
+import CartContext from "../../context/cart-context";
 
 const MainNavigation = () => {
   const authCtx = useContext(AuthContext);
   const isLoggedIn = authCtx.isLoggedIn;
   const role = authCtx.role;
+  const cartCtx = useContext(CartContext);
 
   const logoutHandler = () => {
     authCtx.logOut();
@@ -41,11 +43,6 @@ const MainNavigation = () => {
           )}
           {role === "a" && (
             <li>
-              <Link to="/client">Strefa klienta</Link>
-            </li>
-          )}
-          {role === "a" && (
-            <li>
               <Link to="/settings">Settings</Link>
             </li>
           )}
@@ -54,6 +51,13 @@ const MainNavigation = () => {
               <Link to="/add">Add</Link>
             </li>
           )}
+          <li>
+            <div className="cart-btn">
+              <div className="cart-number">{cartCtx.items.length}</div>
+              <Link to="/cart">Cart</Link>
+            </div>
+          </li>
+
           {isLoggedIn && (
             <li>
               <button onClick={logoutHandler}>Logout</button>

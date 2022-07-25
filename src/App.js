@@ -11,15 +11,18 @@ import Settings from "./components/Profile/ProductAdmin/Settings";
 import AddProduct from "./components/Profile/ProductAdmin/AddProduct";
 import MainPageList from "./components/StartingPage/MainPageList";
 import { ProductList } from "./components/Profile/ProductUser/ProductList";
+import { Cart } from "./components/Profile/ProductUser/Cart";
 
 const App = () => {
   const authCtx = useContext(AuthContext);
+
+  console.log(authCtx.role());
 
   return (
     <Layout>
       <Switch>
         <Route path="/" exact>
-          {authCtx.isLoggedIn && <MainPage />}
+          {authCtx.isLoggedIn && <MainPage role={authCtx.role()} />}
           {!authCtx.isLoggedIn && <Redirect to="/auth" />}
         </Route>
 
@@ -29,31 +32,31 @@ const App = () => {
           </Route>
         )}
 
-        <Route path="/client">
-          {authCtx.isLoggedIn && <MainPageList isUser={true} />}
-          {!authCtx.isLoggedIn && <Redirect to="/auth" />}
-        </Route>
-
         {authCtx.role === "a" && authCtx.isLoggedIn && (
           <Route path="/users">
             <UserList />
           </Route>
         )}
-        {authCtx.role === "a" && authCtx.isLoggedIn && (
+        {authCtx.role() === "a" && authCtx.isLoggedIn && (
           <Route path="/settings">
             <Settings />
           </Route>
         )}
-        {authCtx.role === "a" && authCtx.isLoggedIn && (
+        {authCtx.isLoggedIn && (
           <Route path="/accessory/:cat">
-            <MainPageList />
+            <MainPageList role={authCtx.role()} />
           </Route>
         )}
-        {authCtx.role === "a" && authCtx.isLoggedIn && (
+        {authCtx.role() === "a" && authCtx.isLoggedIn && (
           <Route path="/add">
             <AddProduct />
           </Route>
         )}
+
+        <Route path="/cart">
+          {authCtx.isLoggedIn && <Cart />}
+          {!authCtx.isLoggedIn && <Redirect to="/auth" />}
+        </Route>
 
         <Route path="/profile">
           {authCtx.isLoggedIn && <UserProfile />}

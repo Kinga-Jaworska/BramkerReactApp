@@ -1,5 +1,6 @@
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import CartContext from "../../../context/cart-context";
 import DataContext from "../../../context/data-context";
 import Button from "../../GUI/Button";
 import Modal from "../../GUI/Modal";
@@ -13,7 +14,10 @@ function ProductItem(props) {
   const [deleteModal, setDeleteModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const params = useParams();
+  const quantityRef = useRef();
   const dataCtx = useContext(DataContext);
+  const [cartList, setCartList] = useState([]);
+  const [cartShow, setCartShow] = useState(false);
 
   const { isLoading, error, sendRequest: sendDeleteRequest } = useHttp();
 
@@ -75,6 +79,34 @@ function ProductItem(props) {
     setEditModal(false);
   };
 
+  const addToCartBase = () => {};
+
+  const cartCtx = useContext(CartContext);
+
+  const handleAddToCart = () => {
+    // console.log("clicked");
+    const quantity = quantityRef.current.value;
+    const cartObj = { ...props.product, quantity: quantity };
+
+    // const newArr = cartList.map((cartProduct) => {
+    //   if (cartProduct.id === cartObj.id) {
+    //     return cartObj;
+    //   } else return cartProduct;
+    // });
+    // setCartList((current) => current.concat(cartObj));
+    // console.log(cartList);
+    cartCtx.addItem(cartObj);
+    console.log(cartCtx.totalAmount);
+    // console.log(cartObj);
+
+    // setCartList((prevList) => {
+    //   prevList.concat(cartObj);
+    // });
+    // console.log(cartList);
+    // setCartList;
+    // console.log(quantity);
+  };
+
   return (
     <div className={"expense-item"}>
       <div className="expense-item-desc">
@@ -93,30 +125,34 @@ function ProductItem(props) {
           </div>
         </div>
         <div className="expense-item-actions">
-          <Button
-            className="delete-btn"
-            value={props.product["id"]}
-            // key={`add_${props.product["id"]}`}
-            onClick={displayModal}
-          >
-            <img
-              alt="edit product"
-              width="50"
-              src="https://img.icons8.com/avantgarde/344/experimental-delete-avantgarde.png"
-            />
-          </Button>
-          <Button
-            className="edit-btn"
-            value={props.product["id"]}
-            // key={`edit_${props.product["id"]}`}
-            onClick={displayEditForm}
-          >
-            <img
-              alt="edit product"
-              width="50"
-              src="https://img.icons8.com/avantgarde/344/experimental-edit-avantgarde.png"
-            />
-          </Button>
+          {!props.isUser && (
+            <Button
+              className="delete-btn"
+              value={props.product["id"]}
+              // key={`add_${props.product["id"]}`}
+              onClick={displayModal}
+            >
+              <img
+                alt="edit product"
+                width="50"
+                src="https://img.icons8.com/avantgarde/344/experimental-delete-avantgarde.png"
+              />
+            </Button>
+          )}
+          {!props.isUser && (
+            <Button
+              className="edit-btn"
+              value={props.product["id"]}
+              // key={`edit_${props.product["id"]}`}
+              onClick={displayEditForm}
+            >
+              <img
+                alt="edit product"
+                width="50"
+                src="https://img.icons8.com/avantgarde/344/experimental-edit-avantgarde.png"
+              />
+            </Button>
+          )}
         </div>
       </div>
       {deleteModal && (
@@ -143,6 +179,10 @@ function ProductItem(props) {
           price_brutto={props.price_brutto}
         />
       )}
+      <div className="expense-item-actions">
+        <input type="number" defaultValue={1} ref={quantityRef} />
+        <Button onClick={handleAddToCart}>Add to Cart</Button>
+      </div>
     </div>
   );
 }

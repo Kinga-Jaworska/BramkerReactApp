@@ -14,11 +14,7 @@ const MainPage = (props) => {
   });
 
   //USER OR ADMIN
-  if (authCtx.role === "u") {
-    // content = <ProductList />;
-  } else if (authCtx.role === "a") {
-    content = <MainPageList />;
-  }
+  content = <MainPageList role={props.role} />;
 
   return <div>{content}</div>;
 };

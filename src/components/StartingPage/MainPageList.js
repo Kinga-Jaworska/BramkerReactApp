@@ -1,11 +1,12 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import Products from "../Profile/ProductAdmin/Products";
+import ProductsAdmin from "../Profile/ProductAdmin/ProductsAdmin";
 import VerticalMenu from "../Layout/VerticalMenu";
 import styles from "./MainPageList.module.css";
 import DataContext from "../../context/data-context";
 import { useHistory, useParams } from "react-router-dom";
 import { baseURL } from "../../firebase.config";
 import useHttp from "../hooks/use-http";
+import ProductsUser from "../Profile/ProductUser/ProductsUser";
 
 const MainPageList = (props) => {
   const {
@@ -24,6 +25,8 @@ const MainPageList = (props) => {
   const [mainCat, setMainCat] = useState("");
   const [isAnim, setIsAnim] = useState(false);
   const [displayProducts, setDisplayProducts] = useState([]);
+
+  console.log(props.role);
 
   const getSelectedAccessory = async (selectedSubCat) => {
     const url = `${baseURL}/akcesoria/${selectedSubCat}.json`;
@@ -137,19 +140,27 @@ const MainPageList = (props) => {
       </div>
     );
   } else if (displayProducts.length > 0) {
-    if (!props.isUser) {
+    console.log("isUser: " + props.role);
+    if (props.role === "a") {
+      console.log("isUser: " + props.role);
+
       content = (
-        <Products
+        <ProductsAdmin
           onDelete={onDeleteHandle}
           onEditProduct={onEditHandle}
           products={displayProducts}
           mainCat={mainCat}
-          isUser={false}
+          role={props.isUser}
         />
       );
-    } else {
+    } else if (props.role === "u") {
+      console.log("isUser: " + props.role);
       content = (
-        <Products products={displayProducts} mainCat={mainCat} isUser={true} />
+        <ProductsUser
+          products={displayProducts}
+          mainCat={mainCat}
+          role={props.isUser}
+        />
       );
     }
   }
