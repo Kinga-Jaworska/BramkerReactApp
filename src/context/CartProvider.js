@@ -3,26 +3,40 @@ import CartContext from "./cart-context";
 
 const defaultCartState = {
   items: [],
-  totalAmount: 0,
+  totalAmountNetto: 0,
+  totalAmountBrutto: 0,
+  bruttoVal: localStorage.getItem("bruttoVal") || 23,
+};
+const convertToBrutto = (cenaNetto) => {
+  const brutto = (
+    Math.floor(
+      (+cenaNetto * (+defaultCartState.bruttoVal / 100) + +cenaNetto) * 10
+    ) / 10
+  ).toFixed(2);
+
+  return brutto;
 };
 const cartReducer = (state, action) => {
   if (action.type === "ADD") {
     console.log(action.item);
 
-    const updatedTotalAmount =
-      state.totalAmount + +action.item.price_netto * +action.item.quantity;
-    console.log(+action.item.price_netto);
+    const updatedTotalAmountNetto =
+      state.totalAmountNetto + +action.item.price_netto * action.item.quantity;
+    const updatedTotalAmountBrutto =
+      state.totalAmountBrutto +
+      convertToBrutto(action.item.price_netto) * action.item.quantity;
 
     const existingCartItemIndex = state.items.findIndex(
       (item) => item.id === action.item.id
     );
+
     const existingCartItem = state.items[existingCartItemIndex];
     let updatedItems;
 
     if (existingCartItem) {
       const updatedItem = {
         ...existingCartItem,
-        amount: existingCartItem.amount + action.item.amount,
+        quantity: existingCartItem.quantity + action.item.quantity,
       };
       updatedItems = [...state.items];
       updatedItems[existingCartItemIndex] = updatedItem;
@@ -32,7 +46,8 @@ const cartReducer = (state, action) => {
 
     return {
       items: updatedItems,
-      totalAmount: updatedTotalAmount,
+      totalAmountNetto: updatedTotalAmountNetto,
+      totalAmountBrutto: updatedTotalAmountBrutto,
     };
   }
 
@@ -49,23 +64,34 @@ const cartReducer = (state, action) => {
     console.log("find " + existingCartItemIndex);
 
     const existingItem = state.items[existingCartItemIndex];
-    const updatedTotalAmount = state.totalAmount - existingItem.price;
+    const updatedTotalAmountNetto =
+      state.totalAmountNetto -
+      +existingItem.price_netto * existingItem.quantity;
+    const updatedTotalAmountBrutto =
+      state.totalAmountBrutto -
+      convertToBrutto(existingItem.price_netto) * existingItem.quantity;
+
     let updatedItems;
 
-    if (existingItem.amount === 1) {
-      updatedItems = state.items.filter((item) => item.id !== action.id);
-    } else {
-      const updatedItem = {
-        ...existingItem,
-        quantity: existingItem.amount - 1,
-      };
-      updatedItems = [...state.items];
-      updatedItems[existingCartItemIndex] = updatedItem;
-    }
+    updatedItems = state.items.filter((item) => item.id !== action.id);
+    console.log("UPDATED: ");
+    console.log(updatedItems);
+
+    // if (existingItem.quantity === 1) {
+    //   updatedItems = state.items.filter((item) => item.id !== action.id);
+    // } else {
+    //   const updatedItem = {
+    //     ...existingItem,
+    //     quantity: existingItem.quantity - 1,
+    //   };
+    //   updatedItems = [...state.items];
+    //   updatedItems[existingCartItemIndex] = updatedItem;
+    // }
 
     return {
       items: updatedItems,
-      totalAmount: updatedTotalAmount,
+      totalAmountNetto: updatedTotalAmountNetto,
+      totalAmountBrutto: updatedTotalAmountBrutto,
     };
   }
 };
@@ -84,7 +110,8 @@ const CartProvider = (props) => {
 
   const cartContext = {
     items: cartState.items,
-    totalAmount: cartState.totalAmount,
+    totalAmountNetto: cartState.totalAmountNetto,
+    totalAmountBrutto: cartState.totalAmountBrutto,
     addItem: addItemCartHandler,
     removeItem: removeItemCartHandler,
   };

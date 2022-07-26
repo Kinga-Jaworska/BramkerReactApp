@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useHttp from "../components/hooks/use-http";
+import { baseURL } from "../firebase.config";
 
 const DataContext = React.createContext({
   menuAutomats: [],
@@ -13,7 +14,6 @@ const DataContext = React.createContext({
   getAccessory: () => {},
 });
 
-const FIREBASE_URL = "https://reacttest-b7b01-default-rtdb.firebaseio.com";
 export const DataContextProvider = (props) => {
   const {
     isAnim: isLoadingAccesory,
@@ -43,10 +43,7 @@ export const DataContextProvider = (props) => {
       setAutomatsMenu(loadedSubCat);
     };
 
-    fetchAccessory(
-      { url: `${FIREBASE_URL}/automatsCat.json` },
-      transformSubList
-    );
+    fetchAccessory({ url: `${baseURL}/automatsCat.json` }, transformSubList);
   }, [fetchAccessory]);
 
   const accessoryCatHandler = () => {
@@ -61,10 +58,7 @@ export const DataContextProvider = (props) => {
       setAccessoryMenu(loadedAccessory);
     };
 
-    fetchAccessory(
-      { url: `${FIREBASE_URL}/akcesoria.json` },
-      transformAccessory
-    );
+    fetchAccessory({ url: `${baseURL}/akcesoria.json` }, transformAccessory);
   };
 
   const convertBruttoHandle = (cenaNetto) => {
@@ -74,6 +68,7 @@ export const DataContextProvider = (props) => {
 
     return brutto;
   };
+
   const setBruttoValHandle = (settedVal) => {
     setBruttoVal(settedVal);
     localStorage.setItem("bruttoVal", settedVal);

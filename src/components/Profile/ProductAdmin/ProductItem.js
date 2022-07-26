@@ -86,7 +86,7 @@ function ProductItem(props) {
   const handleAddToCart = () => {
     // console.log("clicked");
     const quantity = quantityRef.current.value;
-    const cartObj = { ...props.product, quantity: quantity };
+    const cartObj = { ...props.product, quantity: +quantity };
 
     // const newArr = cartList.map((cartProduct) => {
     //   if (cartProduct.id === cartObj.id) {
@@ -96,7 +96,8 @@ function ProductItem(props) {
     // setCartList((current) => current.concat(cartObj));
     // console.log(cartList);
     cartCtx.addItem(cartObj);
-    console.log(cartCtx.totalAmount);
+    console.log(cartCtx.totalAmountNetto);
+    console.log(cartCtx.totalAmountBrutto);
     // console.log(cartObj);
 
     // setCartList((prevList) => {

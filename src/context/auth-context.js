@@ -1,6 +1,5 @@
-import { setUserId } from "firebase/analytics";
 import React, { useCallback, useEffect, useState } from "react";
-import { auth, baseURL } from "../firebase.config";
+import { baseURL } from "../firebase.config";
 
 let logOutTimer;
 

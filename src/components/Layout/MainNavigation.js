@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../../context/auth-context";
 import styles from "./MainNavigation.module.css";
@@ -10,10 +10,27 @@ const MainNavigation = () => {
   const isLoggedIn = authCtx.isLoggedIn;
   const role = authCtx.role;
   const cartCtx = useContext(CartContext);
+  const [cartAnim, setCartAnim] = useState("");
 
   const logoutHandler = () => {
     authCtx.logOut();
   };
+
+  useEffect(() => {
+    setCartAnim("scale-cart");
+    console.log(cartAnim);
+    console.log("CHANGED");
+    setTimeout(() => {
+      setCartAnim("");
+    }, 1500);
+    // lassName={`${styles.description} ${styles.yellow}`}
+    // console.log();
+  }, [cartCtx.items.length]);
+
+  useEffect(() => {
+    console.log(cartAnim);
+    // setCartAnim("");
+  }, [cartAnim]);
 
   return (
     <header className={styles.header}>
@@ -51,12 +68,22 @@ const MainNavigation = () => {
               <Link to="/add">Add</Link>
             </li>
           )}
-          <li>
-            <div className="cart-btn">
-              <div className="cart-number">{cartCtx.items.length}</div>
-              <Link to="/cart">Cart</Link>
-            </div>
-          </li>
+          {isLoggedIn && (
+            <li>
+              <Link to="/cart">
+                <button className={`${styles["cart-btn"]}`}>
+                  Cart
+                  <div
+                    className={`${styles["cart-number"]} ${
+                      styles[`${cartAnim}`]
+                    }`}
+                  >
+                    {cartCtx.items.length}
+                  </div>
+                </button>
+              </Link>
+            </li>
+          )}
 
           {isLoggedIn && (
             <li>
