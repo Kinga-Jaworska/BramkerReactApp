@@ -6,7 +6,7 @@ let logOutTimer;
 const AuthContext = React.createContext({
   token: "",
   isLoggedIn: false,
-  role: () => "u",
+  role: () => "",
   userID: "",
   login: (token) => {},
   logOut: () => {},
@@ -23,17 +23,20 @@ const calculateRemainingTime = (expirationTime) => {
 
 const retrieveStoredToken = () => {
   const storedToken = localStorage.getItem("token");
+  const storeduserID = localStorage.getItem("userID");
   const storedExpirationDate = localStorage.getItem("expirationTime");
   const remainingTime = calculateRemainingTime(storedExpirationDate);
 
   if (remainingTime <= 3600) {
     localStorage.removeItem("token");
     localStorage.removeItem("expirationTime");
+    localStorage.removeItem("userID");
     return null;
   }
 
   return {
     token: storedToken,
+    userID: storeduserID,
     duration: remainingTime,
   };
 };
@@ -41,13 +44,15 @@ const retrieveStoredToken = () => {
 export const AuthContextProvider = (props) => {
   const tokenData = retrieveStoredToken();
   let initialToken;
+  let initialuserID;
 
   if (tokenData) {
     initialToken = tokenData.token;
+    initialuserID = tokenData.userID;
   }
 
-  const [token, setToken] = useState(initialToken);
-  const [userID, setUserID] = useState("");
+  const [token, setToken] = useState(initialToken || "");
+  const [userID, setUserID] = useState(initialuserID || "");
   const userIsLoggedIn = !!token; // !! - convert true or false to: Logical true or false
   const [role, setRole] = useState("u");
 
@@ -74,6 +79,7 @@ export const AuthContextProvider = (props) => {
           setUserID(userID);
 
           localStorage.setItem("token", token);
+          localStorage.setItem("userID", userID);
           localStorage.setItem("expirationTime", expirationTime);
           const remainingTime = calculateRemainingTime(expirationTime);
           logOutTimer = setTimeout(logOutHandler, remainingTime);
@@ -89,6 +95,7 @@ export const AuthContextProvider = (props) => {
     setUserID("");
     setRole("u");
     localStorage.removeItem("token");
+    localStorage.removeItem("userID");
     localStorage.removeItem("expirationTime");
 
     if (logOutTimer) {
@@ -115,10 +122,7 @@ export const AuthContextProvider = (props) => {
           .json()
           .then((data) => {
             if (data != null && data.role != null) {
-              if (data.role === "a" || data.role === "u") {
-                setRole(data.role);
-              }
-              //
+              if (data.role === "a" || data.role === "u") setRole(data.role);
               else setRole("u");
             }
           })
@@ -126,10 +130,9 @@ export const AuthContextProvider = (props) => {
             console.log(err);
           });
       });
-
-      return role;
     }
   };
+
   useEffect(() => {
     handleRole();
   }, [userID]);
@@ -138,10 +141,15 @@ export const AuthContextProvider = (props) => {
     setUserID(id);
   };
 
+  const getRole = () => {
+    handleRole();
+    return role;
+  };
+
   const contextValue = {
     token: token,
     isLoggedIn: userIsLoggedIn,
-    role: handleRole,
+    role: getRole,
     userID: userID,
     login: loginHandler,
     logOut: logOutHandler,

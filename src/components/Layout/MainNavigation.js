@@ -10,7 +10,7 @@ import Modal from "../GUI/Modal";
 const MainNavigation = () => {
   const authCtx = useContext(AuthContext);
   const isLoggedIn = authCtx.isLoggedIn;
-  const role = authCtx.role;
+  // const role = authCtx.role;
   const cartCtx = useContext(CartContext);
   const [cartAnim, setCartAnim] = useState("");
   const [cartShow, setCartShow] = useState(false);
@@ -54,17 +54,17 @@ const MainNavigation = () => {
               <Link to="/profile">Profile</Link>
             </li>
           )}
-          {role === "a" && (
+          {authCtx.role() === "a" && (
             <li>
               <Link to="/users">Users</Link>
             </li>
           )}
-          {role === "a" && (
+          {authCtx.role() === "a" && (
             <li>
               <Link to="/settings">Settings</Link>
             </li>
           )}
-          {role === "a" && (
+          {authCtx.role() === "a" && (
             <li>
               <Link to="/add">Add</Link>
             </li>

@@ -69,6 +69,18 @@
   width: 100%;
   border-style: groove;
 }
+.expense-item-extra {
+  display: flex;
+  padding: 5px;
+  justify-content: flex-end;
+}
+.expense-item-extra p {
+  display: flex;
+  align-items: center;
+}
+.expense-item-extra img {
+  padding: 3px;
+}
 .expense-item-name {
   display: block;
   font-size: large;

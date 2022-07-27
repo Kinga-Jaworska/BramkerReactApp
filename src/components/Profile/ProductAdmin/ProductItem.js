@@ -48,15 +48,8 @@ function ProductItem(props) {
   };
 
   useEffect(() => {
-    // console.log("Effect");
     checkedValue();
-    // console.log("CHANGED");
-    // else console.log("NOT exist");
   }, [cartCtx.items]);
-
-  // useEffect(() => {
-  //   checkedValue();
-  // });
 
   const handleEdit = (editedProduct) => {
     ///???
@@ -160,6 +153,39 @@ function ProductItem(props) {
               <div className="expense-price">{`Brutto: ${props.price_brutto} PLN`}</div>
             </div>
           </div>
+        </div>
+        <div className="expense-item-extra">
+          {props.product["isDiscount"] && (
+            <p>
+              <img
+                src="https://img.icons8.com/ultraviolet/344/approval.png"
+                height="30"
+              />
+              Produkt jest objęty rabatem
+            </p>
+          )}
+        </div>
+        <div className="expense-item-extra">
+          {props.product["isSwitchK"] && (
+            <p>
+              <img
+                src="https://img.icons8.com/ultraviolet/344/approval.png"
+                height="30"
+              />
+              Posiada wyłączniki krańcowe
+            </p>
+          )}
+        </div>
+        <div className="expense-item-extra">
+          {props.product["isSwitchM"] && (
+            <p>
+              <img
+                src="https://img.icons8.com/ultraviolet/344/approval.png"
+                height="30"
+              />
+              Posiada wyłączniki mechaniczne
+            </p>
+          )}
         </div>
         <div className="expense-item-actions">
           {!props.isUser && (

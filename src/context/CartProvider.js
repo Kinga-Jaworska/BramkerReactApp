@@ -5,8 +5,11 @@ const defaultCartState = {
   items: [],
   totalAmountNetto: 0,
   totalAmountBrutto: 0,
+  totalAmountDiscB: 0,
+  totalAmountDiscN: 0,
   bruttoVal: localStorage.getItem("bruttoVal") || 23,
 };
+
 const convertToBrutto = (cenaNetto) => {
   const brutto = (
     Math.floor(
@@ -16,6 +19,7 @@ const convertToBrutto = (cenaNetto) => {
 
   return brutto;
 };
+
 const cartReducer = (state, action) => {
   if (action.type === "ADD") {
     let quantity;
@@ -45,14 +49,22 @@ const cartReducer = (state, action) => {
 
     const updatedTotalAmountNetto =
       state.totalAmountNetto + +action.item.price_netto * quantity;
+
     const updatedTotalAmountBrutto =
       state.totalAmountBrutto +
       convertToBrutto(action.item.price_netto) * quantity;
+
+    const discVal = 25;
+
+    const totalAmountDiscB = state.totalAmountBruto * (100 - discVal / 100);
+    const totalAmountDiscN = state.totalAmountNetto * (100 - discVal / 100);
 
     return {
       items: updatedItems,
       totalAmountNetto: updatedTotalAmountNetto,
       totalAmountBrutto: updatedTotalAmountBrutto,
+      totalAmountDiscB: totalAmountDiscB,
+      totalAmountDiscN: totalAmountDiscN,
     };
   }
 
@@ -83,6 +95,10 @@ const cartReducer = (state, action) => {
     updatedItems = state.items.filter(
       (item) => item.id !== action.id && item.subCat !== action.subCat
     );
+
+    const totalAmountDiscB = state.totalAmountBruto * (100 - discVal / 100);
+    const totalAmountDiscN = state.totalAmountNetto * (100 - discVal / 100);
+
     // updatedItems = state.items.filter((_item, index) => index !== action.id);
     // console.log("updatedItems");
     // console.log(updatedItems);
@@ -90,6 +106,8 @@ const cartReducer = (state, action) => {
       items: updatedItems,
       totalAmountNetto: updatedTotalAmountNetto,
       totalAmountBrutto: updatedTotalAmountBrutto,
+      totalAmountDiscB: totalAmountDiscB,
+      totalAmountDiscN: totalAmountDiscN,
     };
   }
 };
@@ -110,6 +128,8 @@ const CartProvider = (props) => {
     items: cartState.items,
     totalAmountNetto: cartState.totalAmountNetto,
     totalAmountBrutto: cartState.totalAmountBrutto,
+    totalAmountDiscB: cartState.totalAmountDiscB,
+    totalAmountDiscN: cartState.totalAmountDiscN,
     addItem: addItemCartHandler,
     removeItem: removeItemCartHandler,
   };

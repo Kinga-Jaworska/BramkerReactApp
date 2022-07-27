@@ -7,6 +7,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { baseURL } from "../../firebase.config";
 import useHttp from "../hooks/use-http";
 import ProductsUser from "../Profile/ProductUser/ProductsUser";
+import AuthContext from "../../context/auth-context";
 
 const MainPageList = (props) => {
   const {
@@ -20,16 +21,16 @@ const MainPageList = (props) => {
     sendRequest: fetchAutomats,
   } = useHttp();
   const dataCtx = useContext(DataContext);
+  const authCtx = useContext(AuthContext);
   const history = useHistory();
   const params = useParams();
   const [mainCat, setMainCat] = useState("");
   const [isAnim, setIsAnim] = useState(false);
   const [displayProducts, setDisplayProducts] = useState([]);
 
-  // console.log(props.role);
-
   const getSelectedAccessory = async (selectedSubCat) => {
     const url = `${baseURL}/akcesoria/${selectedSubCat}.json`;
+
     const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -46,7 +47,8 @@ const MainPageList = (props) => {
         loadedAccessory.push({
           id: key,
           cat: "akcesoria",
-          isSwitch: data[key].wylacznikiMechaniczne === "TAK" ? true : false,
+          // isSwitchM: data[key].wylacznikiMechaniczne === "TAK" ? true : false,
+          // isSwitchK: data[key].wylacznikiKrancowe === "TAK" ? true : false,
           isDiscount: data[key].podlegaRabatowi === "TAK" ? true : false,
           img: data[key].img,
           name_product: data[key].nazwa,
@@ -58,15 +60,33 @@ const MainPageList = (props) => {
     }
   };
 
+  const getSelectedAutomats = (selectedSubCat) => {
+    getAutomats();
+    // console.log("param");
+    // console.log(selectedSubCat.toLowerCase());
+
+    // const filteredAutomats = displayProducts.filter((item) => {
+    //   //console.log(item.subCat.toLowerCase());
+    //   return item.subCat.toLowerCase() === selectedSubCat.toLowerCase();
+    // });
+    // console.log(filteredAutomats);
+    // setDisplayProducts(filteredAutomats);
+  };
+
   const getAutomats = () => {
     const transformAutomats = (automatsObj) => {
       const loadedAutomats = [];
+
       for (const key in automatsObj) {
         loadedAutomats.push({
           id: key,
           cat: "automaty",
-          isSwitch:
+          isSwitchM:
             automatsObj[key].wylacznikiMechaniczne === "TAK" ? true : false,
+          isSwitchK:
+            automatsObj[key].wylacznikiKrancowe === "TAK" ? true : false,
+          // isSwitch:
+          //   automatsObj[key].wylacznikiMechaniczne === "TAK" ? true : false,
           isDiscount: automatsObj[key].podlegaRabatowi === "TAK" ? true : false,
           img: automatsObj[key].img,
           name_product: automatsObj[key].nazwa,
@@ -74,24 +94,36 @@ const MainPageList = (props) => {
           subCat: automatsObj[key].dzial,
         });
       }
-      //console.log(loadedAutomats)
-      setDisplayProducts(loadedAutomats);
+
+      let filteredAutomats = loadedAutomats;
+      if (params.cat) {
+        filteredAutomats = loadedAutomats.filter((item) => {
+          return item.subCat.toLowerCase() === params.cat.toLowerCase();
+        });
+      }
+
+      setDisplayProducts(filteredAutomats);
     };
     fetchAutomats({ url: `${baseURL}/automaty.json` }, transformAutomats);
   };
 
-  useEffect(() => {
-    openProductsList(params.cat);
-  }, [params.cat]);
-
   const openProductsList = (selectedCat) => {
     setIsAnim(true);
-    if (selectedCat) {
+    if (mainCat === "akcesoria" && selectedCat) {
       getSelectedAccessory(selectedCat);
+    }
+    if (mainCat === "automaty" && selectedCat) {
+      console.log("AUTOMATS");
+      getSelectedAutomats(selectedCat);
     } else {
       getAutomats();
     }
     setIsAnim(false);
+  };
+
+  const automatsCatOpen = (cat) => {
+    setMainCat("automaty");
+    history.push(`/automats/${cat}`);
   };
 
   const automatsOpen = (e) => {
@@ -99,10 +131,10 @@ const MainPageList = (props) => {
     history.push(`/`);
   };
 
-  const accessoryOpen = useCallback((cat) => {
+  const accessoryOpen = (cat) => {
     setMainCat("akcesoria");
     history.push(`/accessory/${cat}`);
-  }, []);
+  };
 
   const onDeleteHandle = (id, mainCat) => {
     const newProducts = displayProducts.filter((product) => {
@@ -113,9 +145,6 @@ const MainPageList = (props) => {
     setDisplayProducts(newProducts);
   };
   const onEditHandle = (editedProduct) => {
-    console.log("Main");
-    console.log(editedProduct);
-
     const editedArray = displayProducts.map((product) => {
       if (product.id === editedProduct["id"]) return editedProduct;
       else return product;
@@ -124,6 +153,14 @@ const MainPageList = (props) => {
     // console.log(displayProducts.length);
     setDisplayProducts(editedArray);
   };
+
+  useEffect(() => {
+    openProductsList(params.cat);
+  }, [params.cat]);
+
+  useEffect(() => {
+    openProductsList(params.cat);
+  }, []);
 
   //PREPARE CONTENT:
   let content = <p>No data</p>;
@@ -140,10 +177,7 @@ const MainPageList = (props) => {
       </div>
     );
   } else if (displayProducts.length > 0) {
-    // console.log("isUser: " + props.role);
     if (props.role === "a") {
-      // console.log("isUser: " + props.role);
-
       content = (
         <ProductsAdmin
           onDelete={onDeleteHandle}
@@ -154,7 +188,6 @@ const MainPageList = (props) => {
         />
       );
     } else if (props.role === "u") {
-      // console.log("isUser: " + props.role);
       content = (
         <ProductsUser
           products={displayProducts}
@@ -171,10 +204,11 @@ const MainPageList = (props) => {
       <div className={styles["container"]}>
         <div className={styles["col-left"]}>
           <VerticalMenu
-            // selectedCat={}
+            automats={dataCtx.menuAutomats}
             accessory={dataCtx.menuAccessory} // dataCtx
             accessoryOpen={accessoryOpen}
             automatsOpen={automatsOpen}
+            automatsCatOpen={automatsCatOpen}
           />
         </div>
       </div>
@@ -194,7 +228,17 @@ const MainPageList = (props) => {
               </div>
             </div>
           )}
-          <div className={styles["col-main-1"]}>{content}</div>
+          <div className={styles["col-main-1"]}>
+            {content}
+            {/* {console.log(props.role)}
+            {!isAnim && props.role === "u" && (
+              <ProductsUser
+                products={displayProducts}
+                mainCat={mainCat}
+                role={props.isUser}
+              />
+            )} */}
+          </div>
         </div>
       </div>
     </div>

@@ -42,6 +42,11 @@ const App = () => {
           </Route>
         )}
         {authCtx.isLoggedIn && (
+          <Route path="/automats/:cat">
+            <MainPageList role={authCtx.role()} />
+          </Route>
+        )}
+        {authCtx.isLoggedIn && (
           <Route path="/accessory/:cat">
             <MainPageList role={authCtx.role()} />
           </Route>

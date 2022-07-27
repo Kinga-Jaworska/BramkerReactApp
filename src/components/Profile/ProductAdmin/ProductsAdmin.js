@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import DataContext from "../../../context/data-context";
-import { ProductClientItem } from "../ProductUser/ProductClientItem";
 import ProductItem from "./ProductItem";
 
 const ProductsAdmin = (props) => {
@@ -8,7 +7,7 @@ const ProductsAdmin = (props) => {
 
   return props.products.map((product, index) => {
     return (
-      <div key={index}>
+      <div key={`${product.subCat}_${index}`}>
         <ProductItem
           product={product}
           onDelete={props.onDelete}

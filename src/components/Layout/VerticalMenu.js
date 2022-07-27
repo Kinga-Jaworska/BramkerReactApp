@@ -5,6 +5,7 @@ const VerticalMenu = (props) => {
   const automatsRef = useRef();
   const accessoryRef = useRef();
   const accessory = props.accessory;
+  const automats = props.automats;
   const [selection, setSelection] = useState(); //----
 
   const selectionAccessory = `${styles["selected"]}`;
@@ -28,7 +29,7 @@ const VerticalMenu = (props) => {
     setSelection(e.target);
   };
   const automatsOpenHandler = (e) => {
-    props.automatsOpen(e);
+    props.automatsOpen(e.target.textContent);
     //setClassess(e,selectionAutomats,classesMain)
     accessoryRef.current.className = `${styles["vertical-dis-btn"]}`;
     if (selection) {
@@ -36,6 +37,22 @@ const VerticalMenu = (props) => {
       selection.className = classesOption;
     }
     e.target.className = `${classesMain} ${selectionAutomats}`;
+    setSelection(e.target);
+  };
+
+  const automatOpenHandler = (e) => {
+    props.automatsCatOpen(e.target.textContent);
+    automatsRef.current.className = `${styles["vertical-dis-btn"]} ${selectionAutomats}`;
+
+    if (selection) {
+      if (selection.id === "automats-btn") {
+        console.log("prev: " + selection.id);
+        selection.className = classesMain;
+      } else {
+        selection.className = classesOption;
+      }
+    }
+    e.target.className = `${classesOption} ${selectionAccessory}`;
     setSelection(e.target);
   };
 
@@ -49,6 +66,19 @@ const VerticalMenu = (props) => {
             automaty
           </button>
         </li>
+        {automats.length > 0 &&
+          automats.map((element, index) => {
+            return (
+              <li key={index}>
+                <button
+                  className={classesOption}
+                  onClick={(e) => automatOpenHandler(e)}
+                >
+                  {element.name[0] + element.name.slice(1).toLowerCase()}
+                </button>
+              </li>
+            );
+          })}
         <li key="accessory">
           <button
             className={styles["vertical-dis-btn"]}
