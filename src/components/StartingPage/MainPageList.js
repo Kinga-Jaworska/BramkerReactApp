@@ -26,7 +26,7 @@ const MainPageList = (props) => {
   const [isAnim, setIsAnim] = useState(false);
   const [displayProducts, setDisplayProducts] = useState([]);
 
-  console.log(props.role);
+  // console.log(props.role);
 
   const getSelectedAccessory = async (selectedSubCat) => {
     const url = `${baseURL}/akcesoria/${selectedSubCat}.json`;
@@ -140,9 +140,9 @@ const MainPageList = (props) => {
       </div>
     );
   } else if (displayProducts.length > 0) {
-    console.log("isUser: " + props.role);
+    // console.log("isUser: " + props.role);
     if (props.role === "a") {
-      console.log("isUser: " + props.role);
+      // console.log("isUser: " + props.role);
 
       content = (
         <ProductsAdmin
@@ -154,7 +154,7 @@ const MainPageList = (props) => {
         />
       );
     } else if (props.role === "u") {
-      console.log("isUser: " + props.role);
+      // console.log("isUser: " + props.role);
       content = (
         <ProductsUser
           products={displayProducts}

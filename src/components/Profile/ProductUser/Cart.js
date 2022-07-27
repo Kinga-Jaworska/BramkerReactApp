@@ -7,18 +7,13 @@ import { QuantityInput } from "./QuantityInput";
 export const Cart = () => {
   const cartCtx = useContext(CartContext);
 
-  // console.log(cartCtx.items);
-  const handleChangeQuantity = (e, item) => {
-    // console.log(+e.target.value);
-    // console.log(item);
-    // const newObj = { ...item, quantity: +e.target.value };
-    // cartCtx.addItem(newObj);
-    // console.log("ITEMS: ");
-    // console.log(cartCtx.items);
+  const handleChangeQuantity = (item, newQuantity) => {
+    const newObj = { ...item, quantity: newQuantity };
+    cartCtx.addItem(newObj);
   };
 
-  const handleDelete = (id) => {
-    cartCtx.removeItem(id);
+  const handleDelete = (id, subCat) => {
+    cartCtx.removeItem(id, subCat);
   };
 
   return cartCtx.items.length > 0 ? (
@@ -45,7 +40,7 @@ export const Cart = () => {
 
       {cartCtx.items.map((item, index) => {
         return (
-          <div className={style["cart-item"]} key={item.id}>
+          <div className={style["cart-item"]} key={index}>
             <div className={style["cart-item-name"]}>
               <p>{item.name_product}</p>
             </div>
@@ -53,10 +48,13 @@ export const Cart = () => {
               <QuantityInput
                 key={index}
                 onChange={handleChangeQuantity}
-                quantity={item.quantity}
+                item={item}
               />
             </div>
-            <Button className="cart-btn" onClick={() => handleDelete(item.id)}>
+            <Button
+              className="cart-btn"
+              onClick={() => handleDelete(item.id, item.subCat)}
+            >
               <img
                 src="https://img.icons8.com/pastel-glyph/344/cancel--v1.png"
                 width="30"

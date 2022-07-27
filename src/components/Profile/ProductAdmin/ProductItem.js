@@ -1,14 +1,13 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import CartContext from "../../../context/cart-context";
 import DataContext from "../../../context/data-context";
+import { baseURL } from "../../../firebase.config";
 import Button from "../../GUI/Button";
 import Modal from "../../GUI/Modal";
 import useHttp from "../../hooks/use-http";
 import EditProduct from "./EditProduct";
 import "./ProductItem.css";
-
-const FIREBASE_URL = "https://reacttest-b7b01-default-rtdb.firebaseio.com";
 
 function ProductItem(props) {
   const [deleteModal, setDeleteModal] = useState(false);
@@ -16,10 +15,48 @@ function ProductItem(props) {
   const params = useParams();
   const quantityRef = useRef();
   const dataCtx = useContext(DataContext);
-  const [cartList, setCartList] = useState([]);
-  const [cartShow, setCartShow] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [addBtn, setAddBtn] = useState(true);
+  const [cartItemExist, setCartItemExist] = useState(null);
 
   const { isLoading, error, sendRequest: sendDeleteRequest } = useHttp();
+
+  const cartCtx = useContext(CartContext);
+
+  const checkedValue = () => {
+    const cartID = cartCtx.items.findIndex((item) => {
+      if (
+        item.id === props.product["id"] &&
+        item.subCat === props.product["subCat"]
+      ) {
+        return item;
+      }
+    });
+
+    if (cartID !== -1) {
+      // console.log("exist");
+      const cartItem = cartCtx.items[cartID];
+      setCartItemExist(cartItem);
+      setQuantity(cartItem.quantity);
+      // quantityRef.current.value = cartItem.quantity;
+      setAddBtn(false);
+    } else {
+      setCartItemExist(null);
+      setQuantity(1);
+      setAddBtn(true);
+    }
+  };
+
+  useEffect(() => {
+    // console.log("Effect");
+    checkedValue();
+    // console.log("CHANGED");
+    // else console.log("NOT exist");
+  }, [cartCtx.items]);
+
+  // useEffect(() => {
+  //   checkedValue();
+  // });
 
   const handleEdit = (editedProduct) => {
     ///???
@@ -45,9 +82,9 @@ function ProductItem(props) {
         fetchSTR = `${mainCat}/${params.cat}/${id}`;
       }
 
-      console.log(`${FIREBASE_URL}/${fetchSTR}.json`);
+      console.log(`${baseURL}/${fetchSTR}.json`);
 
-      fetch(`${FIREBASE_URL}/${fetchSTR}.json`, {
+      fetch(`${baseURL}/${fetchSTR}.json`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -79,33 +116,32 @@ function ProductItem(props) {
     setEditModal(false);
   };
 
-  const addToCartBase = () => {};
-
-  const cartCtx = useContext(CartContext);
+  const handleRemoveFromCart = () => {
+    cartCtx.removeItem(props.product["id"], props.product["subCat"]);
+    // console.log(props.product["id"]);
+    setCartItemExist(null);
+    setQuantity(1);
+    setAddBtn(true);
+  };
 
   const handleAddToCart = () => {
-    // console.log("clicked");
-    const quantity = quantityRef.current.value;
-    const cartObj = { ...props.product, quantity: +quantity };
+    setItemCart();
+  };
 
-    // const newArr = cartList.map((cartProduct) => {
-    //   if (cartProduct.id === cartObj.id) {
-    //     return cartObj;
-    //   } else return cartProduct;
-    // });
-    // setCartList((current) => current.concat(cartObj));
-    // console.log(cartList);
-    cartCtx.addItem(cartObj);
-    console.log(cartCtx.totalAmountNetto);
-    console.log(cartCtx.totalAmountBrutto);
+  const setItemCart = () => {
+    const cartObj = { ...props.product, quantity: +quantityRef.current.value };
     // console.log(cartObj);
+    cartCtx.addItem(cartObj);
+  };
 
-    // setCartList((prevList) => {
-    //   prevList.concat(cartObj);
-    // });
-    // console.log(cartList);
-    // setCartList;
-    // console.log(quantity);
+  const handleChangeQuantity = (e) => {
+    console.log(e.target.value);
+    setQuantity(e.target.value);
+
+    // IF EXIST - change quantity
+    if (cartItemExist) {
+      setItemCart();
+    }
   };
 
   return (
@@ -130,7 +166,6 @@ function ProductItem(props) {
             <Button
               className="delete-btn"
               value={props.product["id"]}
-              // key={`add_${props.product["id"]}`}
               onClick={displayModal}
             >
               <img
@@ -144,7 +179,6 @@ function ProductItem(props) {
             <Button
               className="edit-btn"
               value={props.product["id"]}
-              // key={`edit_${props.product["id"]}`}
               onClick={displayEditForm}
             >
               <img
@@ -181,8 +215,29 @@ function ProductItem(props) {
         />
       )}
       <div className="expense-item-actions">
-        <input type="number" defaultValue={1} ref={quantityRef} />
-        <Button onClick={handleAddToCart}>Add to Cart</Button>
+        <input
+          className="expense-item-input"
+          type="number"
+          value={quantity}
+          // defaultValue={quantity} //cartCtx.items[cartID].quantity ||
+          ref={quantityRef}
+          onChange={handleChangeQuantity}
+        />
+        {addBtn ? (
+          <Button className="cart-list-btn" onClick={handleAddToCart}>
+            <img
+              width="45"
+              src="https://img.icons8.com/external-xnimrodx-blue-xnimrodx/344/external-add-black-friday-xnimrodx-blue-xnimrodx.png"
+            />
+          </Button>
+        ) : (
+          <Button className="cart-btn" onClick={handleRemoveFromCart}>
+            <img
+              width="45"
+              src="https://img.icons8.com/external-xnimrodx-blue-xnimrodx/344/external-cancel-black-friday-xnimrodx-blue-xnimrodx-2.png"
+            />
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -6,16 +6,16 @@
   height: 100vh;
   z-index: 10;
   background: rgba(0, 0, 0, 0.75);
-  animation: fadeIn 2s;  
+  animation: fadeIn 2s;
 }
 
 .modal {
   position: fixed;
-  top: 30vh;
+  top: 20vh;
   left: 10%;
   width: 80%;
+  height: 400px;
   z-index: 100;
-  overflow: hidden;
   border-radius: 7px;
 }
 
@@ -34,6 +34,8 @@
   background: white;
   padding: 1rem;
   color: black;
+  height: 100%;
+  overflow-y: scroll;
 }
 
 .actions {
@@ -43,6 +45,7 @@
   justify-content: center;
   align-items: center;
   column-gap: 10px;
+  position: sticky;
 }
 
 @media (min-width: 768px) {
@@ -57,10 +60,9 @@
   }
   100% {
     opacity: 1;
-  }  
+  }
 }
 
-.fadeIn
-{
+.fadeIn {
   animation: fadeIn 3s ease-in;
 }

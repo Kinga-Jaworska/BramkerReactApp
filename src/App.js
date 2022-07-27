@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState, useContext } from "react";
+import { useContext } from "react";
 import Layout from "./components/Layout/Layout";
 import { Redirect, Route, Switch } from "react-router-dom";
 import AuthPage from "./pages/AuthPage";
@@ -10,7 +10,6 @@ import UserList from "./components/Profile/ProductAdmin/UserList";
 import Settings from "./components/Profile/ProductAdmin/Settings";
 import AddProduct from "./components/Profile/ProductAdmin/AddProduct";
 import MainPageList from "./components/StartingPage/MainPageList";
-import { ProductList } from "./components/Profile/ProductUser/ProductList";
 import { Cart } from "./components/Profile/ProductUser/Cart";
 
 const App = () => {

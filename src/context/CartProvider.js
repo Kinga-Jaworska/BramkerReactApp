@@ -18,31 +18,36 @@ const convertToBrutto = (cenaNetto) => {
 };
 const cartReducer = (state, action) => {
   if (action.type === "ADD") {
-    console.log(action.item);
-
-    const updatedTotalAmountNetto =
-      state.totalAmountNetto + +action.item.price_netto * action.item.quantity;
-    const updatedTotalAmountBrutto =
-      state.totalAmountBrutto +
-      convertToBrutto(action.item.price_netto) * action.item.quantity;
+    let quantity;
 
     const existingCartItemIndex = state.items.findIndex(
-      (item) => item.id === action.item.id
+      (item) => item.id === action.item.id && item.subCat === action.item.subCat
     );
 
     const existingCartItem = state.items[existingCartItemIndex];
     let updatedItems;
 
     if (existingCartItem) {
+      const quantityDifference =
+        action.item.quantity - existingCartItem.quantity;
+      quantity = quantityDifference;
+
       const updatedItem = {
         ...existingCartItem,
-        quantity: existingCartItem.quantity + action.item.quantity,
+        quantity: existingCartItem.quantity + quantityDifference,
       };
       updatedItems = [...state.items];
       updatedItems[existingCartItemIndex] = updatedItem;
     } else {
+      quantity = action.item.quantity;
       updatedItems = state.items.concat(action.item);
     }
+
+    const updatedTotalAmountNetto =
+      state.totalAmountNetto + +action.item.price_netto * quantity;
+    const updatedTotalAmountBrutto =
+      state.totalAmountBrutto +
+      convertToBrutto(action.item.price_netto) * quantity;
 
     return {
       items: updatedItems,
@@ -52,18 +57,17 @@ const cartReducer = (state, action) => {
   }
 
   if (action.type === "DELETE") {
-    console.log(action.id);
-    // console.log('state: '+state.items[0])
-    state.items.findIndex((item) => {
-      console.log("item : " + item.id + " " + action.id);
-      return item.id === action.id;
+    // console.log("delete...");
+    const index = state.items.findIndex((item) => {
+      // console.log(item);
+      // console.log(action);
+      return item.id === action.id && item.subCat === action.subCat;
     });
-    const existingCartItemIndex = state.items.findIndex(
-      (item) => item.id === action.id
-    );
-    console.log("find " + existingCartItemIndex);
 
-    const existingItem = state.items[existingCartItemIndex];
+    const existingItem = state.items[index];
+    // console.log("existingItem: ");
+    // console.log(existingItem);
+
     const updatedTotalAmountNetto =
       state.totalAmountNetto -
       +existingItem.price_netto * existingItem.quantity;
@@ -72,22 +76,16 @@ const cartReducer = (state, action) => {
       convertToBrutto(existingItem.price_netto) * existingItem.quantity;
 
     let updatedItems;
-
-    updatedItems = state.items.filter((item) => item.id !== action.id);
-    console.log("UPDATED: ");
-    console.log(updatedItems);
-
-    // if (existingItem.quantity === 1) {
-    //   updatedItems = state.items.filter((item) => item.id !== action.id);
-    // } else {
-    //   const updatedItem = {
-    //     ...existingItem,
-    //     quantity: existingItem.quantity - 1,
-    //   };
-    //   updatedItems = [...state.items];
-    //   updatedItems[existingCartItemIndex] = updatedItem;
-    // }
-
+    // updatedItems = state.items.map((item) => {
+    //   if (item !== existingItem) return item;
+    // });
+    // updatedItems = state.items.del(action.id);
+    updatedItems = state.items.filter(
+      (item) => item.id !== action.id && item.subCat !== action.subCat
+    );
+    // updatedItems = state.items.filter((_item, index) => index !== action.id);
+    // console.log("updatedItems");
+    // console.log(updatedItems);
     return {
       items: updatedItems,
       totalAmountNetto: updatedTotalAmountNetto,
@@ -104,8 +102,8 @@ const CartProvider = (props) => {
   const addItemCartHandler = (item) => {
     dispatchCartAction({ type: "ADD", item: item });
   };
-  const removeItemCartHandler = (id) => {
-    dispatchCartAction({ type: "DELETE", id: id });
+  const removeItemCartHandler = (id, subCat) => {
+    dispatchCartAction({ type: "DELETE", id: id, subCat: subCat });
   };
 
   const cartContext = {

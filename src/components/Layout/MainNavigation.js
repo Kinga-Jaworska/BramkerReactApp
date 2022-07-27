@@ -4,6 +4,8 @@ import AuthContext from "../../context/auth-context";
 import styles from "./MainNavigation.module.css";
 import bramkerLogo from "../../assets/logobramker.png";
 import CartContext from "../../context/cart-context";
+import { Cart } from "../Profile/ProductUser/Cart";
+import Modal from "../GUI/Modal";
 
 const MainNavigation = () => {
   const authCtx = useContext(AuthContext);
@@ -11,26 +13,25 @@ const MainNavigation = () => {
   const role = authCtx.role;
   const cartCtx = useContext(CartContext);
   const [cartAnim, setCartAnim] = useState("");
+  const [cartShow, setCartShow] = useState(false);
 
   const logoutHandler = () => {
     authCtx.logOut();
   };
+  const handleHide = () => {
+    setCartShow(false);
+  };
 
   useEffect(() => {
     setCartAnim("scale-cart");
-    console.log(cartAnim);
-    console.log("CHANGED");
     setTimeout(() => {
       setCartAnim("");
     }, 1500);
-    // lassName={`${styles.description} ${styles.yellow}`}
-    // console.log();
   }, [cartCtx.items.length]);
 
-  useEffect(() => {
-    console.log(cartAnim);
-    // setCartAnim("");
-  }, [cartAnim]);
+  const handleOpenCart = () => {
+    setCartShow(true);
+  };
 
   return (
     <header className={styles.header}>
@@ -70,18 +71,21 @@ const MainNavigation = () => {
           )}
           {isLoggedIn && (
             <li>
-              <Link to="/cart">
-                <button className={`${styles["cart-btn"]}`}>
-                  Cart
-                  <div
-                    className={`${styles["cart-number"]} ${
-                      styles[`${cartAnim}`]
-                    }`}
-                  >
-                    {cartCtx.items.length}
-                  </div>
-                </button>
-              </Link>
+              {/* <Link to="/cart"> */}
+              <button
+                className={`${styles["cart-btn"]}`}
+                onClick={handleOpenCart}
+              >
+                Koszyk
+                <div
+                  className={`${styles["cart-number"]} ${
+                    styles[`${cartAnim}`]
+                  }`}
+                >
+                  {cartCtx.items.length}
+                </div>
+              </button>
+              {/* </Link> */}
             </li>
           )}
 
@@ -92,6 +96,11 @@ const MainNavigation = () => {
           )}
         </ul>
       </nav>
+      {cartShow && (
+        <Modal onHide={handleHide}>
+          <Cart />
+        </Modal>
+      )}
     </header>
   );
 };
