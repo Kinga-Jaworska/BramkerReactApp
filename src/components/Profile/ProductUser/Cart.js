@@ -30,11 +30,11 @@ export const Cart = () => {
         </div>
         <div className={style["summary-brutto"]}>
           <div className={style["summary-text"]}>Netto + rabat:</div>
-          {cartCtx.totalAmountBrutto.toFixed(2)}
+          {cartCtx.totalAmountDiscN.toFixed(2)}
         </div>
         <div className={style["summary-brutto"]}>
           <div className={style["summary-text"]}>Brutto + rabat:</div>
-          {cartCtx.totalAmountBrutto.toFixed(2)}
+          {cartCtx.totalAmountDiscB.toFixed(2)}
         </div>
       </div>
 

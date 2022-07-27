@@ -20,6 +20,37 @@ const convertToBrutto = (cenaNetto) => {
   return brutto;
 };
 
+const setDiscountSum = (updatedItems) => {
+  const discVal = 15; // get from base
+
+  let discountSumN = 0;
+  let discountSumB = 0;
+  let notDiscountSumN = 0;
+  let notDiscountSumB = 0;
+
+  updatedItems.forEach((item) => {
+    console.log(item);
+    if (item.isDiscount) {
+      console.log(item.isDiscount);
+      discountSumN = item.price_netto * item.quantity;
+      discountSumB = convertToBrutto(item.price_netto) * item.quantity;
+    } else {
+      notDiscountSumN = item.price_netto * item.quantity;
+      notDiscountSumB = convertToBrutto(item.price_netto) * item.quantity;
+    }
+  });
+
+  const totalAmountDiscN =
+    discountSumN * ((100 - discVal) / 100) + notDiscountSumN;
+  const totalAmountDiscB =
+    discountSumB * ((100 - discVal) / 100) + notDiscountSumB;
+
+  return {
+    totalAmountDiscN,
+    totalAmountDiscB,
+  };
+};
+
 const cartReducer = (state, action) => {
   if (action.type === "ADD") {
     let quantity;
@@ -54,17 +85,14 @@ const cartReducer = (state, action) => {
       state.totalAmountBrutto +
       convertToBrutto(action.item.price_netto) * quantity;
 
-    const discVal = 25;
-
-    const totalAmountDiscB = state.totalAmountBruto * (100 - discVal / 100);
-    const totalAmountDiscN = state.totalAmountNetto * (100 - discVal / 100);
+    const discount = setDiscountSum(updatedItems);
 
     return {
       items: updatedItems,
       totalAmountNetto: updatedTotalAmountNetto,
       totalAmountBrutto: updatedTotalAmountBrutto,
-      totalAmountDiscB: totalAmountDiscB,
-      totalAmountDiscN: totalAmountDiscN,
+      totalAmountDiscB: discount.totalAmountDiscB,
+      totalAmountDiscN: discount.totalAmountDiscN,
     };
   }
 
@@ -96,8 +124,7 @@ const cartReducer = (state, action) => {
       (item) => item.id !== action.id && item.subCat !== action.subCat
     );
 
-    const totalAmountDiscB = state.totalAmountBruto * (100 - discVal / 100);
-    const totalAmountDiscN = state.totalAmountNetto * (100 - discVal / 100);
+    const discount = setDiscountSum(updatedItems);
 
     // updatedItems = state.items.filter((_item, index) => index !== action.id);
     // console.log("updatedItems");
@@ -106,8 +133,8 @@ const cartReducer = (state, action) => {
       items: updatedItems,
       totalAmountNetto: updatedTotalAmountNetto,
       totalAmountBrutto: updatedTotalAmountBrutto,
-      totalAmountDiscB: totalAmountDiscB,
-      totalAmountDiscN: totalAmountDiscN,
+      totalAmountDiscB: discount.totalAmountDiscB,
+      totalAmountDiscN: discount.totalAmountDiscN,
     };
   }
 };

@@ -110,6 +110,7 @@ const MainPageList = (props) => {
   const openProductsList = (selectedCat) => {
     setIsAnim(true);
     if (mainCat === "akcesoria" && selectedCat) {
+      console.log("ACCESSORY");
       getSelectedAccessory(selectedCat);
     }
     if (mainCat === "automaty" && selectedCat) {
