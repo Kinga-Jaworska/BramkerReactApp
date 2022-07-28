@@ -24,10 +24,10 @@ function ProductItem(props) {
 
   const cartCtx = useContext(CartContext);
 
-  const setSwitchInfo = () => {
-    if (props.product.isSwitchK || props.product.isSwitchM) {
+  const setSwitchInfo = (product) => {
+    if (product.isSwitchK || product.isSwitchM) {
       setIsSwitch(true);
-    }
+    } else setIsSwitch(false);
   };
 
   const checkedValue = () => {
@@ -57,22 +57,17 @@ function ProductItem(props) {
   }, [cartCtx.items]);
 
   useEffect(() => {
-    setSwitchInfo();
+    setSwitchInfo(props.product);
   }, []);
 
   const handleEdit = (editedProduct) => {
-    console.log("edited ");
-    console.log(editedProduct);
     props.onEditProduct(editedProduct);
-    setEditModal(false);
+    setSwitchInfo(editedProduct);
   };
 
   const handleDelete = () => {
     const id = props.product["id"];
     const mainCat = props.product["cat"];
-
-    // console.log("main cat : " + mainCat);
-    console.log("main cat : " + props.product["cat"]);
 
     let fetchSTR = "";
     if (id && mainCat) {
@@ -82,16 +77,12 @@ function ProductItem(props) {
         fetchSTR = `${mainCat}/${params.cat}/${id}`;
       }
 
-      console.log(`${baseURL}/${fetchSTR}.json`);
-
       fetch(`${baseURL}/${fetchSTR}.json`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
       }).then((res) => {
-        // console.log('RES: '+res)
-        //console.log('info '+mainCat)
         console.log("successfully deleted!");
         props.onDelete(id, mainCat);
         hideModal();
@@ -133,9 +124,7 @@ function ProductItem(props) {
   };
 
   const handleChangeQuantity = (e) => {
-    console.log(e.target.value);
     setQuantity(e.target.value);
-
     if (cartItemExist) {
       setItemCart();
     }

@@ -14,6 +14,8 @@ export const Cart = () => {
 
   const handleDelete = (id, subCat) => {
     cartCtx.removeItem(id, subCat);
+    console.log("TEST: ");
+    console.log(cartCtx.items);
   };
 
   return cartCtx.items.length > 0 ? (
@@ -50,7 +52,7 @@ export const Cart = () => {
             </div>
             <div className={style["cart-item-quantity"]}>
               <QuantityInput
-                key={index}
+                key={`quant_${index}`}
                 onChange={handleChangeQuantity}
                 item={item}
               />

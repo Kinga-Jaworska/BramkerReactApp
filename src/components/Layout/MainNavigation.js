@@ -4,13 +4,11 @@ import AuthContext from "../../context/auth-context";
 import styles from "./MainNavigation.module.css";
 import bramkerLogo from "../../assets/logobramker.png";
 import CartContext from "../../context/cart-context";
-import { Cart } from "../Profile/ProductUser/Cart";
-import Modal from "../GUI/Modal";
+import { CartOrders } from "../Profile/ProductUser/CartOrders";
 
 const MainNavigation = () => {
   const authCtx = useContext(AuthContext);
   const isLoggedIn = authCtx.isLoggedIn;
-  // const role = authCtx.role;
   const cartCtx = useContext(CartContext);
   const [cartAnim, setCartAnim] = useState("");
   const [cartShow, setCartShow] = useState(false);
@@ -55,6 +53,11 @@ const MainNavigation = () => {
               <Link to="/profile">Profile</Link>
             </li>
           )}
+          {isLoggedIn && (
+            <li>
+              <Link to="/myOrders">Moje zamówienia</Link>
+            </li>
+          )}
           {authCtx.role() === "a" && (
             <li>
               <Link to="/users">Users</Link>
@@ -68,6 +71,11 @@ const MainNavigation = () => {
           {authCtx.role() === "a" && (
             <li>
               <Link to="/add">Add</Link>
+            </li>
+          )}
+          {authCtx.role() === "a" && (
+            <li>
+              <Link to="/orders">Zarządzanie zamówieniami</Link>
             </li>
           )}
           {isLoggedIn && (
@@ -97,11 +105,7 @@ const MainNavigation = () => {
           )}
         </ul>
       </nav>
-      {cartShow && (
-        <Modal onHide={handleHide}>
-          <Cart />
-        </Modal>
-      )}
+      {cartShow && <CartOrders onHide={handleHide} />}
     </header>
   );
 };

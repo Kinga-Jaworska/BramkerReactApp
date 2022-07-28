@@ -142,14 +142,34 @@ const MainPageList = (props) => {
 
     setDisplayProducts(newProducts);
   };
+
   const onEditHandle = (editedProduct) => {
-    const editedArray = displayProducts.map((product) => {
-      if (product.id === editedProduct["id"]) return editedProduct;
-      else return product;
-    });
-    // console.log(newProducts.length);
-    // console.log(displayProducts.length);
-    setDisplayProducts(editedArray);
+    if (
+      params.cat &&
+      editedProduct.subCat.toLowerCase() !== params.cat.toLowerCase()
+    ) {
+      //go to another page
+      // console.log(editedProduct.cat);
+      // console.log("edited sub cat: " + editedProduct.subCat);
+      // console.log("now you are here: " + params.cat);
+      // setSelectedMenu(editedProduct.subCat.toLowerCase());
+      // history.push(
+      //   `/${editedProduct.cat}/${editedProduct.subCat.toLowerCase()}`
+      // );
+      history.push("/");
+
+      // openProductsList(editedProduct.subCat.toLowerCase());
+    } else {
+      console.log("update:");
+
+      const editedArray = [...displayProducts].map((product) => {
+        if (product.id === editedProduct["id"]) {
+          return editedProduct;
+        } else return product;
+      });
+      console.log(editedArray);
+      setDisplayProducts(editedArray);
+    }
   };
 
   useEffect(() => {

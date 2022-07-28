@@ -1,0 +1,29 @@
+.orders-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* justify-content: center; */
+  padding: 20px;
+  color: black;
+}
+.order-item {
+  display: flex;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+.order-list {
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  background-color: aliceblue;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-radius: 2px;
+  padding: 5px;
+}
+.order-status {
+  display: flex;
+  padding: 20px;
+  align-items: center;
+  width: 20%;
+  justify-content: center;
+}

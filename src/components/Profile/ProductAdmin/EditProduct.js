@@ -6,45 +6,9 @@ import { useState } from "react";
 import { baseURL } from "../../../firebase.config";
 
 const EditProduct = (props) => {
-  const { isLoading, error, sendRequest: sendEditRequest } = useHttp();
-  const [isClosing, setIsClosing] = useState(false);
+  let isClosing = false;
+  const [errorEdit, setErrorEdit] = useState("");
 
-  const editProductHandle = (editProduct, selectedCat) => {
-    //console.log(editProduct, selectedCat)
-    const brutto = (
-      Math.floor(
-        (+editProduct.cenaNetto * 0.23 + +editProduct.cenaNetto) * 10
-      ) / 10
-    ).toFixed(2);
-    const editedDisplayProduct = {
-      id: props.editProduct["id"],
-      name_product: editProduct.nazwa,
-      img: editProduct.img,
-      price_netto: editProduct.cenaNetto,
-      price_brutto: brutto,
-    };
-    props.onEditProduct(editedDisplayProduct, selectedCat);
-    setIsClosing(true);
-
-    setTimeout(() => {
-      props.onHide();
-    }, [1900]);
-  };
-
-  // const handleEditForm = async (editProduct, fetchSTR, selectedCat) => {
-  //   sendEditRequest(
-  //     {
-  //       url: `${FIREBASE_URL}/${fetchSTR}/${props.editProduct["id"]}.json`,
-  //       method: "PATCH",
-  //       body: editProduct,
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     },
-  //     editProductHandle.bind(null, editProduct, selectedCat)
-  //   );
-  //   // newProduct, fetchSTR, selectedCat, selectedSubCat
-  // };
   const handleEditForm = async (
     newProduct,
     fetchSTR,
@@ -54,45 +18,52 @@ const EditProduct = (props) => {
     const editID = props.editProduct["id"];
     const url = `${baseURL}/${fetchSTR}/${editID}.json`;
 
-    console.log(url);
-    console.log(newProduct);
-    console.log(selectedCat);
     const requestOptions = {
-      method: "PATCH",
+      method: "PUT", // PATCH
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newProduct),
     };
 
     const response = await fetch(url, requestOptions);
     if (!response.ok) {
-      // setError(response.statusText);
-      console.log(response.statusText);
-      // setMessage(response.statusText);
+      setErrorEdit(response.statusText);
     } else {
-      // const data = await response.json();
-      // setMessage("Edytowano rekord");
       const brutto = (
         Math.floor(
           (+newProduct.cenaNetto * 0.23 + +newProduct.cenaNetto) * 10
         ) / 10
       ).toFixed(2);
 
+      let subCatInfo = "";
+      if (newProduct.dzial) {
+        subCatInfo = newProduct.dzial;
+      } else {
+        subCatInfo = fetchSTR.split("/")[1];
+      }
+
       let editedDisplayProduct = {
         id: editID,
-        isDiscount: newProduct.podlegaRabatowi,
+        isDiscount: newProduct.podlegaRabatowi === "TAK" ? true : false,
         name_product: newProduct.nazwa,
         img: newProduct.img,
         price_netto: newProduct.cenaNetto,
         price_brutto: brutto,
+        cat: fetchSTR.split("/")[0],
+        subCat: subCatInfo,
       };
 
       if (selectedCat === "automaty") {
         editedDisplayProduct.subCat = newProduct.dzial;
-        editedDisplayProduct.isSwitch = newProduct.wylacznikiMechaniczne;
+        if (newProduct.wylacznikiMechaniczne) {
+          editedDisplayProduct.isSwitchM =
+            newProduct.wylacznikiMechaniczne === "TAK" ? true : false;
+        } else if (newProduct.wylacznikiKrancowe) {
+          editedDisplayProduct.isSwitchK =
+            newProduct.wylacznikiKrancowe === "TAK" ? true : false;
+        }
       }
-
-      console.log(editedDisplayProduct);
       props.onConfirm(editedDisplayProduct);
+      props.onHide();
     }
   };
 
@@ -112,7 +83,7 @@ const EditProduct = (props) => {
           editProduct={props.editProduct}
           price_brutto={props.price_brutto}
           isSwitch={props.isSwitch}
-          error={error}
+          error={errorEdit}
         />,
         document.getElementById("overlay-root")
       )}
@@ -135,8 +106,6 @@ const ModalOverlay = (props) => {
   if (props.isClosing) {
     overlayClasses += ` ${styles.fadeOut}`;
   }
-  console.log(props.isSwitch);
-
   return (
     <div className={overlayClasses}>
       <div className={`${styles.content}`}>

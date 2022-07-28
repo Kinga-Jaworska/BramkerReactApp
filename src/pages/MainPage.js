@@ -1,6 +1,5 @@
 import { getAuth } from "firebase/auth";
-import { useContext, useState, useEffect } from "react";
-import { ProductList } from "../components/Profile/ProductUser/ProductList";
+import { useContext } from "react";
 import MainPageList from "../components/StartingPage/MainPageList";
 import AuthContext from "../context/auth-context";
 
@@ -9,7 +8,6 @@ const MainPage = (props) => {
   let content = "";
 
   getAuth().onAuthStateChanged((user) => {
-    //console.log('Main page '+user.email)
     authCtx.setUserIdFunc(user.uid);
   });
 

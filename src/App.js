@@ -11,6 +11,8 @@ import Settings from "./components/Profile/ProductAdmin/Settings";
 import AddProduct from "./components/Profile/ProductAdmin/AddProduct";
 import MainPageList from "./components/StartingPage/MainPageList";
 import { Cart } from "./components/Profile/ProductUser/Cart";
+import { MyOrdersList } from "./components/Profile/ProductUser/MyOrdersList";
+import { CustomerOrders } from "./components/Profile/ProductAdmin/CustomerOrders";
 
 const App = () => {
   const authCtx = useContext(AuthContext);
@@ -42,6 +44,12 @@ const App = () => {
           </Route>
         )} */}
         {authCtx.isLoggedIn && (
+          <Route path="/myOrders">
+            <MyOrdersList />
+          </Route>
+        )}
+
+        {authCtx.isLoggedIn && (
           <Route path="/automaty/:cat">
             <MainPageList role={authCtx.role()} />
           </Route>
@@ -49,6 +57,11 @@ const App = () => {
         {authCtx.isLoggedIn && (
           <Route path="/akcesoria/:cat">
             <MainPageList role={authCtx.role()} />
+          </Route>
+        )}
+        {authCtx.role() === "a" && authCtx.isLoggedIn && (
+          <Route path="/orders">
+            <CustomerOrders />
           </Route>
         )}
         {authCtx.role() === "a" && authCtx.isLoggedIn && (

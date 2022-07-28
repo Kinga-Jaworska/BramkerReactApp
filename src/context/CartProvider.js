@@ -124,7 +124,7 @@ const cartReducer = (state, action) => {
       totalAmountDiscN: discount.totalAmountDiscN,
     };
   }
-  if (action.type === "USER_LOGOUT") {
+  if (action.type === "CLEAR_CART") {
     return defaultCartState;
   }
 };
@@ -175,7 +175,7 @@ const CartProvider = (props) => {
   };
   const handleClearReducer = () => {
     dispatchCartAction({
-      type: "USER_LOGOUT",
+      type: "CLEAR_CART",
     });
   };
 

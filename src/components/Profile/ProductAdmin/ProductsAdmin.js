@@ -13,7 +13,6 @@ const ProductsAdmin = (props) => {
           onDelete={props.onDelete}
           accessoryCat={props.accessoryCat}
           mainCat={props.mainCat}
-          // selectedAccesory={props.selectedAccesory}
           price_brutto={dataCtx.convertToBurtto(product.price_netto)}
           automatsCat={props.automatsCat}
           onEditProduct={props.onEditProduct}
