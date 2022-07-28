@@ -1,13 +1,12 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import ProductsAdmin from "../Profile/ProductAdmin/ProductsAdmin";
 import VerticalMenu from "../Layout/VerticalMenu";
 import styles from "./MainPageList.module.css";
 import DataContext from "../../context/data-context";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import { baseURL } from "../../firebase.config";
 import useHttp from "../hooks/use-http";
 import ProductsUser from "../Profile/ProductUser/ProductsUser";
-import AuthContext from "../../context/auth-context";
 
 const MainPageList = (props) => {
   const {
@@ -21,16 +20,16 @@ const MainPageList = (props) => {
     sendRequest: fetchAutomats,
   } = useHttp();
   const dataCtx = useContext(DataContext);
-  const authCtx = useContext(AuthContext);
   const history = useHistory();
   const params = useParams();
-  const [mainCat, setMainCat] = useState("");
+  const location = useLocation();
+  const [mainCat, setMainCat] = useState(location.pathname.split("/")[1] || "");
   const [isAnim, setIsAnim] = useState(false);
   const [displayProducts, setDisplayProducts] = useState([]);
+  const [selectedMenu, setSelectedMenu] = useState(params.cat || "");
 
   const getSelectedAccessory = async (selectedSubCat) => {
     const url = `${baseURL}/akcesoria/${selectedSubCat}.json`;
-
     const requestOptions = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -60,17 +59,8 @@ const MainPageList = (props) => {
     }
   };
 
-  const getSelectedAutomats = (selectedSubCat) => {
+  const getSelectedAutomats = () => {
     getAutomats();
-    // console.log("param");
-    // console.log(selectedSubCat.toLowerCase());
-
-    // const filteredAutomats = displayProducts.filter((item) => {
-    //   //console.log(item.subCat.toLowerCase());
-    //   return item.subCat.toLowerCase() === selectedSubCat.toLowerCase();
-    // });
-    // console.log(filteredAutomats);
-    // setDisplayProducts(filteredAutomats);
   };
 
   const getAutomats = () => {
@@ -109,13 +99,12 @@ const MainPageList = (props) => {
 
   const openProductsList = (selectedCat) => {
     setIsAnim(true);
+    console.log("MAIN " + mainCat);
     if (mainCat === "akcesoria" && selectedCat) {
-      console.log("ACCESSORY");
       getSelectedAccessory(selectedCat);
     }
     if (mainCat === "automaty" && selectedCat) {
-      console.log("AUTOMATS");
-      getSelectedAutomats(selectedCat);
+      getSelectedAutomats();
     } else {
       getAutomats();
     }
@@ -124,7 +113,7 @@ const MainPageList = (props) => {
 
   const automatsCatOpen = (cat) => {
     setMainCat("automaty");
-    history.push(`/automats/${cat}`);
+    history.push(`/automaty/${cat}`);
   };
 
   const automatsOpen = (e) => {
@@ -134,15 +123,14 @@ const MainPageList = (props) => {
 
   const accessoryOpen = (cat) => {
     setMainCat("akcesoria");
-    history.push(`/accessory/${cat}`);
+    history.push(`/akcesoria/${cat}`);
   };
 
   const onDeleteHandle = (id, mainCat) => {
     const newProducts = displayProducts.filter((product) => {
       return product.id !== id;
     });
-    // console.log(newProducts.length);
-    // console.log(displayProducts.length);
+
     setDisplayProducts(newProducts);
   };
   const onEditHandle = (editedProduct) => {
@@ -160,6 +148,7 @@ const MainPageList = (props) => {
   }, [params.cat]);
 
   useEffect(() => {
+    setSelectedMenu(params.cat);
     openProductsList(params.cat);
   }, []);
 
@@ -207,6 +196,8 @@ const MainPageList = (props) => {
           <VerticalMenu
             automats={dataCtx.menuAutomats}
             accessory={dataCtx.menuAccessory} // dataCtx
+            selectedMain={mainCat}
+            selectedMenu={selectedMenu}
             accessoryOpen={accessoryOpen}
             automatsOpen={automatsOpen}
             automatsCatOpen={automatsCatOpen}

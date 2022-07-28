@@ -1,4 +1,5 @@
-import { useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
+import { baseURL } from "../firebase.config";
 import CartContext from "./cart-context";
 
 const defaultCartState = {
@@ -7,7 +8,7 @@ const defaultCartState = {
   totalAmountBrutto: 0,
   totalAmountDiscB: 0,
   totalAmountDiscN: 0,
-  bruttoVal: localStorage.getItem("bruttoVal") || 23,
+  bruttoVal: +localStorage.getItem("bruttoVal") || 23,
 };
 
 const convertToBrutto = (cenaNetto) => {
@@ -20,8 +21,8 @@ const convertToBrutto = (cenaNetto) => {
   return brutto;
 };
 
-const setDiscountSum = (updatedItems) => {
-  const discVal = 15; // get from base
+const setDiscountSum = (updatedItems, discVal) => {
+  // const discVal = 15; // get from base
 
   let discountSumN = 0;
   let discountSumB = 0;
@@ -52,6 +53,7 @@ const setDiscountSum = (updatedItems) => {
 };
 
 const cartReducer = (state, action) => {
+  console.log(action.discVal);
   if (action.type === "ADD") {
     let quantity;
 
@@ -85,7 +87,7 @@ const cartReducer = (state, action) => {
       state.totalAmountBrutto +
       convertToBrutto(action.item.price_netto) * quantity;
 
-    const discount = setDiscountSum(updatedItems);
+    const discount = setDiscountSum(updatedItems, action.discVal);
 
     return {
       items: updatedItems,
@@ -124,11 +126,8 @@ const cartReducer = (state, action) => {
       (item) => item.id !== action.id && item.subCat !== action.subCat
     );
 
-    const discount = setDiscountSum(updatedItems);
+    const discount = setDiscountSum(updatedItems, action.discVal);
 
-    // updatedItems = state.items.filter((_item, index) => index !== action.id);
-    // console.log("updatedItems");
-    // console.log(updatedItems);
     return {
       items: updatedItems,
       totalAmountNetto: updatedTotalAmountNetto,
@@ -140,15 +139,55 @@ const cartReducer = (state, action) => {
 };
 
 const CartProvider = (props) => {
+  const [discVal, setDiscVal] = useState(0);
   const [cartState, dispatchCartAction] = useReducer(
     cartReducer,
     defaultCartState
   );
+
+  useEffect(() => {
+    getDiscountVal();
+    console.log("dddd");
+  }, []); // localStorage.getItem("userID")
+
+  const getDiscountVal = async () => {
+    const userID = localStorage.getItem("userID");
+    const url = `${baseURL}/users/${userID}.json`;
+
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    const response = await fetch(url, requestOptions);
+    if (!response.ok) {
+      console.log(response.statusText);
+    } else {
+      const data = await response.json();
+      if (data) {
+        console.log(data);
+        // console.log(+data.rabat);
+        setDiscVal(+data.rabat);
+      }
+    }
+  };
+
   const addItemCartHandler = (item) => {
-    dispatchCartAction({ type: "ADD", item: item });
+    dispatchCartAction({ type: "ADD", item: item, discVal: discVal });
   };
   const removeItemCartHandler = (id, subCat) => {
-    dispatchCartAction({ type: "DELETE", id: id, subCat: subCat });
+    dispatchCartAction({
+      type: "DELETE",
+      id: id,
+      subCat: subCat,
+      discVal: discVal,
+    });
+  };
+
+  const handleGetDiscount = () => {
+    getDiscountVal();
+    console.log("dISC ");
+    return discVal;
   };
 
   const cartContext = {
@@ -157,6 +196,8 @@ const CartProvider = (props) => {
     totalAmountBrutto: cartState.totalAmountBrutto,
     totalAmountDiscB: cartState.totalAmountDiscB,
     totalAmountDiscN: cartState.totalAmountDiscN,
+    discVal: discVal,
+    getDiscount: handleGetDiscount,
     addItem: addItemCartHandler,
     removeItem: removeItemCartHandler,
   };

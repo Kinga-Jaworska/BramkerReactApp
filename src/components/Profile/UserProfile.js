@@ -6,9 +6,11 @@ import { getAuth } from "firebase/auth";
 import UserItem from "./ProductAdmin/UserItem";
 import { baseURL } from "../../firebase.config";
 import Card from "../GUI/Card";
+import CartContext from "../../context/cart-context";
 
 const UserProfile = () => {
   const auth = getAuth();
+  const cartCtx = useContext(CartContext);
   const user = auth.currentUser;
   const [currentUser, setCurrentUser] = useState({});
 
@@ -46,6 +48,7 @@ const UserProfile = () => {
       {/* <UserItem user={user}/> */}
 
       <h1>Profil </h1>
+      <h3>{`Twój rabat: ${cartCtx.getDiscount()}%`}</h3>
       {/* <h2>{user.email}</h2> */}
       <ProfileForm />
     </section>

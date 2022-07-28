@@ -1,62 +1,61 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { VerticalBtn } from "../GUI/VerticalBtn";
 import styles from "./VerticalMenu.module.css";
 
 const VerticalMenu = (props) => {
   const automatsRef = useRef();
+  const accessoryCatRef = useRef();
   const accessoryRef = useRef();
+
   const accessory = props.accessory;
   const automats = props.automats;
-  const [selection, setSelection] = useState(); //----
 
-  const selectionAccessory = `${styles["selected"]}`;
-  const selectionAutomats = `${styles["selected_main"]}`;
+  const selectionSubCat = `${styles["selected"]}`;
+  const selectionMain = `${styles["selected_main"]}`;
   let classesOption = `${styles["vertical-sub-btn"]}`;
   let classesMain = `${styles["vertical-main-btn"]}`;
+  const [selection, setSelection] = useState();
+  const selectedMenu = props.selectedMenu || "";
 
   const accessoryOpenHandler = (e) => {
     props.accessoryOpen(e.target.textContent);
-    accessoryRef.current.className = `${styles["vertical-dis-btn"]} ${selectionAutomats}`;
+    accessoryRef.current.className = `${styles["vertical-dis-btn"]} ${selectionMain}`;
 
     if (selection) {
-      if (selection.id === "automats-btn") {
-        console.log("prev: " + selection.id);
-        selection.className = classesMain;
-      } else {
-        selection.className = classesOption;
-      }
+      if (selection.id === "automats-btn") selection.className = classesMain;
+      else selection.className = classesOption;
     }
-    e.target.className = `${classesOption} ${selectionAccessory}`;
+    e.target.className = `${classesOption} ${selectionSubCat}`;
     setSelection(e.target);
   };
+
   const automatsOpenHandler = (e) => {
     props.automatsOpen(e.target.textContent);
-    //setClassess(e,selectionAutomats,classesMain)
     accessoryRef.current.className = `${styles["vertical-dis-btn"]}`;
-    if (selection) {
-      //console.log(selection)
-      selection.className = classesOption;
-    }
-    e.target.className = `${classesMain} ${selectionAutomats}`;
+
+    if (selection) selection.className = classesOption;
+
+    e.target.className = `${classesMain} ${selectionMain}`;
     setSelection(e.target);
   };
 
   const automatOpenHandler = (e) => {
     props.automatsCatOpen(e.target.textContent);
-    automatsRef.current.className = `${styles["vertical-dis-btn"]} ${selectionAutomats}`;
+    automatsRef.current.className = `${styles["vertical-dis-btn"]} ${selectionMain}`;
 
     if (selection) {
-      if (selection.id === "automats-btn") {
-        console.log("prev: " + selection.id);
-        selection.className = classesMain;
-      } else {
-        selection.className = classesOption;
-      }
+      if (selection.id === "automats-btn") selection.className = classesMain;
+      else selection.className = classesOption;
     }
-    e.target.className = `${classesOption} ${selectionAccessory}`;
+    e.target.className = `${classesOption} ${selectionSubCat}`;
     setSelection(e.target);
   };
 
-  // const accessoryDownList = (e) => {};
+  const setOnPrevSel = (prevSel) => {
+    if (prevSel) {
+      setSelection(prevSel);
+    }
+  };
 
   return (
     <div className={styles["vertical-menu"]}>
@@ -68,14 +67,26 @@ const VerticalMenu = (props) => {
         </li>
         {automats.length > 0 &&
           automats.map((element, index) => {
+            let selectionClass = "";
+            if (selectedMenu) {
+              selectionClass =
+                selectedMenu.toLowerCase() === element.name.toLowerCase()
+                  ? `${selectionMain} ${selectionSubCat}`
+                  : "";
+            }
+
             return (
               <li key={index}>
-                <button
-                  className={classesOption}
-                  onClick={(e) => automatOpenHandler(e)}
+                <VerticalBtn
+                  classesOption={classesOption}
+                  automatOpenHandler={automatOpenHandler}
+                  selectedMenu={selectedMenu}
+                  selected={selectionClass}
+                  prevSel={setOnPrevSel}
+                  id={element.name}
                 >
                   {element.name[0] + element.name.slice(1).toLowerCase()}
-                </button>
+                </VerticalBtn>
               </li>
             );
           })}
@@ -91,14 +102,26 @@ const VerticalMenu = (props) => {
 
         {accessory.length > 0 &&
           accessory.map((element, index) => {
+            let selectionClass = "";
+            if (selectedMenu) {
+              selectionClass =
+                selectedMenu.toLowerCase() === element.cat.toLowerCase()
+                  ? `${selectionMain} ${selectionSubCat}`
+                  : "";
+            }
+
             return (
               <li key={index}>
-                <button
-                  className={classesOption}
-                  onClick={(e) => accessoryOpenHandler(e)}
+                <VerticalBtn
+                  classesOption={classesOption}
+                  automatOpenHandler={accessoryOpenHandler}
+                  selectedMenu={selectedMenu}
+                  selected={selectionClass}
+                  prevSel={setOnPrevSel}
+                  id={element.cat}
                 >
                   {element.cat}
-                </button>
+                </VerticalBtn>
               </li>
             );
           })}

@@ -42,12 +42,12 @@ const App = () => {
           </Route>
         )}
         {authCtx.isLoggedIn && (
-          <Route path="/automats/:cat">
+          <Route path="/automaty/:cat">
             <MainPageList role={authCtx.role()} />
           </Route>
         )}
         {authCtx.isLoggedIn && (
-          <Route path="/accessory/:cat">
+          <Route path="/akcesoria/:cat">
             <MainPageList role={authCtx.role()} />
           </Route>
         )}
