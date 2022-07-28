@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import ProductsAdmin from "../Profile/ProductAdmin/ProductsAdmin";
 import VerticalMenu from "../Layout/VerticalMenu";
 import styles from "./MainPageList.module.css";
@@ -26,7 +26,14 @@ const MainPageList = (props) => {
   const [mainCat, setMainCat] = useState(location.pathname.split("/")[1] || "");
   const [isAnim, setIsAnim] = useState(false);
   const [displayProducts, setDisplayProducts] = useState([]);
+  const [products, setProducts] = useState([]);
   const [selectedMenu, setSelectedMenu] = useState(params.cat || "");
+  const [searchKey, setSearchKey] = useState("");
+  const searchKeyRef = useRef();
+  const selectRef = useRef();
+  const [orderBy, setOrderBy] = useState(
+    localStorage.getItem("orderBramker") || "priceAsc"
+  );
 
   const getSelectedAccessory = async (selectedSubCat) => {
     const url = `${baseURL}/akcesoria/${selectedSubCat}.json`;
@@ -46,8 +53,6 @@ const MainPageList = (props) => {
         loadedAccessory.push({
           id: key,
           cat: "akcesoria",
-          // isSwitchM: data[key].wylacznikiMechaniczne === "TAK" ? true : false,
-          // isSwitchK: data[key].wylacznikiKrancowe === "TAK" ? true : false,
           isDiscount: data[key].podlegaRabatowi === "TAK" ? true : false,
           img: data[key].img,
           name_product: data[key].nazwa,
@@ -56,6 +61,8 @@ const MainPageList = (props) => {
         });
       }
       setDisplayProducts(loadedAccessory);
+      setProducts(loadedAccessory);
+      sortAndOrder(orderBy, loadedAccessory);
     }
   };
 
@@ -93,13 +100,15 @@ const MainPageList = (props) => {
       }
 
       setDisplayProducts(filteredAutomats);
+      setProducts(filteredAutomats);
+      sortAndOrder(orderBy, filteredAutomats);
     };
     fetchAutomats({ url: `${baseURL}/automaty.json` }, transformAutomats);
   };
 
   const openProductsList = (selectedCat) => {
     setIsAnim(true);
-    console.log("MAIN " + mainCat);
+    // console.log("MAIN " + mainCat);
     if (mainCat === "akcesoria" && selectedCat) {
       getSelectedAccessory(selectedCat);
     }
@@ -188,6 +197,46 @@ const MainPageList = (props) => {
     }
   }
 
+  const handleOrderBy = (e) => {
+    setOrderBy(e.target.value);
+    localStorage.setItem("orderBramker", e.target.value);
+  };
+
+  const sortAndOrder = (orderByValue, listToOrder) => {
+    if (orderByValue === "priceAsc") {
+      const newSort = [...listToOrder].sort((a, b) => {
+        return +a["price_netto"] - +b["price_netto"];
+      });
+      setDisplayProducts(newSort);
+    } else if (orderByValue === "priceDsc") {
+      const newSort = [...listToOrder]
+        .sort((a, b) => {
+          return +a["price_netto"] - +b["price_netto"];
+        })
+        .reverse();
+      setDisplayProducts(newSort);
+    }
+  };
+
+  useEffect(() => {
+    sortAndOrder(orderBy, displayProducts);
+  }, [orderBy]);
+
+  const isContains = (value) => {
+    return value["name_product"]
+      .toLowerCase()
+      .includes(searchKey.toLowerCase());
+  };
+
+  useEffect(() => {
+    let filteredProducts = products.filter(isContains);
+    setDisplayProducts(filteredProducts);
+  }, [searchKey]);
+
+  const searcherHandle = (e) => {
+    setSearchKey(e.target.value);
+  };
+
   //VIEW:
   return (
     <div className={styles["wrap-container"]}>
@@ -195,7 +244,7 @@ const MainPageList = (props) => {
         <div className={styles["col-left"]}>
           <VerticalMenu
             automats={dataCtx.menuAutomats}
-            accessory={dataCtx.menuAccessory} // dataCtx
+            accessory={dataCtx.menuAccessory}
             selectedMain={mainCat}
             selectedMenu={selectedMenu}
             accessoryOpen={accessoryOpen}
@@ -211,26 +260,24 @@ const MainPageList = (props) => {
             <div className={styles["top-container"]}>
               <div className={styles["searcher"]}>
                 <img src="https://img.icons8.com/color/344/search--v1.png" />
-                {/* <input
+                <input
                   type="text"
                   onChange={searcherHandle}
-                  value={searchKey}
+                  defaultValue={searchKey}
                   ref={searchKeyRef}
-                /> */}
+                />
+                <select
+                  ref={selectRef}
+                  onClick={handleOrderBy}
+                  defaultValue={orderBy}
+                >
+                  <option value="priceAsc">Cena najniższa</option>
+                  <option value="priceDsc">Cena najwyższa</option>
+                </select>
               </div>
             </div>
           )}
-          <div className={styles["col-main-1"]}>
-            {content}
-            {/* {console.log(props.role)}
-            {!isAnim && props.role === "u" && (
-              <ProductsUser
-                products={displayProducts}
-                mainCat={mainCat}
-                role={props.isUser}
-              />
-            )} */}
-          </div>
+          <div className={styles["col-main-1"]}>{content}</div>
         </div>
       </div>
     </div>

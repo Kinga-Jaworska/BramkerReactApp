@@ -31,16 +31,16 @@ const App = () => {
           </Route>
         )}
 
-        {authCtx.role === "a" && authCtx.isLoggedIn && (
+        {authCtx.role() === "a" && authCtx.isLoggedIn && (
           <Route path="/users">
             <UserList />
           </Route>
         )}
-        {authCtx.role() === "a" && authCtx.isLoggedIn && (
+        {/* {authCtx.role() === "a" && authCtx.isLoggedIn && (
           <Route path="/settings">
             <Settings />
           </Route>
-        )}
+        )} */}
         {authCtx.isLoggedIn && (
           <Route path="/automaty/:cat">
             <MainPageList role={authCtx.role()} />

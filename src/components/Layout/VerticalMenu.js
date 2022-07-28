@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { VerticalBtn } from "../GUI/VerticalBtn";
 import styles from "./VerticalMenu.module.css";
 
 const VerticalMenu = (props) => {
   const automatsRef = useRef();
-  const accessoryCatRef = useRef();
   const accessoryRef = useRef();
 
   const accessory = props.accessory;

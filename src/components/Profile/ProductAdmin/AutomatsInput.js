@@ -2,11 +2,9 @@ import { useEffect, useRef } from "react";
 import DropDown from "../../GUI/DropDown";
 
 const AutomatsInput = (props) => {
-  //console.log('is Switch '+props.isSwitch)
   const switchRef = useRef();
-  //get from base
+
   const getSelection = (subCat) => {
-    //console.log(subCat);
     props.onChangeSubCat(subCat);
   };
   const handleSwitches = () => {
@@ -45,12 +43,12 @@ const AutomatsInput = (props) => {
           Wyłączniki krańcowe TAK/NIE
         </label>
       )}
-      
+
       <DropDown
         list={props.typeListAutomats}
         selectedValue={props.selectedSubCat}
         sendSelection={getSelection}
-        valueName="name"       
+        valueName="name"
       />
     </>
   );

@@ -29,11 +29,15 @@ export const Cart = () => {
           {cartCtx.totalAmountBrutto.toFixed(2)}
         </div>
         <div className={style["summary-brutto"]}>
-          <div className={style["summary-text"]}>Netto + rabat:</div>
+          <div className={style["summary-text"]}>
+            Netto + rabat [{cartCtx.getDiscount()}%]:
+          </div>
           {cartCtx.totalAmountDiscN.toFixed(2)}
         </div>
         <div className={style["summary-brutto"]}>
-          <div className={style["summary-text"]}>Brutto + rabat:</div>
+          <div className={style["summary-text"]}>
+            Brutto + rabat [{cartCtx.getDiscount()}%]
+          </div>
           {cartCtx.totalAmountDiscB.toFixed(2)}
         </div>
       </div>

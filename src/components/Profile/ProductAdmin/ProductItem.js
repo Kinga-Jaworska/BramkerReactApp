@@ -18,10 +18,17 @@ function ProductItem(props) {
   const [quantity, setQuantity] = useState(1);
   const [addBtn, setAddBtn] = useState(true);
   const [cartItemExist, setCartItemExist] = useState(null);
+  const [isSwitch, setIsSwitch] = useState(false);
 
   const { isLoading, error, sendRequest: sendDeleteRequest } = useHttp();
 
   const cartCtx = useContext(CartContext);
+
+  const setSwitchInfo = () => {
+    if (props.product.isSwitchK || props.product.isSwitchM) {
+      setIsSwitch(true);
+    }
+  };
 
   const checkedValue = () => {
     const cartID = cartCtx.items.findIndex((item) => {
@@ -34,11 +41,9 @@ function ProductItem(props) {
     });
 
     if (cartID !== -1) {
-      // console.log("exist");
       const cartItem = cartCtx.items[cartID];
       setCartItemExist(cartItem);
       setQuantity(cartItem.quantity);
-      // quantityRef.current.value = cartItem.quantity;
       setAddBtn(false);
     } else {
       setCartItemExist(null);
@@ -51,13 +56,15 @@ function ProductItem(props) {
     checkedValue();
   }, [cartCtx.items]);
 
+  useEffect(() => {
+    setSwitchInfo();
+  }, []);
+
   const handleEdit = (editedProduct) => {
-    ///???
-    //console.log("edit " + id);
-    // props.onDelete(id);
     console.log("edited ");
     console.log(editedProduct);
     props.onEditProduct(editedProduct);
+    setEditModal(false);
   };
 
   const handleDelete = () => {
@@ -111,7 +118,6 @@ function ProductItem(props) {
 
   const handleRemoveFromCart = () => {
     cartCtx.removeItem(props.product["id"], props.product["subCat"]);
-    // console.log(props.product["id"]);
     setCartItemExist(null);
     setQuantity(1);
     setAddBtn(true);
@@ -123,7 +129,6 @@ function ProductItem(props) {
 
   const setItemCart = () => {
     const cartObj = { ...props.product, quantity: +quantityRef.current.value };
-    // console.log(cartObj);
     cartCtx.addItem(cartObj);
   };
 
@@ -131,7 +136,6 @@ function ProductItem(props) {
     console.log(e.target.value);
     setQuantity(e.target.value);
 
-    // IF EXIST - change quantity
     if (cartItemExist) {
       setItemCart();
     }
@@ -232,12 +236,11 @@ function ProductItem(props) {
           onHide={hideEditModal}
           onEditProduct={props.onEditProduct}
           onConfirm={handleEdit}
-          // accessoryCat={props.accessoryCat}
-          // automatsCat={props.automatsCat}
           accessoryCat={dataCtx.menuAccessory}
           automatsCat={dataCtx.menuAutomats}
           editProduct={props.product}
           price_brutto={props.price_brutto}
+          isSwitch={isSwitch}
         />
       )}
       <div className="expense-item-actions">
@@ -245,7 +248,6 @@ function ProductItem(props) {
           className="expense-item-input"
           type="number"
           value={quantity}
-          // defaultValue={quantity} //cartCtx.items[cartID].quantity ||
           ref={quantityRef}
           onChange={handleChangeQuantity}
         />

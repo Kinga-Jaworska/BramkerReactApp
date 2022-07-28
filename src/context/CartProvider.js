@@ -1,5 +1,6 @@
-import { useEffect, useReducer, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { baseURL } from "../firebase.config";
+import AuthContext from "./auth-context";
 import CartContext from "./cart-context";
 
 const defaultCartState = {
@@ -22,22 +23,20 @@ const convertToBrutto = (cenaNetto) => {
 };
 
 const setDiscountSum = (updatedItems, discVal) => {
-  // const discVal = 15; // get from base
-
   let discountSumN = 0;
   let discountSumB = 0;
   let notDiscountSumN = 0;
   let notDiscountSumB = 0;
 
   updatedItems.forEach((item) => {
-    console.log(item);
     if (item.isDiscount) {
-      console.log(item.isDiscount);
-      discountSumN = item.price_netto * item.quantity;
-      discountSumB = convertToBrutto(item.price_netto) * item.quantity;
+      discountSumN = item.price_netto * item.quantity + discountSumN;
+      discountSumB =
+        convertToBrutto(item.price_netto) * item.quantity + discountSumB;
     } else {
-      notDiscountSumN = item.price_netto * item.quantity;
-      notDiscountSumB = convertToBrutto(item.price_netto) * item.quantity;
+      notDiscountSumN = item.price_netto * item.quantity + notDiscountSumN;
+      notDiscountSumB =
+        convertToBrutto(item.price_netto) * item.quantity + notDiscountSumB;
     }
   });
 
@@ -53,7 +52,6 @@ const setDiscountSum = (updatedItems, discVal) => {
 };
 
 const cartReducer = (state, action) => {
-  console.log(action.discVal);
   if (action.type === "ADD") {
     let quantity;
 
@@ -99,16 +97,11 @@ const cartReducer = (state, action) => {
   }
 
   if (action.type === "DELETE") {
-    // console.log("delete...");
     const index = state.items.findIndex((item) => {
-      // console.log(item);
-      // console.log(action);
       return item.id === action.id && item.subCat === action.subCat;
     });
 
     const existingItem = state.items[index];
-    // console.log("existingItem: ");
-    // console.log(existingItem);
 
     const updatedTotalAmountNetto =
       state.totalAmountNetto -
@@ -117,24 +110,22 @@ const cartReducer = (state, action) => {
       state.totalAmountBrutto -
       convertToBrutto(existingItem.price_netto) * existingItem.quantity;
 
-    let updatedItems;
-    // updatedItems = state.items.map((item) => {
-    //   if (item !== existingItem) return item;
-    // });
-    // updatedItems = state.items.del(action.id);
-    updatedItems = state.items.filter(
-      (item) => item.id !== action.id && item.subCat !== action.subCat
-    );
+    const updatedItems = state.items.filter((item) => {
+      if (item !== existingItem) return item;
+    });
 
     const discount = setDiscountSum(updatedItems, action.discVal);
 
     return {
-      items: updatedItems,
+      items: updatedItems, // updatedItems
       totalAmountNetto: updatedTotalAmountNetto,
       totalAmountBrutto: updatedTotalAmountBrutto,
       totalAmountDiscB: discount.totalAmountDiscB,
       totalAmountDiscN: discount.totalAmountDiscN,
     };
+  }
+  if (action.type === "USER_LOGOUT") {
+    return defaultCartState;
   }
 };
 
@@ -147,7 +138,6 @@ const CartProvider = (props) => {
 
   useEffect(() => {
     getDiscountVal();
-    console.log("dddd");
   }, []); // localStorage.getItem("userID")
 
   const getDiscountVal = async () => {
@@ -165,7 +155,7 @@ const CartProvider = (props) => {
     } else {
       const data = await response.json();
       if (data) {
-        console.log(data);
+        // console.log(data);
         // console.log(+data.rabat);
         setDiscVal(+data.rabat);
       }
@@ -183,10 +173,14 @@ const CartProvider = (props) => {
       discVal: discVal,
     });
   };
+  const handleClearReducer = () => {
+    dispatchCartAction({
+      type: "USER_LOGOUT",
+    });
+  };
 
   const handleGetDiscount = () => {
     getDiscountVal();
-    console.log("dISC ");
     return discVal;
   };
 
@@ -200,6 +194,7 @@ const CartProvider = (props) => {
     getDiscount: handleGetDiscount,
     addItem: addItemCartHandler,
     removeItem: removeItemCartHandler,
+    clearReducer: handleClearReducer,
   };
 
   return (

@@ -68,10 +68,7 @@ const ProductForm = (props) => {
     if (e.target.value.trim() > 0) {
       setIsValid(true);
     }
-
     setInputNetto(e.target.value);
-
-    //AUTOMATE BRUTTO:
     const netto = parseFloat(e.target.value);
     const brutto = dataCtx.convertToBurtto(netto);
     setInputBrutto(brutto.toString());

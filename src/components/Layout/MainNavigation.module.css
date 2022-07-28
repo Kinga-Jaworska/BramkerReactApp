@@ -97,34 +97,3 @@
 .header a:hover {
   color: #457fb3;
 }
-/* 
-
-.header li {
-  margin: 0 1rem;
-}
-
-.header a {
-  text-decoration: none;
-  color: rgba(1, 30, 120, 1);
-  font-weight: bold;
-}
-
-.header button {
-  font: inherit;
-  background-color: transparent;
-  border: 1px solid rgb(121, 96, 96);
-  color: rgba(1, 30, 120, 1);
-  font-weight: bold;
-  padding: 0.5rem 1.5rem;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.header a:hover {
-  color: #91a1e2;
-}
-
-.header button:hover {
-  background-color: #253575;
-  color: #a7aec9;
-} */

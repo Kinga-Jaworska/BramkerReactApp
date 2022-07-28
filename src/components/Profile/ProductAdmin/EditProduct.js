@@ -111,6 +111,7 @@ const EditProduct = (props) => {
           automatsCat={props.automatsCat}
           editProduct={props.editProduct}
           price_brutto={props.price_brutto}
+          isSwitch={props.isSwitch}
           error={error}
         />,
         document.getElementById("overlay-root")
@@ -134,6 +135,7 @@ const ModalOverlay = (props) => {
   if (props.isClosing) {
     overlayClasses += ` ${styles.fadeOut}`;
   }
+  console.log(props.isSwitch);
 
   return (
     <div className={overlayClasses}>
@@ -150,12 +152,12 @@ const ModalOverlay = (props) => {
           cat={props.editProduct["cat"]}
           subCat={props.editProduct["subCat"]}
           isDiscount={props.editProduct["isDiscount"]}
-          isSwitch={props.editProduct["isSwitch"]}
+          isSwitch={props.isSwitch}
           price_netto={props.editProduct["price_netto"]}
           price_brutto={props.price_brutto}
           img={props.editProduct["img"]}
         >
-          <div className="error">{props.error}</div>
+          {props.error && <div className="error">{props.error}</div>}
         </ProductForm>
       </div>
     </div>

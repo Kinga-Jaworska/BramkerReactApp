@@ -17,6 +17,7 @@ const MainNavigation = () => {
 
   const logoutHandler = () => {
     authCtx.logOut();
+    cartCtx.clearReducer();
   };
   const handleHide = () => {
     setCartShow(false);

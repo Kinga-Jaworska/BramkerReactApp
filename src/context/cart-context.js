@@ -10,6 +10,7 @@ const CartContext = React.createContext({
   getDiscount: () => {},
   addItem: (item) => {},
   removeItem: (id, subCat) => {},
+  clearReducer: () => {},
 });
 
 export default CartContext;
