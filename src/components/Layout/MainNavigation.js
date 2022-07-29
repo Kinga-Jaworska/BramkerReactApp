@@ -53,11 +53,7 @@ const MainNavigation = () => {
               <Link to="/profile">Profile</Link>
             </li>
           )}
-          {isLoggedIn && (
-            <li>
-              <Link to="/myOrders">Moje zamówienia</Link>
-            </li>
-          )}
+
           {authCtx.role() === "a" && (
             <li>
               <Link to="/users">Users</Link>
@@ -71,6 +67,11 @@ const MainNavigation = () => {
           {authCtx.role() === "a" && (
             <li>
               <Link to="/add">Add</Link>
+            </li>
+          )}
+          {isLoggedIn && (
+            <li>
+              <Link to="/myOrders">Moje zamówienia</Link>
             </li>
           )}
           {authCtx.role() === "a" && (
@@ -94,7 +95,6 @@ const MainNavigation = () => {
                   {cartCtx.items.length}
                 </div>
               </button>
-              {/* </Link> */}
             </li>
           )}
 

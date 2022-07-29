@@ -2,33 +2,59 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* justify-content: center; */
   padding: 20px;
   color: black;
+}
+.select-modal {
+  width: 100%;
+  font-size: larger;
+}
+.order-customer {
+  display: flex;
+  font-size: large;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(53, 53, 162);
+  color: aliceblue;
+  border-radius: 4px;
+  padding-right: 10px;
+
+  padding-left: 10px;
 }
 .order-item {
   display: flex;
   margin-bottom: 10px;
   padding: 10px;
+  background-color: rgb(227, 229, 230);
+  box-shadow: rgba(9, 20, 123, 0.24) 0px 3px 8px;
+  width: 100%;
+}
+.order-list p {
+  color: blue;
+  font-size: large;
+  font-weight: bold;
+}
+.order-name {
+  font-size: larger;
 }
 .order-list {
   display: flex;
-  width: 80%;
+  width: 100%;
   flex-direction: column;
-  background-color: aliceblue;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   border-radius: 2px;
-  padding: 5px;
+  padding: 5px 25px;
 }
 .order-status {
   display: flex;
   padding: 20px;
   align-items: center;
-  width: 20%;
-  justify-content: center;
+  text-align: center;
+  width: 100%;
+  justify-content: flex-end;
 }
 .order-status-text {
-  padding: 10px;
+  padding: 15px;
   border-radius: 5px;
-  background-color: aliceblue;
+  color: aliceblue;
+  background-color: rgb(53, 53, 162);
 }

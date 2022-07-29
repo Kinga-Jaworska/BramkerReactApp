@@ -12,8 +12,8 @@ export const Cart = () => {
     cartCtx.addItem(newObj);
   };
 
-  const handleDelete = (id) => {
-    cartCtx.removeItem(id);
+  const handleDelete = (item) => {
+    cartCtx.removeItem(item.id, item.subCat);
   };
 
   return cartCtx.items.length > 0 ? (
@@ -51,7 +51,7 @@ export const Cart = () => {
             <div className={style["cart-item-quantity"]}>
               <QuantityInput onChange={handleChangeQuantity} item={item} />
             </div>
-            <Button className="cart-btn" onClick={() => handleDelete(index)}>
+            <Button className="cart-btn" onClick={() => handleDelete(item)}>
               <img
                 src="https://img.icons8.com/pastel-glyph/344/cancel--v1.png"
                 width="30"

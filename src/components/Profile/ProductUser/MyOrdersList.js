@@ -40,5 +40,5 @@ export const MyOrdersList = () => {
     getOrders();
   }, []);
 
-  return orders && <OrderList orders={orders} />;
+  return orders && <OrderList orders={orders} isOwnOrder={true} />;
 };

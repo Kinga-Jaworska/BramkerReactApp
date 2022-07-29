@@ -1,6 +1,5 @@
-import { useContext, useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { baseURL } from "../firebase.config";
-import AuthContext from "./auth-context";
 import CartContext from "./cart-context";
 
 const defaultCartState = {
@@ -87,9 +86,6 @@ const cartReducer = (state, action) => {
 
     const discount = setDiscountSum(updatedItems, action.discVal);
 
-    console.log("ADDED items: ");
-    console.log(updatedItems);
-
     return {
       items: updatedItems,
       totalAmountNetto: updatedTotalAmountNetto,
@@ -100,7 +96,10 @@ const cartReducer = (state, action) => {
   }
 
   if (action.type === "DELETE") {
-    const index = action.id;
+    const index = state.items.findIndex(
+      (item) => item.id === action.id && item.subCat === action.subCat
+    );
+    // const index = action.id;
     const existingItem = state.items[index];
 
     const updatedTotalAmountNetto =
@@ -165,10 +164,11 @@ const CartProvider = (props) => {
   const addItemCartHandler = (item) => {
     dispatchCartAction({ type: "ADD", item: item, discVal: discVal });
   };
-  const removeItemCartHandler = (id) => {
+  const removeItemCartHandler = (id, subCat) => {
     dispatchCartAction({
       type: "DELETE",
       id: id,
+      subCat: subCat,
       discVal: discVal,
     });
   };

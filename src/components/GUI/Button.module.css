@@ -11,7 +11,16 @@
   background-color: aliceblue;
   color: black;
 }
-
+.image-btn {
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  border-radius: 5px;
+  border-style: none;
+}
+.image-btn:hover {
+  animation: transDel 2s;
+}
 .block-btn {
   display: block;
   width: 100%;

@@ -50,10 +50,19 @@ export const OrderList = (props) => {
         orders.map((order, index) => {
           return (
             <div key={index} className={styles["order-item"]}>
-              {props.isEmailVisible && <p>{order.customer_email}</p>}
+              {props.isEmailVisible && (
+                <div className={styles["order-customer"]}>
+                  {order.customer_email}
+                </div>
+              )}
               <div className={styles["order-list"]}>
-                {order.order_list.map((product) => {
-                  return <p>{product.name_product}</p>;
+                <p>Zamówione produkty:</p>
+                {order.order_list.map((product, index) => {
+                  return (
+                    <div className={styles["order-name"]} key={index}>
+                      {product.name_product} ilość: {product.quantity}
+                    </div>
+                  );
                 })}
               </div>
               {authCtx.role() === "a" && (
@@ -61,24 +70,28 @@ export const OrderList = (props) => {
                   <p className={styles["order-status-text"]}>
                     {order.order_status}
                   </p>
-                  <Button
-                    className="edit-btn"
-                    onClick={() => showStatusModal(order)}
-                  >
-                    <img
-                      src="https://img.icons8.com/avantgarde/344/experimental-edit-avantgarde.png"
-                      width="50"
-                    />
-                  </Button>
-                  <Button
-                    className="delete-btn"
-                    onClick={() => showDeleteModal(order)}
-                  >
-                    <img
-                      src="https://img.icons8.com/color-glass/344/delete--v3.png"
-                      width="50"
-                    />
-                  </Button>
+                  {!props.isOwnOrder && (
+                    <>
+                      <Button
+                        className="edit-btn"
+                        onClick={() => showStatusModal(order)}
+                      >
+                        <img
+                          src="https://img.icons8.com/avantgarde/344/experimental-edit-avantgarde.png"
+                          width="50"
+                        />
+                      </Button>
+                      <Button
+                        className="image-btn"
+                        onClick={() => showDeleteModal(order)}
+                      >
+                        <img
+                          src="https://img.icons8.com/color-glass/344/delete--v3.png"
+                          width="50"
+                        />
+                      </Button>
+                    </>
+                  )}
                 </div>
               )}
               {authCtx.role() === "u" && (
@@ -100,8 +113,13 @@ export const OrderList = (props) => {
         ></Modal>
       )}
       {statusModal && (
-        <Modal onHide={hideStatusModal} onConfirm={confirmStatus}>
+        <Modal
+          onHide={hideStatusModal}
+          onConfirm={confirmStatus}
+          title="Zmiana statusu zamówienia"
+        >
           <select
+            className={styles["select-modal"]}
             onChange={selectStatus}
             defaultValue={selectedOrder.order_status}
           >

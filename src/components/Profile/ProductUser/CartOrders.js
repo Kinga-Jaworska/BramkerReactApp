@@ -10,11 +10,7 @@ export const CartOrders = (props) => {
   const authCtx = useContext(AuthContext);
 
   const handleSendOrder = async () => {
-    console.log("send order...");
     const url = `${baseURL}/orders/${authCtx.userID}/${Date.now()}.json`;
-
-    console.log(url);
-    console.log(cartCtx.items);
 
     const orderObj = {
       customer_email: auth.currentUser.email,
@@ -41,7 +37,7 @@ export const CartOrders = (props) => {
     <Modal
       onHide={props.onHide}
       onConfirm={handleSendOrder}
-      title="Zmiana statusu zamówienia"
+      title="Twój koszyk"
     >
       <Cart />
     </Modal>
