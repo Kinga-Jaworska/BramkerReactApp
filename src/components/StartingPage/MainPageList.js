@@ -10,11 +10,6 @@ import ProductsUser from "../Profile/ProductUser/ProductsUser";
 
 const MainPageList = (props) => {
   const {
-    isAnim: isLoadingAccesory,
-    error: isErrorAccesory,
-    sendRequest: fetchAccessory,
-  } = useHttp();
-  const {
     isAnim: isLoading,
     error: isError,
     sendRequest: fetchAutomats,
@@ -36,6 +31,7 @@ const MainPageList = (props) => {
   );
 
   const getSelectedAccessory = async (selectedSubCat) => {
+    setIsAnim(true);
     const url = `${baseURL}/akcesoria/${selectedSubCat}.json`;
     const requestOptions = {
       method: "GET",
@@ -64,6 +60,7 @@ const MainPageList = (props) => {
       setProducts(loadedAccessory);
       sortAndOrder(orderBy, loadedAccessory);
     }
+    setIsAnim(false);
   };
 
   const getSelectedAutomats = () => {
@@ -82,8 +79,6 @@ const MainPageList = (props) => {
             automatsObj[key].wylacznikiMechaniczne === "TAK" ? true : false,
           isSwitchK:
             automatsObj[key].wylacznikiKrancowe === "TAK" ? true : false,
-          // isSwitch:
-          //   automatsObj[key].wylacznikiMechaniczne === "TAK" ? true : false,
           isDiscount: automatsObj[key].podlegaRabatowi === "TAK" ? true : false,
           img: automatsObj[key].img,
           name_product: automatsObj[key].nazwa,
@@ -107,8 +102,6 @@ const MainPageList = (props) => {
   };
 
   const openProductsList = (selectedCat) => {
-    setIsAnim(true);
-    // console.log("MAIN " + mainCat);
     if (mainCat === "akcesoria" && selectedCat) {
       getSelectedAccessory(selectedCat);
     }
@@ -117,7 +110,6 @@ const MainPageList = (props) => {
     } else {
       getAutomats();
     }
-    setIsAnim(false);
   };
 
   const automatsCatOpen = (cat) => {
@@ -148,26 +140,13 @@ const MainPageList = (props) => {
       params.cat &&
       editedProduct.subCat.toLowerCase() !== params.cat.toLowerCase()
     ) {
-      //go to another page
-      // console.log(editedProduct.cat);
-      // console.log("edited sub cat: " + editedProduct.subCat);
-      // console.log("now you are here: " + params.cat);
-      // setSelectedMenu(editedProduct.subCat.toLowerCase());
-      // history.push(
-      //   `/${editedProduct.cat}/${editedProduct.subCat.toLowerCase()}`
-      // );
       history.push("/");
-
-      // openProductsList(editedProduct.subCat.toLowerCase());
     } else {
-      console.log("update:");
-
       const editedArray = [...displayProducts].map((product) => {
         if (product.id === editedProduct["id"]) {
           return editedProduct;
         } else return product;
       });
-      console.log(editedArray);
       setDisplayProducts(editedArray);
     }
   };
@@ -183,14 +162,14 @@ const MainPageList = (props) => {
 
   //PREPARE CONTENT:
   let content = <p>No data</p>;
-  if (isAnim) {
+  if (isAnim || isLoading) {
     content = (
       <div className={styles["spinner"]}>
         <div className={styles["loading-spinner"]}>
           <img
             width="100px"
             alt="Spinner loading"
-            src="https://icons.iconarchive.com/icons/elegantthemes/beautiful-flat-one-color/128/loading-icon.png"
+            src="https://img.icons8.com/color/344/godtier.png"
           />
         </div>
       </div>

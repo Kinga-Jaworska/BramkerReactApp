@@ -28,27 +28,6 @@
   align-items: center;
   flex-direction: column;
 }
-
-/* .no-product-container {
-  display: flex;
-  position: fixed;
-  width: 100%;
-  font-size: larger;
-  font-weight: bold;
-  padding: 20px;
-  align-items: center;
-  flex-direction: column;
-}
-.no-product-container img {
-  display: flex;
-  justify-content: center;
-  width: 300px;
-} */
-/* .no-products {
-  display: flex;
-  width: 100%;
-  justify-content: center;
-} */
 .summary-info {
   font-size: larger;
   font-weight: bold;
@@ -88,6 +67,4 @@
   display: flex;
   justify-content: flex-end;
   width: 100%;
-}
-.cart-item-name {
 }

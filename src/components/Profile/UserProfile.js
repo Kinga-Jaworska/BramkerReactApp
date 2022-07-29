@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import ProfileForm from "./ProfileForm";
 import styles from "./UserProfile.module.css";
-import { getAuth } from "firebase/auth";
 import CartContext from "../../context/cart-context";
 
 const UserProfile = () => {

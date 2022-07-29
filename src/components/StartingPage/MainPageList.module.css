@@ -32,11 +32,9 @@
 }
 .col-main-1 {
   width: 100%;
-  /* width: fit-content; */
 }
 .container-row {
   display: grid;
-  /* width: fit-content; */
   width: 100%;
   justify-content: center;
 }
@@ -49,8 +47,6 @@
   height: 100vh;
   display: flex;
   justify-content: center;
-  /* align-content: center; */
-  /* background-color: beige; */
   align-items: center;
 }
 .searcher img {
@@ -62,7 +58,7 @@
   column-gap: 10px;
 }
 .loading-spinner img {
-  animation: loading 4s infinite;
+  animation: loading 2s infinite;
 }
 .top-container {
   display: flex;

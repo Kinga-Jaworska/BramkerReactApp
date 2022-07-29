@@ -14,7 +14,7 @@ const MainPage = (props) => {
   //USER OR ADMIN
   content = <MainPageList role={props.role} />;
 
-  return <div>{content}</div>;
+  return <div className="main-wraper">{content}</div>;
 };
 
 export default MainPage;

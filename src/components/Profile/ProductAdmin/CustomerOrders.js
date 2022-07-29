@@ -99,7 +99,7 @@ export const CustomerOrders = () => {
         arr.push(customOrders);
 
         return (
-          <div>
+          <div className={styles["customer-order"]}>
             <OrderList
               orders={arr}
               // userID={arr.}

@@ -87,6 +87,9 @@ const cartReducer = (state, action) => {
 
     const discount = setDiscountSum(updatedItems, action.discVal);
 
+    console.log("ADDED items: ");
+    console.log(updatedItems);
+
     return {
       items: updatedItems,
       totalAmountNetto: updatedTotalAmountNetto,
@@ -97,10 +100,7 @@ const cartReducer = (state, action) => {
   }
 
   if (action.type === "DELETE") {
-    const index = state.items.findIndex((item) => {
-      return item.id === action.id && item.subCat === action.subCat;
-    });
-
+    const index = action.id;
     const existingItem = state.items[index];
 
     const updatedTotalAmountNetto =
@@ -117,7 +117,7 @@ const cartReducer = (state, action) => {
     const discount = setDiscountSum(updatedItems, action.discVal);
 
     return {
-      items: updatedItems, // updatedItems
+      items: updatedItems,
       totalAmountNetto: updatedTotalAmountNetto,
       totalAmountBrutto: updatedTotalAmountBrutto,
       totalAmountDiscB: discount.totalAmountDiscB,
@@ -165,11 +165,10 @@ const CartProvider = (props) => {
   const addItemCartHandler = (item) => {
     dispatchCartAction({ type: "ADD", item: item, discVal: discVal });
   };
-  const removeItemCartHandler = (id, subCat) => {
+  const removeItemCartHandler = (id) => {
     dispatchCartAction({
       type: "DELETE",
       id: id,
-      subCat: subCat,
       discVal: discVal,
     });
   };

@@ -9,7 +9,7 @@ const CartContext = React.createContext({
   discVal: 0,
   getDiscount: () => {},
   addItem: (item) => {},
-  removeItem: (id, subCat) => {},
+  removeItem: (id) => {},
   clearReducer: () => {},
 });
 

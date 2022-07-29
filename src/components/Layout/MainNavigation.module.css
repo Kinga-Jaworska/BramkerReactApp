@@ -89,6 +89,7 @@
   text-decoration: none;
   color: rgba(1, 30, 120, 1);
   font-weight: bold;
+  padding: 5px 10px;
 }
 .header button:hover {
   background-color: #011e78;
@@ -96,4 +97,8 @@
 }
 .header a:hover {
   color: #457fb3;
+  border-style: dashed;
+}
+#header-img:hover {
+  border-style: none;
 }

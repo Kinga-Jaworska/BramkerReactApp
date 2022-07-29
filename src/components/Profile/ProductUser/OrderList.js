@@ -58,15 +58,35 @@ export const OrderList = (props) => {
               </div>
               {authCtx.role() === "a" && (
                 <div className={styles["order-status"]}>
-                  <p>{order.order_status}</p>
-                  <Button onClick={() => showStatusModal(order)}>
-                    Change status
+                  <p className={styles["order-status-text"]}>
+                    {order.order_status}
+                  </p>
+                  <Button
+                    className="edit-btn"
+                    onClick={() => showStatusModal(order)}
+                  >
+                    <img
+                      src="https://img.icons8.com/avantgarde/344/experimental-edit-avantgarde.png"
+                      width="50"
+                    />
                   </Button>
-                  <Button onClick={() => showDeleteModal(order)}>Delete</Button>
+                  <Button
+                    className="delete-btn"
+                    onClick={() => showDeleteModal(order)}
+                  >
+                    <img
+                      src="https://img.icons8.com/color-glass/344/delete--v3.png"
+                      width="50"
+                    />
+                  </Button>
                 </div>
               )}
               {authCtx.role() === "u" && (
-                <p className={styles["order-status"]}>{order.order_status}</p>
+                <div className={styles["order-status"]}>
+                  <p className={styles["order-status-text"]}>
+                    {order.order_status}
+                  </p>
+                </div>
               )}
             </div>
           );

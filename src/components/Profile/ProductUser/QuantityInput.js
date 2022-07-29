@@ -1,21 +1,16 @@
-import { useState } from "react";
-
 export const QuantityInput = (props) => {
-  const [quantity, setQuantity] = useState(props.item["quantity"] || "");
-
-  // VALIDATE
-
+  // TODO: VALIDATE
   const handleChange = (e) => {
-    setQuantity(e.target.value);
     props.onChange(props.item, +e.target.value);
   };
 
   return (
     <input
+      key={props.item.id}
       type="number"
       min="1"
       max="100"
-      value={quantity}
+      defaultValue={props.item["quantity"] || ""}
       onChange={(e) => handleChange(e)}
     />
   );

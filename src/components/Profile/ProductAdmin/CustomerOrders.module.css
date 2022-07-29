@@ -5,3 +5,10 @@
   /* justify-content: center; */
   color: black;
 }
+
+.customer-order {
+  display: flex;
+  padding: 10px;
+  margin: 10px;
+  background-color: rgb(8, 16, 72);
+}

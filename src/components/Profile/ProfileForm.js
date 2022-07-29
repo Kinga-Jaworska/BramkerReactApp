@@ -28,7 +28,8 @@ const ProfileForm = () => {
         },
       }
     ).then((res) => {
-      history.replace("/");
+      if (res.ok) history.replace("/");
+      else console.log(res.statusText);
     });
   };
 

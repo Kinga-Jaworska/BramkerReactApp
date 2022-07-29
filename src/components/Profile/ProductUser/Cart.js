@@ -12,10 +12,8 @@ export const Cart = () => {
     cartCtx.addItem(newObj);
   };
 
-  const handleDelete = (id, subCat) => {
-    cartCtx.removeItem(id, subCat);
-    console.log("TEST: ");
-    console.log(cartCtx.items);
+  const handleDelete = (id) => {
+    cartCtx.removeItem(id);
   };
 
   return cartCtx.items.length > 0 ? (
@@ -51,16 +49,9 @@ export const Cart = () => {
               <p>{item.name_product}</p>
             </div>
             <div className={style["cart-item-quantity"]}>
-              <QuantityInput
-                key={`quant_${index}`}
-                onChange={handleChangeQuantity}
-                item={item}
-              />
+              <QuantityInput onChange={handleChangeQuantity} item={item} />
             </div>
-            <Button
-              className="cart-btn"
-              onClick={() => handleDelete(item.id, item.subCat)}
-            >
+            <Button className="cart-btn" onClick={() => handleDelete(index)}>
               <img
                 src="https://img.icons8.com/pastel-glyph/344/cancel--v1.png"
                 width="30"
@@ -73,7 +64,10 @@ export const Cart = () => {
   ) : (
     <div className={style["no-product-container"]}>
       <p className={style["no-products"]}>Brak produktów w koszyku </p>
-      <img src="https://img.icons8.com/external-xnimrodx-blue-xnimrodx/344/external-cancel-black-friday-xnimrodx-blue-xnimrodx.png" />
+      <img
+        height="80"
+        src="https://img.icons8.com/external-xnimrodx-blue-xnimrodx/344/external-cancel-black-friday-xnimrodx-blue-xnimrodx.png"
+      />
     </div>
   );
 };

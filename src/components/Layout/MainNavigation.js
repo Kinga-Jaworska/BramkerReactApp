@@ -34,8 +34,8 @@ const MainNavigation = () => {
 
   return (
     <header className={styles.header}>
-      <Link to="/">
-        <section className={styles["header-img"]}>
+      <Link to="/" id={styles["header-img"]}>
+        <section>
           <img src={bramkerLogo} alt="Bramker logo" />
         </section>
       </Link>
