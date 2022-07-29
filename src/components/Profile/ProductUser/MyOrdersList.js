@@ -23,7 +23,6 @@ export const MyOrdersList = () => {
       console.log(response.statusText);
     } else {
       const data = await response.json();
-      console.log(data);
       const ordersArray = [];
 
       for (const key in data) {
@@ -33,9 +32,6 @@ export const MyOrdersList = () => {
           order_status: data[key].order_status,
         });
       }
-      console.log("MY ORDER LIST");
-      console.log(ordersArray);
-
       setOrders(ordersArray);
     }
   }, [authCtx.userID]);

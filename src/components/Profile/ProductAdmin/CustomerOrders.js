@@ -11,7 +11,6 @@ export const CustomerOrders = () => {
 
   const getAllOrders = useCallback(async () => {
     const url = `${baseURL}/orders.json`;
-    console.log(url);
 
     const requestOptions = {
       method: "GET", // PATCH
@@ -23,8 +22,6 @@ export const CustomerOrders = () => {
       console.log(response.statusText);
     } else {
       const data = await response.json();
-      console.log("DATA");
-      console.log(data);
       const allOrders = [];
       const ordersArray = [];
 
@@ -32,35 +29,17 @@ export const CustomerOrders = () => {
         for (const key2 in data[key]) {
           ordersArray.push({
             id: key2,
+            userID: key,
             customer_email: data[key][key2].customer_email,
             order_list: data[key][key2].order,
             order_status: data[key][key2].order_status,
           });
         }
-        // console.log("ORDERS ARRAY:");
-        // console.log(ordersArray);
         allOrders.push({
           id: key,
           orders: ordersArray,
         });
       }
-
-      console.log("ALL....:");
-      console.log(allOrders);
-      console.log("ITERATE");
-      allOrders.map((allOrders) => {
-        console.log("map1");
-        console.log(allOrders.orders);
-        console.log("map2");
-        allOrders.orders.map((order) => {
-          console.log(order.order_list);
-          console.log("map3");
-          order.order_list.map((product) => {
-            console.log(product);
-          });
-        });
-      });
-
       setOrders(ordersArray);
     }
   }, [authCtx.userID]);
@@ -69,20 +48,65 @@ export const CustomerOrders = () => {
     getAllOrders();
   }, []);
 
+  const onDeleteOrderHandler = async (userID, orderID) => {
+    const url = `${baseURL}/orders/${userID}/${orderID}.json`;
+    console.log(url);
+
+    const requestOptions = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    };
+    if (userID && orderID) {
+      const response = await fetch(url, requestOptions);
+      if (!response.ok) {
+        console.log(response.statusText);
+      } else {
+        const updatedOrders = [...allOrders].filter((order) => {
+          return order.id !== orderID;
+        });
+
+        setOrders(updatedOrders);
+      }
+    }
+  };
+
+  const onChangeStatusHandler = async (userID, orderID, newStatus) => {
+    const url = `${baseURL}/orders/${userID}/${orderID}/order_status.json`;
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newStatus),
+    };
+
+    const response = await fetch(url, requestOptions);
+    if (!response.ok) {
+      console.log(response.statusText);
+    } else {
+      const data = await response.json();
+      const updatedOrders = [...allOrders].map((order) => {
+        if (order.id === orderID) {
+          return { ...order, order_status: data };
+        } else return order;
+      });
+      setOrders(updatedOrders);
+    }
+  };
+
   return (
     <div className={styles["customer-orders"]}>
       {allOrders.map((customOrders) => {
-        console.log("map===custom");
-        console.log(customOrders);
         const arr = [];
         arr.push(customOrders);
 
-        // customOrders.orders.map((el) => {
-        //   return el.order_list;
-        // });
         return (
           <div>
-            <OrderList orders={arr} isEmailVisible={true} />
+            <OrderList
+              orders={arr}
+              // userID={arr.}
+              isEmailVisible={true}
+              onDeleteOrder={onDeleteOrderHandler}
+              onChangeStatus={onChangeStatusHandler}
+            />
           </div>
         );
       })}

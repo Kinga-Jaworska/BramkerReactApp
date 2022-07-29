@@ -38,7 +38,11 @@ export const CartOrders = (props) => {
     }
   };
   return (
-    <Modal onHide={props.onHide} onConfirm={handleSendOrder}>
+    <Modal
+      onHide={props.onHide}
+      onConfirm={handleSendOrder}
+      title="Zmiana statusu zamówienia"
+    >
       <Cart />
     </Modal>
   );
