@@ -16,8 +16,6 @@ import { CustomerOrders } from "./components/Profile/ProductAdmin/CustomerOrders
 const App = () => {
   const authCtx = useContext(AuthContext);
 
-  console.log(authCtx.role());
-
   return (
     <Layout>
       <Switch>
