@@ -39,7 +39,7 @@ export const MyOrdersList = () => {
     getOrders();
   }, []);
 
-  return orders && orders.length > 1 ? (
+  return orders && orders.length > 0 ? (
     <OrderList orders={orders} isOwnOrder={true} />
   ) : (
     <p className={styles["no-orders"]}>Brak zamówień</p>
