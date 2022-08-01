@@ -2,6 +2,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import AuthContext from "../../../context/auth-context";
 import { baseURL } from "../../../firebase.config";
 import { OrderList } from "./OrderList";
+import styles from "./MyOrders.module.css";
 
 export const MyOrdersList = () => {
   const authCtx = useContext(AuthContext);
@@ -38,5 +39,9 @@ export const MyOrdersList = () => {
     getOrders();
   }, []);
 
-  return orders && <OrderList orders={orders} isOwnOrder={true} />;
+  return orders && orders.length > 0 ? (
+    <OrderList orders={orders} isOwnOrder={true} />
+  ) : (
+    <p className={styles["no-orders"]}>Brak zamówień</p>
+  );
 };

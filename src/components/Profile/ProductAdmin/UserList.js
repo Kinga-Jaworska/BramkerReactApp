@@ -15,8 +15,8 @@ const UserList = () => {
         loadedUsers.push({
           id: key,
           email: usersObj[key].email,
-          role: usersObj[key].role,
-          discount_user: usersObj[key].rabat,
+          role: usersObj[key].role || "u",
+          discount_user: usersObj[key].rabat || 0,
         });
       }
       setUsers(loadedUsers);

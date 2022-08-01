@@ -59,11 +59,11 @@ const MainNavigation = () => {
               <Link to="/users">Users</Link>
             </li>
           )}
-          {authCtx.role() === "a" && (
+          {/* {authCtx.role() === "a" && (
             <li>
               <Link to="/settings">Settings</Link>
             </li>
-          )}
+          )} */}
           {authCtx.role() === "a" && (
             <li>
               <Link to="/add">Add</Link>
