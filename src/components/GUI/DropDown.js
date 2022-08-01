@@ -1,22 +1,26 @@
+import styles from "./DropDown.module.css";
+const DropDown = (props) => {
+  const handleSelection = (e) => {
+    props.sendSelection(e.target.value);
+  };
 
+  let valueName = props.valueName;
 
-
-const DropDown = (props) =>
-{
-    const handleSelection = (e) => {
-        // setSelectedCat(e.target.value);
-        //console.log(e)
-        props.sendSelection(e.target.value)
-      };
-
-    return(
-        <select value={props.selectedValue} onChange={handleSelection}>
-        {props.list.map((element)=>
-            {
-                return <option value={element.name}>{element.name}</option>
-            })}
-        </select>       
-    )
-}
+  return (
+    <select
+      value={props.selectedValue}
+      onChange={handleSelection}
+      className={styles.select}
+    >
+      {props.list.map((element, index) => {
+        return (
+          <option key={index} value={element[valueName]}>
+            {element[valueName]}
+          </option>
+        );
+      })}
+    </select>
+  );
+};
 
 export default DropDown;

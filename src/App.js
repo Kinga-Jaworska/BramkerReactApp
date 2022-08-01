@@ -1,181 +1,90 @@
-import Products from "./components/Products/Products";
-import AddProduct from "./components/ProductAdmin/AddProduct";
 import "./App.css";
-import Navbar from "./components/GUI/Navbar";
-import { useEffect, useState, useCallback } from "react";
-import NavLink from "./components/GUI/NavLink";
-import VerticalMenu from "./components/GUI/VerticalMenu";
-import bramker from "./assets/bramker.PNG";
+import { useContext } from "react";
+import Layout from "./components/Layout/Layout";
+import { Redirect, Route, Switch } from "react-router-dom";
+import AuthPage from "./pages/AuthPage";
+import UserProfile from "./components/Profile/UserProfile";
+import AuthContext from "./context/auth-context";
+import MainPage from "./pages/MainPage";
+import UserList from "./components/Profile/ProductAdmin/UserList";
+import Settings from "./components/Profile/ProductAdmin/Settings";
+import AddProduct from "./components/Profile/ProductAdmin/AddProduct";
+import MainPageList from "./components/StartingPage/MainPageList";
+import { Cart } from "./components/Profile/ProductUser/Cart";
+import { MyOrdersList } from "./components/Profile/ProductUser/MyOrdersList";
+import { CustomerOrders } from "./components/Profile/ProductAdmin/CustomerOrders";
 
 const App = () => {
-  const [addFormVisibility, setAddFormVisibility] = useState(false);
-  const [devices, setDevices] = useState([]);
-  const [accessory, setAccessory] = useState([]);
-  const [isAnim, setAnim] = useState(false);
-  const [error, setError] = useState(null);
-  let animation = isAnim ? "fadeIn" : "";
+  const authCtx = useContext(AuthContext);
 
-  const accessoryOpen = (e) => {
-    const cat = e.target.textContent;
-    console.log(cat);
-    let loadedAccessory = [];
-    //console.log(accessory)
-
-    setAnim(true);
-
-    const findAccessory = accessory.find((element) => element.cat === cat).data;
-    for (const key in findAccessory) {
-      loadedAccessory.push({
-        id: key,
-        name: findAccessory[key].nazwa,
-        price_netto: findAccessory[key].cenaNetto,
-        img: findAccessory[key].img,
-        // price_brutto: findAccessory[key].cenaBrutto,
-      });
-    }
-    setDevices(loadedAccessory);
-    setAnim(false);
-  };
-
-  const fetchAccessory = useCallback(async () => {
-    setAnim(true);
-    try {
-      const response = await fetch(
-        "https://reacttest-b7b01-default-rtdb.firebaseio.com/akcesoria.json"
-      );
-      if (!response.ok) {
-        throw new Error("Somethingwent wrong :C");
-      }
-      const data = await response.json();
-      let loadedAccessory = [];
-
-      for (const key in data) {
-        loadedAccessory.push({
-          cat: key,
-          data: data[key],
-        });
-      }
-      setAccessory(loadedAccessory);
-    } catch (error) {
-      setError(error.message);
-    }
-    setAnim(false);
-  }, []);
-
-  const fetchDevices = useCallback(async () => {
-    setAnim(true);
-    try {
-      const response = await fetch(
-        "https://reacttest-b7b01-default-rtdb.firebaseio.com/autoaty.json"
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong :C");
-      }
-      const data = await response.json();
-      const loadedDevices = [];
-
-      for (const key in data) {
-        //console.log('key: '+key+' '+data[key])
-        loadedDevices.push({
-          id: key,
-          img: data[key].img,
-          name: data[key].nazwa,
-          price_netto: data[key].cenaNetto,
-          price_brutto: data[key].cenaBrutto,
-        });
-      }
-      setDevices(loadedDevices);
-    } catch (error) {
-      setError(error.message);
-    }
-    setAnim(false);
-  }, []);
-
-  useEffect(() => {
-    fetchDevices();
-  }, [fetchDevices]);
-
-  useEffect(() => {
-    fetchAccessory();
-  }, [fetchAccessory]);
-
-  const openAddForm = () => {
-    setAddFormVisibility(!addFormVisibility);
-  };
-  const addProduct = (product) => {
-
-    let saveProduct = {
-      cenaNetto: product.price_netto,
-      img: product.img,
-      nazwa: product.name,
-      podlegaRabatowi: product.isDiscount,
-    };
-    let fetchStr = "";
-
-    if (product.cat === "Automaty") {
-      saveProduct.dzial = product.subCat;
-      saveProduct.wylacznikiKrancowe = product.isSwitch;
-      fetchStr = product.cat.toLowerCase();
-    } else if (product.cat === "Akcesoria") {
-      fetchStr = `${product.cat.toLowerCase()}/${product.subCat}`;
-    }
-
-    fetch(
-      `https://reacttest-b7b01-default-rtdb.firebaseio.com/${fetchStr}.json`,
-      {
-        method: "POST",
-        body: JSON.stringify(saveProduct),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    // setDevices((prevList) => {
-    //   return [product, ...prevList];
-    // });
-  };
-
-  let content = <p>No data</p>;
-
-  if (devices.length > 0) {
-    content = <Products products={devices} className={animation} />;
-  }
-  if (error) {
-    content = <p>{error}</p>;
-  }
-  if (isAnim) {
-    content = <p>Anim ...</p>;
-  }
+  console.log(authCtx.role());
 
   return (
-    <>
-      <Navbar>
-        
-          {/* <img height="40" src={logo} /> */}
-          <NavLink onClick={openAddForm}>Add</NavLink>
-          <NavLink>Zmień % Brutto</NavLink>
-        
-      </Navbar>
-      <main>
-        {error && <p>ERROR</p>}
-        <VerticalMenu accessory={accessory} accessoryOpen={accessoryOpen} />
-        <div className="admin-add-product">
-          {addFormVisibility && (
-            <AddProduct
-              onAdd={addProduct}
-              onOpen={openAddForm}
-              subListAutomats={accessory}
-            />
-          )}
-        </div>
-        {content}
-        {/* {devices.length > 0 && (
-          <Products products={devices} className={animation} />
-        )*/}
-      </main>
-      <footer></footer>
-    </>
+    <Layout>
+      <Switch>
+        <Route path="/" exact>
+          {authCtx.isLoggedIn && <MainPage role={authCtx.role()} />}
+          {!authCtx.isLoggedIn && <Redirect to="/auth" />}
+        </Route>
+
+        {!authCtx.isLoggedIn && (
+          <Route path="/auth">
+            <AuthPage />
+          </Route>
+        )}
+
+        {authCtx.role() === "a" && authCtx.isLoggedIn && (
+          <Route path="/users">
+            <UserList />
+          </Route>
+        )}
+        {/* {authCtx.role() === "a" && authCtx.isLoggedIn && (
+          <Route path="/settings">
+            <Settings />
+          </Route>
+        )} */}
+        {authCtx.isLoggedIn && (
+          <Route path="/myOrders">
+            <MyOrdersList />
+          </Route>
+        )}
+
+        {authCtx.isLoggedIn && (
+          <Route path="/automaty/:cat">
+            <MainPageList role={authCtx.role()} />
+          </Route>
+        )}
+        {authCtx.isLoggedIn && (
+          <Route path="/akcesoria/:cat">
+            <MainPageList role={authCtx.role()} />
+          </Route>
+        )}
+        {authCtx.role() === "a" && authCtx.isLoggedIn && (
+          <Route path="/orders">
+            <CustomerOrders />
+          </Route>
+        )}
+        {authCtx.role() === "a" && authCtx.isLoggedIn && (
+          <Route path="/add">
+            <AddProduct />
+          </Route>
+        )}
+
+        <Route path="/cart">
+          {authCtx.isLoggedIn && <Cart />}
+          {!authCtx.isLoggedIn && <Redirect to="/auth" />}
+        </Route>
+
+        <Route path="/profile">
+          {authCtx.isLoggedIn && <UserProfile />}
+          {!authCtx.isLoggedIn && <Redirect to="/auth" />}
+        </Route>
+
+        <Route path="*">
+          <Redirect to="/" />
+        </Route>
+      </Switch>
+    </Layout>
   );
 };
 

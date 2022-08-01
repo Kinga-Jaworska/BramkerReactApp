@@ -1,0 +1,89 @@
+input {
+  padding: 10px;
+  margin: 5px 0px;
+  border-radius: 5px;
+}
+label {
+  padding: 5px 0px;
+}
+.productForm {
+  display: flex;
+  flex-direction: column;
+  color: aliceblue;
+}
+.btnSection {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.priceSection {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.priceSection input {
+  width: 50%;
+}
+.btnSection button {
+  width: 50%;
+}
+.priceSection label {
+  justify-content: space-between;
+  display: flex;
+  width: 100%;
+}
+.checkSection {
+  margin: 5px 0px;
+  box-sizing: border-box;
+  /* width: 100%; */
+  display: grid;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
+}
+.checkSection input {
+  margin-right: 10px;
+  padding: 10px;
+}
+.priceItem label {
+  width: 100%;
+}
+h2 {
+  text-align: center;
+}
+.productForm > p {
+  animation: blink 0.8s 3;
+}
+
+.editName
+{
+  background-color: aliceblue;
+  border-radius: 4px;
+  font-size: large;
+  color: rgb(62, 29, 152);
+}
+
+@media (min-width: 880px) {
+  .checkSection {
+    display: flex;
+  }
+}
+
+.fadeIn
+{
+  animation: blink 3s;
+}
+
+
+@keyframes blink {
+  100% {
+    opacity: 1;
+  }
+  0% {
+    opacity: 0.2;
+  }
+}

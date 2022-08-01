@@ -1,0 +1,104 @@
+.header {
+  width: 100%;
+  position: fixed;
+  padding: 0px 16px;
+  background-color: rgb(220, 225, 234);
+  justify-content: space-between;
+  display: flex;
+  top: 0;
+  z-index: 9;
+  box-shadow: rgba(38, 52, 93, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+}
+.cart-number {
+  display: flex;
+  width: 100%;
+  margin-left: 5px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #011e78;
+  color: aliceblue;
+}
+.cart-btn {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+.cart-btn:hover {
+  color: aliceblue;
+  opacity: 0.7;
+}
+.scale-cart {
+  animation: scaling 1s;
+}
+@keyframes scaling {
+  10% {
+    scale: 1.1;
+  }
+  50% {
+    scale: 1.2;
+  }
+  80% {
+    scale: 1.1;
+  }
+  100% {
+    scale: 1;
+  }
+}
+.header img {
+  height: 100px;
+  padding: 10px;
+}
+.header nav {
+  display: flex;
+  align-items: center;
+}
+.header ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  margin: 10px;
+}
+.header li {
+  display: flex;
+  justify-content: center;
+}
+.header a {
+  text-decoration: none;
+  color: rgba(1, 30, 120, 1);
+  font-weight: bold;
+  display: flex;
+  margin-right: 10px;
+  align-items: center;
+}
+.header button {
+  font: inherit;
+  background-color: transparent;
+  border: 1px solid rgb(121, 96, 96);
+  color: #011e78;
+  font-weight: bold;
+  padding: 0.5rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.header a {
+  text-decoration: none;
+  color: rgba(1, 30, 120, 1);
+  font-weight: bold;
+  padding: 5px 10px;
+}
+.header button:hover {
+  background-color: #011e78;
+  color: #e8e7ed;
+}
+.header a:hover {
+  color: #457fb3;
+  border-style: dashed;
+}
+#header-img:hover {
+  border-style: none;
+}

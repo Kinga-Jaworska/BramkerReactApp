@@ -1,0 +1,83 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 10;
+  background: rgba(4, 2, 8, 0.75);
+  animation: fadeIn 2s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fadeIn {
+  animation: fadeIn 3s ease-in;
+}
+.modal {
+  position: fixed;
+  top: 10%;
+  width: 80%;
+  left: auto;
+  height: fit-content;
+  /* top: 30vh;
+    left: 10%;
+    width: 80%; */
+  z-index: 100;
+  overflow: hidden;
+  border-radius: 7px;
+}
+
+.header {
+  background: #270c92e1;
+  padding: 8px;
+  border-radius: 3px;
+}
+
+.header h2 {
+  margin: 0;
+  color: white;
+}
+
+.content {
+  background: white;
+  padding: 1rem;
+  color: black;
+  display: flex;
+  justify-content: center;
+}
+
+.actions {
+  padding: 1rem;
+  display: flex;
+  background: white;
+  /* justify-content: center;
+    align-items: center; */
+}
+
+@media (min-width: 768px) {
+  .modal {
+    left: calc(50% - 20rem);
+    width: 40rem;
+  }
+}
+.fadeOut
+{
+  animation: fadeOut 2s;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

@@ -1,0 +1,85 @@
+input {
+  padding: 10px;
+  margin: 5px 0px;
+  border-radius: 5px;
+}
+label {
+  padding: 5px 0px;
+}
+.addForm {
+  display: flex;
+  flex-direction: column;
+  color: aliceblue;
+}
+.btnSection {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.priceSection {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.priceSection input {
+  width: 50%;
+}
+.btnSection button {
+  width: 50%;
+}
+.priceSection label {
+  justify-content: space-between;
+  display: flex;
+  width: 100%;
+}
+.checkSection {
+  margin: 5px 0px;
+  box-sizing: border-box;
+  /* width: 100%; */
+  display: grid;
+  justify-content: center;
+  flex-direction: row;
+  gap: 10px;
+}
+.checkSection input {
+  margin-right: 10px;
+  padding: 10px;
+}
+.priceItem label {
+  width: 100%;
+}
+h2 {
+  text-align: center;
+}
+.addForm p {
+  animation: blink 0.8s 3;
+}
+.back-link {
+  display: flex;
+  text-decoration: none;
+  padding: 10px;
+  background-color: azure;
+  justify-content: center;
+}
+.back-link:hover {
+  color: aliceblue;
+  background-color: rgba(0, 0, 255, 0.096);
+}
+@media (min-width: 880px) {
+  .checkSection {
+    display: flex;
+  }
+}
+
+@keyframes blink {
+  100% {
+    opacity: 1;
+  }
+  0% {
+    opacity: 0.2;
+  }
+}
