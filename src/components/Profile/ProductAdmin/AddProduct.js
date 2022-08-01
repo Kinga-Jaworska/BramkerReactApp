@@ -2,11 +2,10 @@ import { useContext, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import DataContext from "../../../context/data-context";
 import { baseURL } from "../../../firebase.config";
-import useHttp from "../../hooks/use-http";
 import ProductForm from "./ProductForm";
 import styles from "./AddProduct.module.css";
 
-const AddProduct = (props) => {
+const AddProduct = () => {
   const history = useHistory();
   const dataCtx = useContext(DataContext);
   const [message, setMessage] = useState("");

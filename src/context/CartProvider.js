@@ -152,11 +152,9 @@ const CartProvider = (props) => {
       console.log(response.statusText);
     } else {
       const data = await response.json();
-      if (data) {
-        // console.log(data);
-        // console.log(+data.rabat);
+      if (data && data.rabat) {
         setDiscVal(+data.rabat);
-      }
+      } else setDiscVal(0);
     }
   };
 
