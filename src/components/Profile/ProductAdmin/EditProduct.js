@@ -19,7 +19,7 @@ const EditProduct = (props) => {
     const url = `${baseURL}/${fetchSTR}/${editID}.json`;
 
     const requestOptions = {
-      method: "PUT", // PATCH
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newProduct),
     };

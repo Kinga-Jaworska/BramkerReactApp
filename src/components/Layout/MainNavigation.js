@@ -81,7 +81,6 @@ const MainNavigation = () => {
           )}
           {isLoggedIn && (
             <li>
-              {/* <Link to="/cart"> */}
               <button
                 className={`${styles["cart-btn"]}`}
                 onClick={handleOpenCart}

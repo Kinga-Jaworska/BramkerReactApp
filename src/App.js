@@ -7,7 +7,6 @@ import UserProfile from "./components/Profile/UserProfile";
 import AuthContext from "./context/auth-context";
 import MainPage from "./pages/MainPage";
 import UserList from "./components/Profile/ProductAdmin/UserList";
-import Settings from "./components/Profile/ProductAdmin/Settings";
 import AddProduct from "./components/Profile/ProductAdmin/AddProduct";
 import MainPageList from "./components/StartingPage/MainPageList";
 import { Cart } from "./components/Profile/ProductUser/Cart";

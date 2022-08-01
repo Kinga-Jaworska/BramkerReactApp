@@ -1,7 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import AuthContext from "../../../context/auth-context";
-import { auth, baseURL } from "../../../firebase.config";
-import styles from "./MyOrders.module.css";
+import { baseURL } from "../../../firebase.config";
 import { OrderList } from "./OrderList";
 
 export const MyOrdersList = () => {
@@ -11,10 +10,9 @@ export const MyOrdersList = () => {
 
   const getOrders = useCallback(async () => {
     const url = `${baseURL}/orders/${userID}.json`;
-    console.log(url);
 
     const requestOptions = {
-      method: "GET", // PATCH
+      method: "GET",
       headers: { "Content-Type": "application/json" },
     };
 

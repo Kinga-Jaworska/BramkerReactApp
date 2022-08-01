@@ -1,6 +1,5 @@
 import styles from "./Modal.module.css";
 import ReactDOM from "react-dom";
-// import ButtonModal from "./ButtonModal";
 import Button from "./Button";
 
 const Modal = (props) => {
@@ -19,6 +18,8 @@ const Modal = (props) => {
           message={props.message}
           onConfirm={props.onConfirm}
           id={props.id}
+          confirmText={props.confirmText}
+          confirmEnable={props.confirmEnable}
         />,
         document.getElementById("overlay-root")
       )}
@@ -46,11 +47,13 @@ const ModalOverlay = (props) => {
           onClick={(e) => props.onConfirm(e.target.value)}
           id={props.id}
           value={props.id}
-          className='modal-btn'
+          className="modal-btn"
         >
-          Okay
+          {props.confirmText || "Okay"}
         </Button>
-        <Button onClick={props.onHide} className='modal-btn-cancel'>Cancel</Button>
+        <Button onClick={props.onHide} className="modal-btn-cancel">
+          Cancel
+        </Button>
       </footer>
     </div>
   );

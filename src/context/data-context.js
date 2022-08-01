@@ -25,7 +25,6 @@ export const DataContextProvider = (props) => {
   const [menuAutomats, setAutomatsMenu] = useState([]);
   const [bruttoVal, setBruttoVal] = useState(
     localStorage.getItem("bruttoVal") ? localStorage.getItem("bruttoVal") : 23
-    // add btn -> set brutto to global or up prices instead brutto
   );
 
   useEffect(() => {

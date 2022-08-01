@@ -99,7 +99,6 @@ const cartReducer = (state, action) => {
     const index = state.items.findIndex(
       (item) => item.id === action.id && item.subCat === action.subCat
     );
-    // const index = action.id;
     const existingItem = state.items[index];
 
     const updatedTotalAmountNetto =
@@ -137,7 +136,7 @@ const CartProvider = (props) => {
 
   useEffect(() => {
     getDiscountVal();
-  }, []); // localStorage.getItem("userID")
+  }, []);
 
   const getDiscountVal = async () => {
     const userID = localStorage.getItem("userID");

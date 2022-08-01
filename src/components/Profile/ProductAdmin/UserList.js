@@ -1,14 +1,12 @@
 import useHttp from "../../hooks/use-http";
 import UserItem from "./UserItem";
 import { baseURL } from "../../../firebase.config";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./UserList.module.css";
-import AuthContext from "../../../context/auth-context";
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
   const { isAnim, error: isError, sendRequest: fetchUsers } = useHttp();
-  const authCtx = useContext(AuthContext);
 
   useEffect(() => {
     const transformUsers = (usersObj) => {
