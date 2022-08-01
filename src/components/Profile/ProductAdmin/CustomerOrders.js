@@ -1,19 +1,18 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import AuthContext from "../../../context/auth-context";
-import { auth, baseURL } from "../../../firebase.config";
+import { baseURL } from "../../../firebase.config";
 import { OrderList } from "../ProductUser/OrderList";
 import styles from "./CustomerOrders.module.css";
 
 export const CustomerOrders = () => {
   const authCtx = useContext(AuthContext);
-  const userID = authCtx.userID;
   const [allOrders, setOrders] = useState([]);
 
   const getAllOrders = useCallback(async () => {
     const url = `${baseURL}/orders.json`;
 
     const requestOptions = {
-      method: "GET", // PATCH
+      method: "GET",
       headers: { "Content-Type": "application/json" },
     };
 
@@ -50,7 +49,6 @@ export const CustomerOrders = () => {
 
   const onDeleteOrderHandler = async (userID, orderID) => {
     const url = `${baseURL}/orders/${userID}/${orderID}.json`;
-    console.log(url);
 
     const requestOptions = {
       method: "DELETE",
@@ -102,7 +100,6 @@ export const CustomerOrders = () => {
           <div className={styles["customer-order"]}>
             <OrderList
               orders={arr}
-              // userID={arr.}
               isEmailVisible={true}
               onDeleteOrder={onDeleteOrderHandler}
               onChangeStatus={onChangeStatusHandler}
@@ -111,21 +108,5 @@ export const CustomerOrders = () => {
         );
       })}
     </div>
-
-    // <div className={styles["orders-container"]}>
-    //   {orders &&
-    //     orders.map((order, index) => {
-    //       return (
-    //         <div key={index} className={styles["order-item"]}>
-    //           <div className={styles["order-list"]}>
-    //             {order.order_list.map((product) => {
-    //               return <p>{product.name_product}</p>;
-    //             })}
-    //           </div>
-    //           <p className={styles["order-status"]}>{order.order_status}</p>
-    //         </div>
-    //       );
-    //     })}
-    // </div>
   );
 };

@@ -25,7 +25,6 @@ const AutomatsInput = (props) => {
             ref={switchRef}
             onChange={handleSwitches}
             value={props.swichesSelection}
-            // defaultChecked={props.swichesSelection}
           />
           Wyłączniki mechaniczne TAK/NIE
         </label>
@@ -38,7 +37,6 @@ const AutomatsInput = (props) => {
             ref={switchRef}
             onChange={handleSwitches}
             value={props.swichesSelection}
-            // defaultChecked={props.swichesSelection}
           />
           Wyłączniki krańcowe TAK/NIE
         </label>

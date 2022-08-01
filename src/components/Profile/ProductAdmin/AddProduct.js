@@ -6,10 +6,7 @@ import useHttp from "../../hooks/use-http";
 import ProductForm from "./ProductForm";
 import styles from "./AddProduct.module.css";
 
-const FIREBASE_URL = "https://reacttest-b7b01-default-rtdb.firebaseio.com";
-
 const AddProduct = (props) => {
-  // const { isLoading, message, sendRequest: sendProductRequest } = useHttp();
   const history = useHistory();
   const dataCtx = useContext(DataContext);
   const [message, setMessage] = useState("");
@@ -25,7 +22,6 @@ const AddProduct = (props) => {
     selectedSubCat
   ) => {
     const url = `${baseURL}/${fetchSTR}.json`;
-    // console.log(url);
 
     const requestOptions = {
       method: "POST",
@@ -35,8 +31,6 @@ const AddProduct = (props) => {
 
     const response = await fetch(url, requestOptions);
     if (!response.ok) {
-      // setError(response.statusText);
-      console.log(response.statusText);
       setMessage(response.statusText);
     } else {
       setMessage("Dodano nowy rekord");

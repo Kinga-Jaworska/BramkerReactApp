@@ -1,12 +1,10 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import AuthContext from "../../../context/auth-context";
-import { auth, baseURL } from "../../../firebase.config";
 import Button from "../../GUI/Button";
 import Modal from "../../GUI/Modal";
 import styles from "./MyOrders.module.css";
 
 export const OrderList = (props) => {
-  // const [orders, setOrders] = useState(props.orders);
   const orders = props.orders;
   const authCtx = useContext(AuthContext);
   const [statusModal, setStatusModal] = useState(false);

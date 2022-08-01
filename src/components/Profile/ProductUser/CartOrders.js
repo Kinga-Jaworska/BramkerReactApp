@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AuthContext from "../../../context/auth-context";
 import CartContext from "../../../context/cart-context";
 import { auth, baseURL } from "../../../firebase.config";
@@ -8,29 +8,33 @@ import { Cart } from "./Cart";
 export const CartOrders = (props) => {
   const cartCtx = useContext(CartContext);
   const authCtx = useContext(AuthContext);
+  const [error, setError] = useState("");
 
   const handleSendOrder = async () => {
-    const url = `${baseURL}/orders/${authCtx.userID}/${Date.now()}.json`;
+    if (cartCtx.items.length > 0) {
+      const url = `${baseURL}/orders/${authCtx.userID}/${Date.now()}.json`;
 
-    const orderObj = {
-      customer_email: auth.currentUser.email,
-      order_status: "oczekujące",
-      order: cartCtx.items,
-    };
+      const orderObj = {
+        customer_email: auth.currentUser.email,
+        order_status: "oczekujące",
+        order: cartCtx.items,
+      };
 
-    const requestOptions = {
-      method: "PUT", // PATCH
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(orderObj),
-    };
+      const requestOptions = {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderObj),
+      };
 
-    const response = await fetch(url, requestOptions);
-    if (!response.ok) {
-      // setErrorEdit(response.statusText);
-      console.log(response.statusText);
+      const response = await fetch(url, requestOptions);
+      if (!response.ok) {
+        setError(response.statusText);
+      } else {
+        cartCtx.clearReducer();
+        props.onHide();
+      }
     } else {
-      cartCtx.clearReducer();
-      props.onHide();
+      setError("Koszyk jest pusty :C");
     }
   };
   return (
@@ -38,6 +42,8 @@ export const CartOrders = (props) => {
       onHide={props.onHide}
       onConfirm={handleSendOrder}
       title="Twój koszyk"
+      confirmText="Wyślij zamówienie"
+      isError={error}
     >
       <Cart />
     </Modal>
