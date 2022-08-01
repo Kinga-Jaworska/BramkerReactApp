@@ -1,6 +1,7 @@
 # Web App with Bramker products
 
 ## To test use this accounts:
+Link to web page: bramkerreactap.netlify.app
 * user - create own account or [login: user@gmail.com | pasword: user1234]
 * admin - [login: test@gmail.com | password: test1234]
 
