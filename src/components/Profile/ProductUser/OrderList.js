@@ -54,6 +54,7 @@ export const OrderList = (props) => {
                 </div>
               )}
               <div className={styles["order-list"]}>
+                {props.isEmailVisible && <p>Nr: {order.id}</p>}
                 <p>Zamówione produkty:</p>
                 {order.order_list.map((product, index) => {
                   return (
